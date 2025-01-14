@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <link rel="stylesheet" href="./css/style.css">
+  <title>Calculator</title>
+ <style>
+    /* Additional CSS styles */
+   
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    select, input[type="number"] {
+      width: 90%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      width: 90%;
+      padding: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #result {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 18px;
+      color: #333;
+    }   
+    #hello-text {   
+      display:flex;
+      justify-content: center;
+      align-items: center;   
+      height: 25px;
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: blue;
+      font-size: 6vw;
+      text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
+      font-weight: bold;
+    }
+    @media only screen and (min-width:768px ){
+            input{
+                height: 30px;
+                border-radius: 10px;    
+                font-size: 4vw;    
+            }
+            #result{
+                font-size: 4vw;
+            }
+            select{
+                font-size: 4vw;
+            }
+            .p{
+                font-size: 4vw;
+            }
+        }
+        @media only screen and (min-width:1024px ){
+            input{
+                height: 50px;
+                border-radius: 20px;     
+               font-size: 4vw;         
+                }
+           button{
+               height: 50px;
+               font-size: 4vw;              
+                }
+           #hello-text{
+                height: 100px;            
+            }
+        }
+        @media only screen and (min-width:2560px ){
+            input{
+                height: 100px;
+                border-radius: 20px;        
+                font-size: 4vw;  
+                }            
+            button{
+                height: 150px;
+                font-size: 70px;
+            }
+            #hello-text{
+                height: 170px;            
+            }
+         }
+        @media only screen and (max-width:320px ){
+            input{
+                height: 7px;
+                border-radius: 3px;  
+                font-size: 4vw;           
+                }                           
+        }
+  </style>
+</head>
+<body>
+    
+  <header>
+     <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>  
+        <div class="container">       
+            
+        <nav>           
+          <ul>
+            <li class="current"><a href="calculate.html">simple.c</a></li>
+            <li><a href="geometrical calculator.html">geometrical.c</a></li>
+            
+          </ul>
+        </nav>
+      </div>
+    </header>  
+    
+    <p id="hello-text">      
+           
+  </div>
+  <div class="containerc"> 
+    <label for="operation">Select an operation:</label>
+    <select id="operation">
+      <option value="addition">Addition</option>
+      <option value="multiplication">Multiplication</option>
+      <option value="subtraction">Subtraction</option>
+      <option value="division">Division</option>
+    </select>
+    <label for="number1">Enter first number:</label>
+    <input type="number" id="number1" placeholder="Enter first number">
+    <label for="number2">Enter second number:</label>
+    <input type="number" id="number2" placeholder="Enter second number" >
+    <button onclick="calculate()">Calculate</button>
+    <p id="result"></p>
+</div>
+ <audio id="myAudio">
+        <source src="./audio/mathematics classical .mp3" type="audio/mp3">  
+  <script>
+     
+            
+    function calculate() {
+      var operation = document.getElementById("operation").value;
+      var number1 = parseFloat(document.getElementById("number1").value);
+      var number2 = parseFloat(document.getElementById("number2").value);
+      var result;
+
+      switch(operation) {
+        case "addition":
+          result = number1 + number2;
+          break;
+
+        case "multiplication":
+          result = number1 * number2;
+          break;
+
+        case "subtraction":
+          result = number1 - number2;
+          break;
+
+        case "division":
+          result = number1 / number2;
+          break;
+      }
+
+      document.getElementById("result").innerHTML = "The result is " + result;
+    }
+  function printHello() {
+            document.getElementById("hello-text").innerText = "calculator";
+            setTimeout(clearHello, 100); // Clear the "Hello" text after 1 second
+document.getElementById("hello-text").style.color ="blue";         
+        }
+
+        function clearHello() {
+            document.getElementById("hello-text").innerText = "";
+            setTimeout(printHello, 100); // Print "Hello" again after 1 second
+        }
+
+        printHello(); // Start the loop  
+  </script> 
+</body>
+</html>
+
+
+
