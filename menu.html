@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>the menu of website</title>
+    <link rel="stylesheet" href="style.css">    
+</head>
+<body>
+    <h1>This is the menu of this web</h1>
+    <h1 id="received-value"></h1>
+    <div class="menu-con">
+        
+       <div class="item"> 
+<a href="calculate.html">
+    <img src="./image/cal.jpg" alt="">
+</a><br>calculates</div>
+    
+        <div class="item">
+ <a href="water body.html">
+     <img src="./image/Enjoy.jpg" alt="">
+</a><br>Enjoy</div>
+
+        <div class="item">
+<a href="Guess.html">
+    <img src="./image/Game.jpg" alt="">
+</a><br>Games</div>
+
+       <div class="item">
+<a href="date.html">
+    <img src="./image/calendar.jpg" alt="">
+</a><br>date</div>
+
+      <div class="item">
+<a href="qf.html">
+    <img src="./image/que.jpg" alt="">
+</a><br>Quadratic equation<br>for equality</div>
+   
+       <div class="item">
+<a href="factorization-in.html">
+    <img src="./image/qr.png" alt="">
+</a><br>Quadratic equation<br> for inequality</div>
+
+       <div class="item">
+<a href="ox.html">
+    <img src="./image/ox.jpeg" alt="">
+</a><br>OX game</div>
+
+        <div class="item">
+<a href="logical calculater.html">
+    <img src="./image/clup.jpg" alt="">
+</a><br>Calculator</div>
+
+        <div class="item">
+<a href="checker.html">
+    <img src="./image/checker.jpg" alt="">
+</a><br>checker</div>
+
+        <div class="item">
+<a href="logical calculation.html">
+    <img src="./image/lo.cl.jpg" alt="">
+</a><br>number puzzle</div>       
+
+        <div class="item">
+<a href="chess.html">
+    <img src="./image/chess.jpg" alt="">
+</a><br>chess</div>
+
+         <div class="item">
+<a href="Lodo king.html">
+    <img src="./image/lodoking.jpg" alt="">
+</a><br>Lodo King</div>
+
+        <div class="item">
+<a href="dama.html">
+    <img src="./image/dama.jpg" alt="">
+</a><br>dama</div>
+
+        <div class="item">
+<a href="about.html">
+    <img src="./img/sitting.jpg" alt="">
+</a><br>about</div>
+
+        </div>
+        
+        
+ <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const k = urlParams.get('k');   
+    if (k) {
+        document.getElementById("received-value").innerHTML ="hello " + k;
+    } else {
+        
+    }
+ </script>
+</body>
+</html>
