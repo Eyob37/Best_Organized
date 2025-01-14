@@ -1,0 +1,120 @@
+
+        #damaboard {            
+            width: 300px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            border: 4px solid black;
+            margin: auto;
+            overflow: hidden;
+            margin-top: 100px;
+        }
+
+        .square {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .square.white {
+            background-color: #80ff98;
+        }
+
+        .square.black {
+            background-color: #b58863;
+        }
+
+        .checker {
+            
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+        }
+        
+   .selected {
+    box-shadow: 0 0 15px 5px yellow; 
+    outline: 3px solid yellow;       
+    transform: scale(1.1);            
+    transition: all 0.3s ease;       
+    border-radius: 50%;              
+}
+
+hr{
+    position: relative;    
+    border: 2px solid black;
+    height: 101%;
+    margin: auto;
+}
+.a1{
+    transform: rotate(0deg);
+    top: -5px;
+    left: 114px;
+}
+.a2{
+    transform: rotate(45deg);
+    left: 40px;
+    height: 145%;
+    bottom: 70px;
+}
+.a3{
+    transform: rotate(90deg);
+    right: 35px;
+    bottom: 3px;
+}
+.a4{
+  transform: rotate(135deg);  
+  right: 112px;
+  height: 145%;
+  bottom: 70px;
+}
+#inputs button{
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+#I1{
+    top: 220px;
+    left: 45px;
+}
+#I2{
+    top: 215px;
+    left: 195px;
+}
+#I3{
+    top: 220px;
+    right: 45px;
+}
+#I4{
+    top: 365px;
+    left: 45px;
+}
+#I5{
+    top: 365px;
+    left: 195px;
+}
+#I6{
+    top: 365px;
+    right: 45px;
+}
+#I7{
+    top: 515px;
+    left: 45px;
+}
+#I8{
+    top: 515px;
+    left: 195px;
+}
+#I9{
+    top: 515px;
+    right: 45px;
+}
+h2{
+    color: green;
+    text-align: center;
+}
