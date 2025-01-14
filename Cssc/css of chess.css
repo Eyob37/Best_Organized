@@ -1,0 +1,148 @@
+#chessboard {
+    margin-top: 90px;
+    margin-left: 5px;
+    width: 100%;
+    max-width: 400px;
+    display: grid;
+    grid-template-columns: repeat(8, 50px);
+    grid-template-rows: repeat(8, 50px);
+    gap: 0;
+    border: 2px solid #333;
+}
+
+.square {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.square.white {
+    background-color: #80ff98;
+}
+
+.square.black {
+    background-color: #b58863;
+}
+
+.checker {
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+}
+
+.checker.selected {
+    box-shadow: 0 0 10px 2px yellow;
+    outline: 2px solid yellow;
+}
+
+.checker.p2.king {
+    background-color: #b9ff00; /* King color */
+    box-shadow: 0 0 10px; /* Optional border for kings */
+}
+
+.checker.p1.king {
+    background-color: #1100f3; /* King color */
+    box-shadow: 0 0 10px; /* Optional border for kings */
+}
+
+#p2, #p1 {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ede3c6;
+    font-weight: bold;
+    color: #ff001f;
+    border-radius: 10px;
+    width: 150px;
+    height: 30px;
+    font-size: 25px;
+}
+
+#p2 {
+    right: 5px;
+    top: 150px;
+}
+
+#p1 {
+    top: 150px;
+    left: 5px;
+}
+
+#timer {
+    text-align: center;
+}
+
+#time {
+    height: 50px;
+    width: 200px;
+    margin: auto;
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10vw;
+    background: #000;
+    color: #fff;
+    display: flex;
+    border-radius: 2rem;
+    padding: 0 2rem;
+    border: 0.5rem solid #2d2d2d; 
+}
+
+input {
+    margin: 3px;
+    margin-bottom: 20px;
+}
+
+#sitting {
+    position: fixed;
+    top: 5px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    background: cyan;
+    box-shadow: 0 0 10px;
+    border-radius: 50%;
+    overflow: auto;
+}
+
+img {
+    width: 35px;
+    height: 35px;
+    margin-bottom: 20px;
+}
+
+#sitting:hover {
+    transition: all 2s ease-in-out;
+    width: 150px;
+    height: 400px;
+    display: block;
+    border-radius: 0;
+}
+
+label {
+    margin-top: 5px;
+    font-weight: bold;
+    margin-left: 3px;
+}
+
+.p {
+    position: absolute;
+    top: 1px;
+    font-size: 30px;
+}
+
+#au {
+    display: flex;
+}
+
+#audiom {
+    margin: 5px 1px;
+    width: 15px;
+    height: 15px;
+}
