@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page title</title>
+    <style>
+        *{
+        box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      font-size: 4vw;
+    }
+    .p{
+    margin-top: 1px;
+    font-size: 25px;
+}
+.current {
+  color:#ff001f;
+  font-weight:bold;
+}
+    header {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 0;
+      text-align: center;
+    }
+
+    header nav ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    header nav ul li {
+      display: inline;
+      margin-right: 20px;
+    }
+
+    header nav ul li a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    header nav ul li a:hover {
+      text-decoration: underline;
+    }
+        input{
+            width: 70px;
+            height: 25px;
+            text-align: center;
+        }
+        div{
+            margin-top: 200px;
+            text-align: center;
+        }
+        h2{
+            text-align: center;
+        }
+        fo{
+            font-size: 40px;
+        }             
+        .b1{
+            text-align: left;
+            margin-right: 100px;
+        }
+        .b2{
+            margin-right: 100px;
+        }
+        #a7{
+            margin-right: 40px;
+        }
+        #a8{
+            margin-right: 90px;
+        }
+        button{
+            margin: 20px;
+            width: 100px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+      
+        </div class="container">
+        <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>     
+        
+      </div>
+    </header>
+    <h2>This is about calculations</h2>
+    <div>  
+        <input id="a1" type="number"><fo>+</fo>
+        <input id="a2" type="number"><fo>=</fo>
+        <input id="a3" type="number"><br><fo class="b1">+</fo><fo class="b2">+</fo><br>
+        <input id="a4" type="number"><fo class="more">-</fo>
+        <input id="a5" type="number"><fo>=</fo>
+        <input id="a6" type="number">
+        <br><fo class="b1">=</fo><fo class="b2">=</fo><br>
+        <input id="a7" type="number">
+        <input id="a8" type="number"><br>
+        <button onclick="calculate()">Calculate</button>
+    </div>
+    <script>
+        a1.disabled = true;
+     a2.disabled = true;
+     a4.disabled = true;
+     a5.disabled = true;
+        function calculate() {
+            var a3 = parseInt(document.getElementById("a3").value);
+            var a6 = parseInt(document.getElementById("a6").value);
+            var a7 = parseInt(document.getElementById("a7").value);
+            var a8 = parseInt(document.getElementById("a8").value);
+            var found = false;
+            var b = (a3 + a6 + a8) - a7;            
+            b /= 2;            
+                var a1 = a3 - b;
+                var a2 = b;
+                var a4 = a7 - a1;
+                var a5 = a4 - a6;                
+                if ((a2 + a5 == a8)) {
+                    document.getElementById("a1").value = a1;
+                    document.getElementById("a2").value = a2;
+                    document.getElementById("a4").value = a4;
+                    document.getElementById("a5").value = a5;
+                    found = true;
+                    
+                }
+            
+
+            if (!found) {
+                alert("No solution found");
+            }
+        }
+    </script>
+</body>
+</html>

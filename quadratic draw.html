@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page title</title>
+  <style>
+ .p{
+    margin-top: 1px;
+    font-size: 25px;
+}
+
+        
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        input[type="number"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 60px;
+        }
+   body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        canvas {
+            border: 1px solid black;
+            margin-top: 20px;
+        }
+        label, input, button {
+            margin: 5px;
+        }
+        #inputs{
+            display: flex;
+            flex-direction: row;
+            width: 100%;            
+        }
+        #input1,#inputs2{         
+            flex-direction: column;                        
+        }
+        #input2{
+            width: 200px;
+            padding-left: 50px;
+            align-content: center;
+        }
+  </style>
+</head>
+<body>
+  
+<h1>The formula of<br> f(x) = ax² + bx + c</h1>
+<div id="inputs">
+<div id="input1"> 
+Enter the number a<input id="a" value="1" type="number"><br>
+Enter the number b<input id="b" value="2" type="number"><br>
+Enter the number c<input id="c" value="-8" type="number"><br>
+</div>
+<div id="input2">
+Size:
+<input type="number" id="size" value="50"><br>
+Step:
+<input type="number" id="step" value="0.1" step="0.01"><br>
+<button onclick="drawGraph()">Draw Graph</button>
+</div>
+</div>
+<canvas id="graph" width="600" height="400"></canvas>
+
+<script>
+      
+    function drawGraph() {
+        var a = Number(document.getElementById("a").value);
+        var b = Number(document.getElementById("b").value);
+        var c = Number(document.getElementById("c").value);
+        if(a != 1){
+            b = b/a;
+            c = c/a;            
+        }
+        var g = b / 2;
+        var z = g ** 2;
+        var p = c - z;
+        if(a < 0)p = -p
+            // Get user inputs
+            a = a;
+            const k = parseFloat(g);
+            c = parseFloat(p);
+            const size = parseInt(document.getElementById('size').value);
+            const step = parseFloat(document.getElementById('step').value);
+
+           // Set up the canvas
+            const canvas = document.getElementById('graph');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Center and scale settings
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            // Draw axes
+            ctx.beginPath();
+            ctx.strokeStyle = "black";
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(canvas.width, centerY); // x-axis
+            ctx.moveTo(centerX, 0);
+            ctx.lineTo(centerX, canvas.height); // y-axis
+            ctx.stroke();
+
+            // Add numbers and tick marks to axes
+            ctx.font = `${Math.max(10, size / 10)}px Arial`; // Dynamically adjust font size
+            ctx.fillStyle = "black";
+
+            // X-axis numbers and tick marks
+            for (let x = -12; x <= 12; x++) {
+                const posX = centerX + x * size;
+                ctx.fillText(x, posX - size / 10, centerY + size / 5); // Adjust text position dynamically
+                ctx.beginPath();
+                ctx.moveTo(posX, centerY - size / 20);
+                ctx.lineTo(posX, centerY + size / 20); // Tick marks scale with size
+                ctx.stroke();
+            }
+
+            // Y-axis numbers and tick marks
+            for (let y = -12; y <= 12; y++) {
+                const posY = centerY - y * size;
+                if (y !== 0) { // Skip the origin for y-axis labels
+                    ctx.fillText(y, centerX + size / 10, posY + size / 40); // Adjust text position dynamically
+                }
+                ctx.beginPath();
+                ctx.moveTo(centerX - size / 20, posY);
+                ctx.lineTo(centerX + size / 20, posY); // Tick marks scale with size
+                ctx.stroke();
+            }
+
+            // Function for f(x)
+            function F(x) {
+                return a * Math.pow((x + k), 2) + c;
+            }
+
+            // Draw the graph
+            ctx.beginPath();
+            ctx.strokeStyle = "red";
+            let first = true;
+            for (let x = -12; x <= 12; x += step) {
+                const scaledX = centerX + x * size;
+                const scaledY = centerY - F(x) * size;
+                if (first) {
+                    ctx.moveTo(scaledX, scaledY); // Move to the starting point
+                    first = false;
+                } else {
+                    ctx.lineTo(scaledX, scaledY); // Draw to the next point
+                }
+            }
+            ctx.stroke();
+        }
+
+        // Initial graph draw
+        drawGraph();
+</script>    
+</body>
+</html>

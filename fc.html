@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page title</title>
+  <style>
+  .p{
+    margin-top: 1px;
+    font-size: 25px;
+}
+  .current {
+  color:#ff001f;
+  font-weight:bold;
+}      
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        header nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        header nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        header nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        header nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        #answer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        input[type="number"] {
+            display: block;
+            margin: 0 auto 10px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+   <header>
+      </div class="container">
+         <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>     
+        <nav>
+          <ul>
+            <li><a href="qf.html">General</a></li>
+            <li><a href="com.html">complete </a></li>
+            <li class="current"><a href="fc.html">factorization</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>  
+    <h1>factorization method</h1>
+Enter the number a<input id="a" type="number"><br>
+Enter the number b<input id="b" type="number"><br>
+Enter the number c<input id="c" type="number"><br>
+<p id="answer"></p>
+<button onclick="calculate()">calculate</button>
+
+<script>
+    function calculate() {
+      var a = Number(document.getElementById("a").value);
+      var b = Number(document.getElementById("b").value);
+      var c = Number(document.getElementById("c").value);
+      if(a != 1){
+          c = c*a;
+      }
+      var k = c;
+      if(k <= 0){
+          k = -k;
+          if(k == 0){
+              k = b;
+              if(k < 0){
+                  k = -k;
+              }
+          }
+      }
+      
+      function loop(a,b,c) {
+        for(var i=-k; i < k; i++){
+          var a1 = i;
+          var a2 = b - i;
+          if(a1 * a2 == c){
+              return [a1, a2];
+          }
+        }
+        return null; // If no solution is found
+      }
+      
+      var result = loop(a, b, c);
+      if(result) {
+        var A1 = -result[0];
+        var A2 = -result[1];
+        document.getElementById("answer").innerHTML = "The answer is "+A1+" and "+A2;
+      } else {
+        document.getElementById("answer").innerHTML = "No solution found.";
+      }
+    }
+    
+</script>    
+</body>
+</html>

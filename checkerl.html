@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkers Game</title>
+    <link rel="stylesheet" href="./Cssc/css of chess.css">
+    <style>
+         #ch{      
+                  
+            justify-content: center;
+            align-items: center;
+            width: 410px;
+            height: 100vh;
+            background-image: url("./img/backgrounddiv.jpg");
+            margin: 0;    
+            margin-top: -50px;       
+}
+    </style>
+</head>
+<body id="ch">   
+    <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>  
+    <audio id="myAudio">
+        <source src="./audio/chess.m4a" type="audio/mp3">
+    </audio>
+        <div id="p2"><p id="HMR">player2 = 12</p></div>  
+        <div id="time"><p id="timer"></p></div>  
+          <div id="sitting">  
+              <img src="./img/sitting.jpg" alt=""><br><label for="bcolorPicker">
+Choose the color for p1</label><input type="color" id="bcolorPicker" value="#000000" onchange="generateChessboard()"><br><label for="bcolorPicker">
+Choose the color for p2</label><input type="color" id="rcolorPicker" value="#ffffff" onchange="generateChessboard()">        
+<label for="bcolorPicker"><br>
+Choose the color for p1 when king</label><input type="color" id="kbcolorPicker" value="#ff001f" onchange="generateChessboard()"><br><label for="bcolorPicker">
+Choose the color for p2 when king</label><input type="color" id="krcolorPicker" value="#0003ff" onchange="generateChessboard()">     
+<label>Choose the kind of chess</label>   
+    <select id="operation" onchange="abc()">
+        <option value="ko">kingone</option>
+        <option value="kl" selected>kinglong</option>            
+    </select>
+    <div id="au">
+   <label>Sound</label>    
+        <img id="audiom" onclick="mute()" src="./img/audioon.jpg" alt=""> </div>   
+        </div>
+       <div id="p1"><p id="HMB">player1 = 12</p></div>
+       
+    <div id="chessboard"></div>
+  
+    <script src="./JavaScript/chessLong.js"></script>
+    
+</body>
+</html>

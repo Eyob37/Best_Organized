@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Page title</title>
+    <style>
+           .p{
+    margin-top: 1px;
+    font-size: 25px;
+}
+.current {
+  color:#ff001f;
+  font-weight:bold;
+}
+    header {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 0;
+      text-align: center;
+    }
+
+    header nav ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    header nav ul li {
+      display: inline;
+      margin-right: 20px;
+    }
+
+    header nav ul li a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    header nav ul li a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      width: 100%;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+        @font-face{
+            font-family: 'FX_LED';
+            src: url('font/FX_LED.TTF');
+        }
+        @font-face  {
+            font-family: 'Hack';
+            src: url('font/Hack-Bold.ttf');
+        }
+        .digital-clock{
+            background: #000;
+            color: #fff;
+            display: flex;
+            border-radius: 2rem;
+            padding: 0 2rem;      
+            border: 0.5rem solid #2d2d2d;      
+        }
+       .week{
+           display: flex;
+           flex-direction: column;
+           justify-content: center;
+           align-items: center;
+           width: 2rem;
+           color: #2d2d2d;
+           font-weight: bold;
+           font-family: "Hack";
+       }
+       .week .active{
+           color: white;
+       }
+      .time{
+          display: flex;
+          width: 700px;
+          justify-content: center;
+          align-items: center;
+          font-family: "FX_LED";
+      }
+      .hour,.min,.dot{
+          display: inline-block;
+          font-size: 5rem;
+      }
+      .min{
+          display: math;
+      }
+      .invsible{
+          visibility: hidden;
+      }
+      h2{
+         text-align: center;
+         font-size: 50px;
+         color: #0018ff;
+         text-shadow: 5px 7px 10px ;
+     }
+       #action{
+         position: fixed;
+         bottom: 5px;
+         right: 10px;
+         width: 120px;
+         height: 35px;
+         text-transform: uppercase;
+         font-weight: bold;
+         background: cyan;
+         color: blue;
+         border-radius: 10px;
+     } 
+    </style>
+</head>
+<body>
+    <header>
+      </div class="container">
+         <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>     
+        <nav>
+          <ul>
+              <li class="current"><a href="date.html">date</a></li>  
+            <li><a href="h.p.html">Happy birthday </a></li>
+                     
+          </ul>
+        </nav>
+      </div>
+    </header> 
+    <h2>Digital clock</h2>
+    <div class="digital-clock">
+        <div class="week">
+            <div class="active">SUN</div>
+            <div>MON</div>
+            <div>TUE</div>
+            <div>WED</div>
+            <div>THU</div>
+            <div>FRI</div>
+            <div>SAT</div>
+        </div>   
+        <div class="time">
+            <div class="hour">12</div>
+            <div class="dot">:</div>
+            <div class="min">05</div>
+        </div>
+    </div> 
+    <button id="action" onclick="goto()">Analog-clock</button>
+    <script>
+        const $ = (selector) => {
+            return document.querySelector(selector);            
+        }
+        const hour = $('.hour');
+        const dot = $('.dot');
+        const min = $('.min');
+        const week = $('.week');
+        let showDot = true;
+        function update() {
+            showDot = !showDot;
+            const now = new Date();
+            if(showDot) {
+              dot.classList.add('invsible');  
+            }else {
+               dot.classList.remove('invsible');
+            }
+            hour.textContent = String(now.getHours())
+              .padStart(2, '0');
+            min.textContent = String(now.getMinutes())
+              .padStart(2, '0');              
+            Array
+              .from(week.children)
+              .forEach(
+                  (ele) => {
+                      ele.classList.remove('active');
+                  }
+              );
+            week
+              .children[now.getDay()]
+              .classList
+              .add('active');
+        };
+        setInterval(update, 500);
+        
+function goto() {
+    window.location.href = 'analog clock.html';
+}        
+    </script>
+</body>
+</html>

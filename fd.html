@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drawing</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        body {
+            margin: 20px;
+            overflow: hidden;
+        }
+   .p{
+    margin-top: 1px;
+    font-size: 25px;
+}
+        .current {
+  color:#ff001f;
+  font-weight:bold;
+}
+header {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 0;
+  text-align: center;
+}
+
+header nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+header nav ul li {
+  display: inline;
+  margin-right: 20px;
+}
+
+header nav ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+header nav ul li a:hover {
+  text-decoration: underline;
+}
+
+.container {
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+        canvas {
+            display: block;
+            border: 1px solid #000;
+        }
+      #fillButton{
+          width: 100px;
+      }
+      #clearButton{
+          width: 100px;
+      }
+      labl {
+     
+      margin-bottom: 10px;
+      text-align: left;
+      font-weight: bold;
+    }
+     
+    </style>
+</head>
+<body>
+   <header>
+  <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>     
+      </div class="container">
+        <nav>
+          <ul>
+            <li><a href="water body.html">water body</a></li>
+            <li>
+                <a href="sorce.html">img</a>
+            </li>
+            <li class="current">
+                <a href="fd.html">drawing</a>
+            </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </header>   
+ <input type="color" id="colorPicker" value="#000000">
+    <input type="range" id="penSize" min="1" max="20" value="5">
+   
+    <button id="fillButton">Fill Canvas</button>
+    <button id="clearButton">Clear Canvas</button>
+   
+    <canvas id="gameCanvas" width="400" height="400"></canvas> 
+
+    
+    <script>
+           
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('touchstart', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('touchend', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        const colorPicker = document.getElementById('colorPicker');
+        colorPicker.addEventListener('input', function() {
+            ctx.strokeStyle = colorPicker.value;
+        });
+
+        const penSize = document.getElementById('penSize');
+        penSize.addEventListener('input', function() {
+            ctx.lineWidth = penSize.value;
+        });
+
+        const fillButton = document.getElementById('fillButton');
+        fillButton.addEventListener('click', function() {
+            ctx.fillStyle = colorPicker.value;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        });
+
+        const clearButton = document.getElementById('clearButton');
+        clearButton.addEventListener('click', function() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+
+        function startDrawing(e) {
+            isDrawing = true;
+            draw(e);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            ctx.lineCap = 'round';
+            if (e.type === 'touchmove') {
+                e.preventDefault();
+                const touch = e.touches[0];
+                ctx.lineTo(touch.clientX - canvas.offsetLeft, touch.clientY - canvas.offsetTop);
+            } else {
+                ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+            }
+            ctx.stroke();
+            ctx.beginPath();
+            if (e.type === 'touchmove') {
+                const touch = e.touches[0];
+                ctx.moveTo(touch.clientX - canvas.offsetLeft, touch.clientY - canvas.offsetTop);
+            } else {
+                ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+            }
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+            ctx.beginPath();
+        }
+     function drawShape(type) {
+            if (type === 'circle') {                
+                const x = Number(document.getElementById('positionX').value);
+                const y = Number(document.getElementById('positionY').value);
+                const size = Number(document.getElementById('size').value);
+                ctx.beginPath();
+                ctx.arc(x, y, size, 0, 2 * Math.PI);
+                ctx.stroke();
+                ctx.fillStyle = colorPicker.value;
+                ctx.fill();
+                ctx.beginPath();
+            } else if (type === 'rectangle') {
+                const x = Number(document.getElementById('positionX').value);
+                const y = Number(document.getElementById('positionY').value);
+                const size = Number(document.getElementById('size').value);
+                ctx.beginPath();
+                ctx.rect(x, y, size, size);
+                ctx.stroke();
+                ctx.fillStyle = colorPicker.value;
+                ctx.fill();
+                ctx.beginPath();
+            } else if (type === 'triangle') {
+                const x = Number(document.getElementById('positionX').value);
+                const y = Number(document.getElementById('positionY').value);
+                const size = Number(document.getElementById('size').value);
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x + size, y + size);
+                ctx.lineTo(x - size, y + size);
+                ctx.closePath();
+                ctx.stroke();
+                ctx.fillStyle = colorPicker.value;
+                ctx.fill();
+                ctx.beginPath();
+            }
+        }
+    </script>
+</body>
+</html>
+</html>

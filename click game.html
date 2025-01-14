@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Action Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/style.css">
+  <style>
+    /* CSS code */
+    div{
+     
+      padding: 20px;
+      background-color: #ffd295;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      text-align:center;
+    }
+    body {
+      background-color: #1e1e1e;
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+    }
+    .p{
+    margin-top: -20px;
+    font-size: 25px;
+}
+    .current {
+  color:#ff001f;
+  font-weight:bold;
+}
+header {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 0;
+  text-align: center;
+}
+
+header nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+header nav ul li {
+  display: inline;
+  margin-right: 20px;
+}
+
+header nav ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+header nav ul li a:hover {
+  text-decoration: underline;
+}
+
+.container {
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+    h1 {
+      font-size: 48px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    .game-container {
+      width: 350px;
+      height: 350px;;
+      border: 2px solid #fff;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    
+    .target {
+      width: 3px;
+      height: 5px;
+      position: absolute;
+      background-color: #ff5722;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+    }
+    #high-score {
+        color: red;
+        font-weight: bold;    
+        }
+    #score {
+    background:#1e1e1e;
+      font-size: 24px;
+    }
+    #nust{
+        text-align:right;
+        
+    }
+    #nust2{
+        display:none;
+        text-align:right;
+        width:2px;
+    }
+    #time{
+        width:55px;
+    }
+    #nus{
+       text-align: center;
+       width:50px; 
+    }  
+    #nust2{
+       width:50px; 
+        text-align: center;
+    }  
+    #re{
+    width:55px;
+        display:hide;
+    }
+  </style>
+</head>
+<body>
+    <header>
+       <p id="timer" style="text-align:right"></p>
+      </div class="container">
+         <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>     
+        <nav>
+          <ul>
+            <li><a href="Guess.html">Guess number</a></li>
+            <li class="current"><a href="click game.html">Click game</a></li>
+                        
+          </ul>
+        </nav>
+      </div>
+    </header> 
+    <div id="nust">
+    <input id="time" type="number">
+    <button id="nus" onclick="startCountdown()">🔵</button>
+   <button id="re" onclick="re()">rest</button> </div>
+    <button id="nust2" onclick="p()">⚫</button>
+    
+  <h1>Action Game</h1>
+  <div id="score">Score: 0</div>
+  <div id="high-score">High Score: 0</div>
+  <div class="game-container">
+    
+    <div class="target" id="target" onclick="removeTarget()"></div>
+ 
+  </div>
+  <audio id="myAudio">
+        <source src="./audio/enjoy.mp3" type="audio/mp3">
+    </audio>
+  <script>
+      
+        var highScore = localStorage.getItem('highScore') || 0;
+        var time = localStorage.getItem('time') || 1;                      
+        document.getElementById("high-score").innerText = "High Score: " + highScore+" & second = " +time;
+ var audio = document.getElementById("myAudio"); 
+ var score = 0;
+
+function countdown(t) {
+let ft = t;
+audio.play();
+        var timerElement = document.getElementById('timer');
+        var interval = setInterval(function() {
+            if (t > 0) {
+              var mins = Math.floor(t / 60);
+              var secs = t % 60;
+              var timer = ("0" + mins).slice(-2) + ":" + ("0" + secs).slice(-2);
+            timerElement.textContent = timer;
+                t--;
+            } else {
+            alert("time is completed");
+                clearInterval(interval);
+                timerElement.textContent = 'Timer completed!';
+                audio.pause();
+                checkHighScore(ft);    
+       
+                 }
+        }, 1000);
+    }
+
+    function startCountdown() {   
+    score = 0;   
+    document.getElementById("score").innerText = "Score: " + score;
+        var inputTime = document.getElementById('time').value;
+document.getElementById("nust").style.display="none";
+document.getElementById("nust2").style.display="block";
+        countdown(parseInt(inputTime, 10));
+        
+    }
+function p(){
+ document.getElementById("nust").style.display="block"; 
+document.getElementById("nust2").style.display="none"; 
+document.getElementById("re").style.display="block"; 
+}
+
+
+      
+    // JavaScript code
+    
+   function updateScore()
+     {
+     
+      score += 1;
+      document.getElementById("score").innerText = "Score: " + score;
+    }
+function re(){
+score = 0;
+document.getElementById("score").innerText = "Score: " + score;
+document.getElementById("nust").style.display="none";
+document.getElementById("nust2").style.display="block";
+}		    
+    function removeTarget() {
+    updateScore();
+      var target = document.querySelector('.target');
+      target.parentNode.removeChild(target);
+document.querySelector(".target").style.backgroundColor = getRandomColor();
+      addNewTarget();
+      
+    }
+    
+    function addNewTarget() {
+      var container = document.querySelector('.game-container');
+      var target = document.createElement('div');
+      target.className = 'target';
+      target.onclick = removeTarget;
+      target.style.backgroundColor = getRandomColor();
+      var x = Math.floor(Math.random() * (container.clientWidth - 50));
+      var y = Math.floor(Math.random() * (container.clientHeight - 50));
+      target.style.top = y + 'px';
+      target.style.left = x + 'px';
+      
+      container.appendChild(target);
+    }
+  function getRandomColor() {
+    var letters = "0123456789F";
+    var color = "#";
+
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 11)];
+    }
+   
+    return color;
+}  
+        function checkHighScore(t) {
+            if (score/t >= highScore/time) {
+                highScore = score;
+                time = t;
+                localStorage.setItem('highScore', highScore);
+                localStorage.setItem('time', time);  
+                document.getElementById("high-score").innerText = "High Score: " + highScore+" & second = " +time;
+                alert("New High Score: " + highScore);
+            }
+        }
+
+    addNewTarget();
+   
+  </script>
+</body>
+</html>

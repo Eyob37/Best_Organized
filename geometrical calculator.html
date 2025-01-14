@@ -1,0 +1,327 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Geometric Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/style.css">
+  <style>
+    /* Additional CSS styles */
+*{
+    box-sizing: border-box;
+}
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+  font-size: 4vw;
+}
+.p{
+    margin-top: 1px;
+    font-size: 25px;
+}
+.current {
+  color:#ff001f;
+  font-weight:bold;
+}
+header {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 0;
+  text-align: center;
+}
+
+header nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+header nav ul li {
+  display: inline;
+  margin-right: 20px;
+}
+
+header nav ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+header nav ul li a:hover {
+  text-decoration: underline;
+}
+
+.container {
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+select, input[type="number"] {
+  width: 90%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+}
+
+button {
+  width: 90%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 10px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+#result-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#result-container p {
+  font-size: 18px;
+  color: #333;
+}
+ .m{
+     height: 45px;
+ }  
+ #hello-text{
+     display: flex;
+     justify-content: center;
+     align-content: center;
+ }
+      @media only screen and (min-width:768px ){            
+            select, input[type="number"] {                
+                padding: 10px;                
+                margin-bottom: 30px;
+                margin-left: 30px;
+                font-size: 4vw;
+            }           
+            .p{
+                font-size: 4vw;
+            }
+            button{
+                height: 50px;
+                border-radius: 10px;    
+                font-size: 4vw;    
+                margin-left: 30px;
+            }
+        }
+        @media only screen and (min-width:1024px ){
+            select, input[type="number"] {                
+                padding: 15px;                
+                margin-bottom: 40px;
+                margin-left: 40px;
+                font-size: 4vw;
+            }           
+            .p{
+                font-size: 4vw;
+            }
+            button{
+                height: 100px;
+                border-radius: 10px;    
+                font-size: 4vw;    
+                margin-left: 50px;
+            }
+           #hello-text{
+                height: 100px;            
+            }
+        }
+        @media only screen and (min-width:2560px ){
+            input{
+                height: 100px;
+                border-radius: 20px;        
+                font-size: 4vw;  
+                }            
+            button{
+                height: 150px;
+                font-size: 70px;
+            }
+            #hello-text{
+                height: 170px;            
+            }
+         }
+        @media only screen and (max-width:320px ){
+            input{
+                height: 7px;
+                border-radius: 3px;  
+                font-size: 4vw;           
+                }
+            
+        }
+    </style>
+</head>
+<body>
+   <header>
+      </div class="container">
+         <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>     
+        <nav>
+          <ul>
+            <li><a href="calculate.html">simple.c</a></li>
+            <li class="current"><a href="geometrical calculator.html">geometrical.c</a></li>
+            
+          </ul>
+        </nav>
+      </div>
+    </header>    
+   
+  <h1>
+      <div class="m">
+ <div id="hello-text">
+   </div>
+  </div>
+  </h1>
+  <label for="choice">Choose an option:</label>
+  <select id="choice" onchange="handleChoice()">
+    <option value="0">- Select an option -</option>
+    <option value="1">1. Lateral and Total Surface Area of Rectangular Prism</option>
+    <option value="2">2. Lateral and Total Surface Area of Triangular Prism</option>
+    <option value="3">3. Lateral and Total Surface Area of Cylinder</option>
+    <option value="4">4. Volume of Rectangular Prism</option>
+    <option value="5">5. Volume of Triangular Prism</option>
+    <option value="6">6. Volume of Cylinder</option>
+  </select>
+
+  <div id="input-container">
+    <!-- Input fields will be dynamically generated here -->
+  </div>
+
+  <button onclick="calculate()">Calculate</button>
+
+  <div id="result-container">
+    <!-- Results will be displayed here -->
+  </div>
+
+  <script>
+      function handleChoice() {
+  var choice = document.getElementById("choice").value;
+  var inputContainer = document.getElementById("input-container");
+  inputContainer.innerHTML = "";
+
+  switch(choice) {
+    case "0":
+      break;
+    case "1":
+      inputContainer.innerHTML += "<label for='height'>Height:</label> <input type='number' id='height'><br>";
+      inputContainer.innerHTML += "<label for='length'>Length:</label> <input type='number' id='length'><br>";
+      inputContainer.innerHTML += "<label for='width'>Width:</label> <input type='number' id='width'><br>";
+      break;
+    case "2":
+      inputContainer.innerHTML += "<label for='side1'>Side 1:</label> <input type='number' id='side1'><br>";
+      inputContainer.innerHTML += "<label for='side2'>Side 2:</label> <input type='number' id='side2'><br>";
+      inputContainer.innerHTML += "<label for='base'>Base:</label> <input type='number' id='base'><br>";
+      inputContainer.innerHTML += "<label for='height'>Height:</label> <input type='number' id='height'><br>";
+      break;
+    case "3":
+      inputContainer.innerHTML += "<label for='radius'>Radius:</label> <input type='number' id='radius'><br>";
+      inputContainer.innerHTML += "<label for='height'>Height:</label> <input type='number' id='height'><br>";
+      break;
+    case "4":
+      inputContainer.innerHTML += "<label for='length'>Length:</label> <input type='number' id='length'><br>";
+      inputContainer.innerHTML += "<label for='width'>Width:</label> <input type='number' id='width'><br>";
+      inputContainer.innerHTML += "<label for='height'>Height:</label> <input type='number' id='height'><br>";
+      break;
+    case "5":
+      inputContainer.innerHTML += "<label for='side'>Largest Side:</label> <input type='number' id='side'><br>";
+      inputContainer.innerHTML += "<label for='halfSide'>Half of Largest Side:</label> <input type='number' id='halfSide'><br>";
+      inputContainer.innerHTML += "<label for='height'>Height:</label> <input type='number' id='height'><br>";
+      break;
+    case "6":
+      inputContainer.innerHTML += "<label for='radius'>Radius:</label> <input type='number' id='radius'><br>";
+      inputContainer.innerHTML += "<label for='height'>Height:</label> <input type='number' id='height'><br>";
+      break;
+  }
+}
+
+function calculate() {
+  var choice = document.getElementById("choice").value;
+  var resultContainer = document.getElementById("result-container");
+  resultContainer.innerHTML = "";
+
+  switch(choice) {
+    case "0":
+      break;
+    case "1":
+      var height = parseFloat(document.getElementById("height").value);
+      var length = parseFloat(document.getElementById("length").value);
+      var width = parseFloat(document.getElementById("width").value);
+      var lateralSurfaceArea = 2 * height * (length + width);
+      var totalSurfaceArea = 2 * (length * width + lateralSurfaceArea);
+      resultContainer.innerHTML = "Lateral Surface Area: " + lateralSurfaceArea.toFixed(2) + "<br>" + "Total Surface Area: " + totalSurfaceArea.toFixed(2);
+      break;
+    case "2":
+      var side1 = parseFloat(document.getElementById("side1").value);
+      var side2 = parseFloat(document.getElementById("side2").value);
+      var base = parseFloat(document.getElementById("base").value);
+      var height = parseFloat(document.getElementById("height").value);
+      var lateralSurfaceArea = (side1 + side2 + base) * height;
+      var totalSurfaceArea = lateralSurfaceArea + side1 * base;
+      resultContainer.innerHTML = "Lateral Surface Area: " + lateralSurfaceArea.toFixed(2) + "<br>" +
+                                  "Total Surface Area: " + totalSurfaceArea.toFixed(2);
+      break;
+    case "3":
+      var radius = parseFloat(document.getElementById("radius").value);
+      var height = parseFloat(document.getElementById("height").value);
+      var lateralSurfaceArea = 2 * Math.PI * radius * height;
+      var totalSurfaceArea = lateralSurfaceArea + 2 * Math.PI * Math.pow(radius, 2);
+      resultContainer.innerHTML = "Lateral Surface Area: " + lateralSurfaceArea.toFixed(2) + "<br>" +
+                                  "Total Surface Area: " + totalSurfaceArea.toFixed(2);
+      break;
+    case "4":
+      var length = parseFloat(document.getElementById("length").value);
+      var width = parseFloat(document.getElementById("width").value);
+      var height = parseFloat(document.getElementById("height").value);
+      var volume = length * width * height;
+      resultContainer.innerHTML = "Volume: " + volume.toFixed(2)+"m<sup>3</sup>";
+      break;
+    case "5":
+      var side = parseFloat(document.getElementById("side").value);
+      var halfSide = parseFloat(document.getElementById("halfSide").value);
+      var height = parseFloat(document.getElementById("height").value);
+      var volume = (side * halfSide * height) / 2;
+      resultContainer.innerHTML = "Volume: " + volume.toFixed(2)+"m<sup>3</sup>";
+      break;
+    case "6":
+      var radius = parseFloat(document.getElementById("radius").value);
+      var height = parseFloat(document.getElementById("height").value);
+      var volume = Math.PI * Math.pow(radius, 2) * height;
+      resultContainer.innerHTML = "Volume: " + volume.toFixed(2)+"m<sup>3</sup>";
+      break;
+  }
+}
+
+function printHello() {
+            document.getElementById("hello-text").innerText = "Geometrical calculator";
+            setTimeout(clearHello, 1000); // Clear the "Hello" text after 1 second
+document.getElementById("hello-text").style.color ="blue";         
+        }
+
+        function clearHello() {
+            document.getElementById("hello-text").innerText = "";
+            setTimeout(printHello, 1000); // Print "Hello" again after 1 second
+        }
+
+        printHello(); // Start the loop  
+  </script>
+  
+</body>
+</html>
+

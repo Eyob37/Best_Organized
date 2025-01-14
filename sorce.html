@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title>trading on sorce of image</title>
+    <link rel="stylesheet" href="./css/style.css">
+   <style>
+  .p{
+    margin-top: 1px;
+    font-size: 25px;
+}
+       .current {
+  color:#ff001f;
+  font-weight:bold;
+}
+header {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 0;
+  text-align: center;
+}
+
+header nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+header nav ul li {
+  display: inline;
+  margin-right: 20px;
+}
+
+header nav ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+header nav ul li a:hover {
+  text-decoration: underline;
+}
+
+.container {
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+div{
+    text-align: center;
+}
+#col{
+    display: flex;
+}
+button{
+    width: 30%;
+}
+label{
+    margin-top: 20px;    
+}
+#on{
+    margin-right: 100px;
+}
+
+   </style> 
+</head>
+<body>
+   <header>
+  <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>     
+      </div class="container">
+        <nav>
+          <ul>
+            <li><a href="water body.html">water body</a></li>
+            <li class="current">
+                <a href="sorce.html">img</a>
+            </li>
+            <li>
+                <a href="fd.html">drawing</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>   
+    <div>
+    <h1>this is my light</h1>
+    
+    <img id="light" src="./image/off.jpg"width="100">
+    <div id="col">
+   <label for="on">on</label> <button id="on" type="button" onclick="document.getElementById('light').src='./image/on.jpg'">🔵</button>    
+ <label for="off">off</label><button id="off" type="button" onclick="document.getElementById('light').src='./image/off.jpg'">⚫</button>   
+</div>
+    </div>
+</body>
+</html>
