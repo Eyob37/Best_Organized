@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>the index of website</title>
+    <link rel="stylesheet" href="./css/style.css">
+   
+</head>
+<body>
+    <h1>This is Eyob Web</h1>
+    <div id="oncss" class="col-h-6">
+
+     <h3>input</h3>
+ <i>Enter your name</i><br>
+ <input id="k" class="col-6 " type="username" required><br>
+ <i>Enter the password</i><br>
+ <input id="pass" class="col-6" type="password" required>
+ <input id="check" type="checkbox" value="👁️">
+ <button onclick="m()" class="col-10">🔵</button>
+ 
+    </div>
+    <script>       
+        check.onclick = togglepassword;
+        function togglepassword(){
+          if(check.checked)  pass.type="text";
+          else pass.type="password";
+        }
+        function m() {
+            var k = document.getElementById('k').value;
+         window.location.href = "menu.html?k=" + k;
+        }
+    </script>
+</body>
+</html>
