@@ -1,18 +1,289 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Physics</title>
-    <style>
-       h3{
-           color: blue;
-           text-align: center;
-           text-shadow: 2 5 5 black;
-                                 
-       }
+  <title>Geometric Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/style.css">
+  <style>
+    /* Additional CSS styles */
+*{
+    box-sizing: border-box;
+}
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+  font-size: 4vw;
+}
+.p{
+    margin-top: 1px;
+    font-size: 25px;
+}
+.current {
+  color:#ff001f;
+  font-weight:bold;
+}
+header {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 0;
+  text-align: center;
+}
+
+header nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+header nav ul li {
+  display: inline;
+  margin-right: 20px;
+}
+
+header nav ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+header nav ul li a:hover {
+  text-decoration: underline;
+}
+
+.container {
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+
+select, input[type="number"] {
+  width: 90%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+}
+
+button {
+  width: 90%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 10px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+#result-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#result-container p {
+  font-size: 18px;
+  color: #333;
+}
+ .m{
+     height: 45px;
+ }  
+ #hello-text{
+     display: flex;
+     justify-content: center;
+     align-content: center;
+ }
+      @media only screen and (min-width:768px ){            
+            select, input[type="number"] {                
+                padding: 10px;                
+                margin-bottom: 30px;
+                margin-left: 30px;
+                font-size: 4vw;
+            }           
+            .p{
+                font-size: 4vw;
+            }
+            button{
+                height: 50px;
+                border-radius: 10px;    
+                font-size: 4vw;    
+                margin-left: 30px;
+            }
+        }
+        @media only screen and (min-width:1024px ){
+            select, input[type="number"] {                
+                padding: 15px;                
+                margin-bottom: 40px;
+                margin-left: 40px;
+                font-size: 4vw;
+            }           
+            .p{
+                font-size: 4vw;
+            }
+            button{
+                height: 100px;
+                border-radius: 10px;    
+                font-size: 4vw;    
+                margin-left: 50px;
+            }
+           #hello-text{
+                height: 100px;            
+            }
+        }
+        @media only screen and (min-width:2560px ){
+            input{
+                height: 100px;
+                border-radius: 20px;        
+                font-size: 4vw;  
+                }            
+            button{
+                height: 150px;
+                font-size: 70px;
+            }
+            #hello-text{
+                height: 170px;            
+            }
+         }
+        @media only screen and (max-width:320px ){
+            input{
+                height: 7px;
+                border-radius: 3px;  
+                font-size: 4vw;           
+                }
+            
+        }
     </style>
 </head>
 <body>
-    <h3> I am waiting for kalkidan </h3>
+   <header>
+      </div class="container">
+         <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>     
+        
+      </div>
+    </header>    
+   
+  <h1>
+      <div class="m">
+ <div id="hello-text">
+   </div>
+  </div>
+  </h1>
+  <label for="choice">Choose an option:</label>
+  <select id="choice" onchange="handleChoice()">
+    <option value="0">- Select an option -</option>
+    <option value="1">1. stress</option>
+    <option value="2">2. strian</option>
+    <option value="3">3. Density</option>
+    <option value="4">4. S.G</option>
+  </select>
+
+  <div id="input-container">
+    <!-- Input fields will be dynamically generated here -->
+  </div>
+
+  <button onclick="calculate()">Calculate</button>
+
+  <div id="result-container">
+    <!-- Results will be displayed here -->
+  </div>
+
+  <script>
+      function handleChoice() {
+  var choice = document.getElementById("choice").value;
+  var inputContainer = document.getElementById("input-container");
+  inputContainer.innerHTML = "";
+
+  switch(choice) {
+    case "0":
+      break;
+    case "1":
+      inputContainer.innerHTML += "<label for='force'>Force:</label> <input type='number' id='force'><br>";
+      inputContainer.innerHTML += "<label for='length'>Area:</label> <input type='number' id='area'><br>";
+      break;
+    case "2":
+      inputContainer.innerHTML += "<label for='radius'>L1:</label> <input type='number' id='l1'><br>";
+      inputContainer.innerHTML += "<label for='height'>L2:</label> <input type='number' id='l2'><br>";
+      inputContainer.innerHTML += "<label for='height'>LO:</label> <input type='number' id='lo'><br>";
+      break;
+    case "3":
+      inputContainer.innerHTML += "<label for='length'>mass:</label> <input type='number' id='mass'><br>";
+      inputContainer.innerHTML += "<label for='width'>volume:</label> <input type='number' id='volume'><br>";
+      break;
+    case "4":
+      inputContainer.innerHTML += "<label for='side'>Density of substance:</label> <input type='number' id='ds'><br>";
+      inputContainer.innerHTML += "<label for='halfSide'>Density of water:</label> <input type='number' id='dw'><br>";
+      break;
+    
+  }
+}
+
+function calculate() {
+  var choice = document.getElementById("choice").value;
+  var resultContainer = document.getElementById("result-container");
+  resultContainer.innerHTML = "";
+
+  switch(choice) {
+    case "0":
+      break;
+    case "1":
+      var force = parseFloat(document.getElementById("force").value);
+      var area = parseFloat(document.getElementById("area").value);
+      var stress = force/area;
+      resultContainer.innerHTML = "The stress is: " + stress.toFixed(2);
+      break;
+    case "2":
+      var l1 = parseFloat(document.getElementById("l1").value);
+      var l2 = parseFloat(document.getElementById("l2").value);
+      var lo = parseFloat(document.getElementById("lo").value);
+      var strain = (l1 - l2)/lo;
+      resultContainer.innerHTML = "The strain is: " + strain.toFixed(2);
+      break;
+    case "3":
+      var mass = parseFloat(document.getElementById("mass").value);
+      var volume = parseFloat(document.getElementById("volume").value);
+      var Density = mass/volume;
+      resultContainer.innerHTML = "The density is: " + Density.toFixed(2);
+      break;
+    case "4":
+      var ds = parseFloat(document.getElementById("ds").value);
+      var dw = parseFloat(document.getElementById("dw").value);
+      var sg = ds/dw;
+      resultContainer.innerHTML = "S.G: " + sg.toFixed(2);
+      break;   
+    
+  }
+}
+
+function printHello() {
+            document.getElementById("hello-text").innerText = "Static equilibrium ";
+            setTimeout(clearHello, 1000); // Clear the "Hello" text after 1 second
+document.getElementById("hello-text").style.color ="blue";         
+        }
+
+        function clearHello() {
+            document.getElementById("hello-text").innerText = "";
+            setTimeout(printHello, 1000); // Print "Hello" again after 1 second
+        }
+
+        printHello(); // Start the loop  
+  </script>
+  
 </body>
 </html>
+
