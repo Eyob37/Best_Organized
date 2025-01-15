@@ -271,7 +271,7 @@
     const m = d.getMinutes();
     const s = d.getSeconds();
     const date = d.getDate();
-    const month = d.getMonth() + 1;
+    let month = d.getMonth() + 1;
     const year = d.getFullYear();
     
     const hdeg = h * 30 + m * (360 / 720);
