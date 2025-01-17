@@ -87,19 +87,22 @@ header nav ul li a:hover {
 </div>
      <script>
         var audio = document.getElementById("myAudio"); 
-        
-         var randomNumber = Math.floor(Math.random() * 10) + 1;
- var attempts = 3;
- 
+        var attempts;
+        var randomNumber;
+    function start() {   
+         document.getElementById("result").innerHTML = "";                
+         randomNumber = Math.floor(Math.random() * 10) + 1;
+         attempts = 3;
+    }
  function checkGuess() {
      var guess = parseInt(document.getElementById("guessInput").value);
      
 
      if (guess === randomNumber) {
         audio.play(); document.getElementById("result").innerHTML = "Congratulations! You guessed the correct number.";
-         document.getElementById("result").style.color = "green";
-         document.getElementById("guessInput").disabled = true;
-         document.querySelector("button").disabled = true;
+         document.getElementById("result").style.color = "green";   
+         alert("Congratulations! You guessed the correct number.");
+         start();      
      } else {
          attempts--;
 
@@ -115,13 +118,14 @@ header nav ul li a:hover {
          } else {
              document.getElementById("result").innerHTML = "Game Over! The correct number was " + randomNumber;
              document.getElementById("result").style.color = "red";
-             document.getElementById("guessInput").disabled = true;
-             document.querySelector("button").disabled = true;
+             alert("Game Over! The correct number was "+ randomNumber);
+             start();
          }
      }
 
      document.getElementById("guessInput").value = "";
  }
+ 	start();
  	
 </script>
 <marquee bgcolor="#eeeeee" direction="left" scrollamount="10" width="100%" height="20">
