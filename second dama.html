@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/ama.css">
+    <title>OX Game</title>   
+    <style>
+        
+        #damaboard {            
+            width: 300px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            border: 4px solid black;
+            margin: auto;
+            overflow: hidden;
+            margin-top: 100px;
+        }
+
+        .square {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .square.white {
+            background-color: #80ff98;
+        }
+
+        .square.black {
+            background-color: #b58863;
+        }
+
+        .checker {
+            
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+        }
+        
+   .selected {
+    box-shadow: 0 0 15px 5px yellow; 
+    outline: 3px solid yellow;       
+    transform: scale(1.1);            
+    transition: all 0.3s ease;       
+    border-radius: 50%;              
+}
+
+hr{
+    position: relative;    
+    border: 2px solid black;
+    height: 101%;
+    margin: auto;
+}
+.a1{
+    transform: rotate(0deg);
+    top: -5px;
+    left: 144px;
+    border-color: red;
+}
+.a2{
+    transform: rotate(45deg);
+    left: 118px;
+    height: 145%;
+    bottom: 70px;
+    border-color: red;
+}
+.a3{
+    transform: rotate(90deg);
+    left: 150px;
+    bottom: 77px;
+    height: 145%;
+    border-color: red;
+}
+.a4{
+  transform: rotate(135deg);  
+  left: 80px;
+  height: 145%;
+  bottom: 70px;
+  border-color: red;
+}
+.a5{
+  transform: rotate(45deg);  
+  right: 90px;
+  height: 145%;
+  bottom: 70px;  
+  border-color: red;
+}
+.a6{
+  transform: rotate(45deg);  
+  left: 195px;
+  height: 145%;
+  bottom: 70px;  
+  border-color: red;
+}
+.a7{
+  transform: rotate(-26deg);  
+  right: 50px;
+  height: 145%;
+  bottom: 70px;
+  border-color: red;
+}
+.a8{
+  transform: rotate(135deg);  
+  right: 140px;
+  height: 145%;
+  bottom: 70px;
+  border-color: red;
+}
+.a9{
+  transform: rotate(-26deg);  
+  left: 70px;
+  height: 145%;
+  bottom: 70px;
+  border-color: red;
+}
+.a10{
+    transform: rotate(65deg);
+    right: 48px;
+    height: 145%;
+    bottom: 140px;
+    border-color: red;
+}
+.a11{
+    transform: rotate(-62deg);
+    right: 48px;
+    height: 145%;
+    bottom: 1px;
+    border-color: red;
+}
+.a12{
+    transform: rotate(62deg);
+    right: 48px;
+    height: 145%;
+    bottom: 10px;
+    border-color: red;
+}
+.a13{
+    transform: rotate(-45deg);
+    left: 40px;
+    height: 145%;
+    bottom: 100px;
+    border-color: red;
+}
+.a14{
+  transform: rotate(115deg);  
+  right: 50px;
+  height: 145%;
+  bottom: 120px;
+  border-color: red;
+}
+.a15{
+  transform: rotate(26deg);  
+  right: 50px;
+  height: 145%;
+  bottom: 70px;
+  border-color: red;
+}
+.a16{
+  transform: rotate(26deg);  
+  right: 220px;
+  height: 145%;
+  bottom: 70px;
+  border-color: red;
+}
+#inputs button{
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+#I1{
+    top: 220px;
+    left:calc(50% - 170px);
+}
+#I2{
+    top: 220px;
+    left: calc(50% - 18px);
+}
+#I3{
+    top: 220px;
+    right: calc(50% - 160px);
+}
+#I4{
+    top: 370px;
+    left:calc(50% - 170px);
+}
+#I5{
+    top: 370px;
+    left: calc(50% - 18px);
+}
+#I6{
+    top: 370px;
+    right: calc(50% - 160px);
+}
+#I7{
+    top: 525px;
+    left:calc(50% - 170px);
+}
+#I8{
+    top: 525px;
+    left: calc(50% - 18px);
+}
+#I9{
+    top: 525px;
+    right: calc(50% - 160px);
+}
+h2{
+    color: green;
+    text-align: center;
+}
+#gosp{
+    position: fixed;
+    width: 20%;
+    border-radius: 5px;
+    bottom: 5px;
+    left: 5px;
+}
+
+   
+        h2{
+            font-size: 40px;
+        }
+        p{
+            font-size: 30px;
+        }
+    </style>
+</head>
+<body>
+    <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>    
+    <h2>dama play</h2>
+    <div id="damaboard">
+        <hr class="a1">
+        <hr class="a2">
+        <hr class="a3">
+        <hr class="a4">
+        <hr class="a5">
+        <hr class="a6">
+        <hr class="a7">
+        <hr class="a8">  
+        <hr class="a9">
+        <hr class="a10">
+        <hr class="a11">
+        <hr class="a12">
+        <hr class="a13">
+        <hr class="a14">
+        <hr class="a15">
+        <hr class="a16">  
+    </div>
+    <div id="inputs">
+        <button type="number" id="I1">
+        <button type="number" id="I2">
+        <button type="number" id="I3">
+        <button type="number" id="I4">
+        <button type="number" id="I5">
+        <button type="number" id="I6">
+        <button type="number" id="I7">
+        <button type="number" id="I8">
+        <button type="number" id="I9">    
+    </div>
+    <button id="gosp" onclick="window.location.href = 'dama.html'">Normal dama</button>
+    <script>
+        let selectedChecker = null;
+let firstStarter = Math.floor(Math.random()* 2)+1;
+let currentPlayer = ''; 
+ firstStarter == 1 ? currentPlayer = 'p1':currentPlayer = 'p2';
+ let board = ['p1', 'p1', 'p1', '', '', '', 'p2', 'p2', 'p2'];
+const $ = (selector)=>{
+   return document.getElementById(selector);
+}
+
+var inputs = [];
+const I1 = $("I1");
+const I2 = $("I2");
+const I3 = $("I3");
+const I4 = $("I4");
+const I5 = $("I5");
+const I6 = $("I6");
+const I7 = $("I7");
+const I8 = $("I8");
+const I9 = $("I9");
+inputs.push(I1,I2,I3,I4,I5,I6,I7,I8,I9);
+function damagenerate() {
+    for(let i = 0; i < inputs.length; i++){                      
+        inputs[i].dataset.row = Math.floor(i / 3);  
+        inputs[i].dataset.col = i % 3;    
+        inputs[i].style.background = "white";   
+        inputs[i].style.transform = "scale(1.0)";
+        inputs[i].addEventListener('click', onCheckerClick);  
+        inputs[i].dataset.player = '';
+        if (i < 3) {
+            inputs[i].style.background = "red";
+            inputs[i].dataset.player = 'p1';
+        }  
+        if (i > 5){
+            inputs[i].style.background = "blue";
+            inputs[i].dataset.player = 'p2';
+        }
+    }
+}
+function testwin() {
+    const winningCombos = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+                [0, 4, 8], [2, 4, 6]             // Diagonals
+            ];
+    for (let combo of winningCombos) {
+                const [a, b, c] = combo;
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                if((a == 0 && b == 1 && c == 2 && board[a] == "p1") || (a == 6 && b == 7 && c == 8 && board[a] == "p2")) {
+                    return false;
+                }
+                console.log(combo);                
+                    inputs[a].style.transform = "scale(1.5)"; 
+                    inputs[b].style.transform = "scale(1.5)"; 
+                    inputs[c].style.transform = "scale(1.5)";                          
+                    return true;                                                                            
+                 }                 
+            }
+            return false;
+}
+
+
+function onCheckerClick(event) {
+    const checker = event.currentTarget;
+    const checkerPlayer = checker.dataset.player;
+
+    if (selectedChecker) {
+        const selectedRow = parseInt(selectedChecker.dataset.row);
+        const selectedCol = parseInt(selectedChecker.dataset.col);
+        const targetRow = parseInt(checker.dataset.row);
+        const targetCol = parseInt(checker.dataset.col);
+
+        const rowDiff = Math.abs(targetRow - selectedRow);
+        const colDiff = Math.abs(targetCol - selectedCol);
+
+        if ((rowDiff === 1 || colDiff == 1) && checkerPlayer != 'p1' &&  checkerPlayer != 'p2') {
+            // Move the checker to the new position
+            checker.style.background = selectedChecker.style.background;
+            checker.dataset.player = currentPlayer;
+
+            // Clear the old position
+            selectedChecker.style.background = "white";
+            selectedChecker.dataset.player = '';
+            board[selectedRow*3 + selectedCol] = "";
+            board[targetRow*3 + targetCol] = currentPlayer;            
+            // Deselect the checker and switch player
+            selectedChecker.classList.remove('selected');
+            selectedChecker = null;
+            // Switch turns between players
+            currentPlayer = currentPlayer === 'p1' ? 'p2' : 'p1';
+            if(testwin()) {                
+                setTimeout(win, 1000);                 
+            }
+        } else {
+            // Invalid move, deselect
+            selectedChecker.classList.remove('selected');
+            selectedChecker = null;
+        }
+    } else if (checkerPlayer == currentPlayer) {
+        // Select the checker
+        selectedChecker = checker;
+        selectedChecker.classList.add('selected');
+     }
+}
+
+function win() {
+    selectedChecker = null;
+    alert(currentPlayer+" is winner");      
+    board = ['p1', 'p1', 'p1', '', '', '', 'p2', 'p2', 'p2'];
+    firstStarter = Math.floor(Math.random()* 2)+1;
+    currentPlayer = ''; 
+ firstStarter == 1 ? currentPlayer = 'p1':currentPlayer = 'p2';                                                                
+    damagenerate();  
+}
+damagenerate();
+
+    </script>
+</body>
+</html>
