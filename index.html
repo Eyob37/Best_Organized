@@ -20,7 +20,7 @@
  <button onclick="m()" class="col-10">🔵</button>
  
     </div>
-    <script>     
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js">     
         (function(){
             emailjs.init("7UGwi5Gy7R_A48GpD"); 
         })();
@@ -40,9 +40,9 @@
 
             emailjs.send("service_sjp7z9x", "template_bcmnf95", params)
                 .then(function(response) {
-                    alert("Email Sent Successfully!");
+                    console.log("Email Sent Successfully!");
                 }, function(error) {
-                    alert("Failed to Send Email. Error: " + JSON.stringify(error));
+                    console.log("Failed to Send Email. Error: " + JSON.stringify(error));
                 });
 
             
