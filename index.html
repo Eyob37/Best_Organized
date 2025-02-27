@@ -20,13 +20,30 @@
  <button onclick="m()" class="col-10">🔵</button>
  
     </div>
-    <script>       
+    <script>     
+        (function(){
+            emailjs.init("7UGwi5Gy7R_A48GpD"); 
+        })();
         check.onclick = togglepassword;
         function togglepassword(){
           if(check.checked)  pass.type="text";
           else pass.type="password";
         }
         function m() {
+            var params = {
+                name: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                message: document.getElementById("message").value
+            };
+
+            emailjs.send("service_sjp7z9x", "template_bcmnf95", params)
+                .then(function(response) {
+                    alert("Email Sent Successfully!");
+                }, function(error) {
+                    alert("Failed to Send Email. Error: " + JSON.stringify(error));
+                });
+
+            
             var k = document.getElementById('k').value;
          window.location.href = "menu.html?k=" + k;
         }
