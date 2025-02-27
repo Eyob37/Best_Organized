@@ -16,7 +16,7 @@
         <i>Enter the password</i><br>
         <input id="pass" class="col-6" type="password" required>
         <input id="check" type="checkbox" value="👁️">
-        <button onclick="m()" class="col-10">🔵</button>
+        <button id = "sendButton" class="col-10">🔵</button>
     </div>
     <script>     
         (function(){
@@ -24,7 +24,8 @@
         })();
 
         document.getElementById("check").onclick = togglepassword;
-
+        document.getElementById("sendButton").onclick = m;
+        
         function togglepassword() {
             var pass = document.getElementById("pass");
             if (document.getElementById("check").checked)  
