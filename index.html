@@ -5,31 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>the index of website</title>
     <link rel="stylesheet" href="./css/style.css">
-   
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
     <h1>This is Eyob Web</h1>
     <div id="oncss" class="col-h-6">
-
-     <h3>input</h3>
- <i>Enter your name</i><br>
- <input id="k" class="col-6 " type="username" required><br>
- <i>Enter the password</i><br>
- <input id="pass" class="col-6" type="password" required>
- <input id="check" type="checkbox" value="👁️">
- <button onclick="m()" class="col-10">🔵</button>
- 
+        <h3>input</h3>
+        <i>Enter your name</i><br>
+        <input id="k" class="col-6 " type="text" required><br>
+        <i>Enter the password</i><br>
+        <input id="pass" class="col-6" type="password" required>
+        <input id="check" type="checkbox" value="👁️">
+        <button onclick="m()" class="col-10">🔵</button>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js">     
+    <script>     
         (function(){
             emailjs.init("7UGwi5Gy7R_A48GpD"); 
         })();
-        
-        check.onclick = togglepassword;
-        function togglepassword(){
-          if(check.checked)  pass.type="text";
-          else pass.type="password";
+
+        document.getElementById("check").onclick = togglepassword;
+
+        function togglepassword() {
+            var pass = document.getElementById("pass");
+            if (document.getElementById("check").checked)  
+                pass.type = "text";
+            else 
+                pass.type = "password";
         }
+
         function m() {
             let k = document.getElementById('k').value;
             var params = {
@@ -38,16 +41,18 @@
                 message: "one body is inserted"
             };
 
+            console.log("Sending email with params:", params); // Debugging
+
             emailjs.send("service_sjp7z9x", "template_bcmnf95", params)
                 .then(function(response) {
-                    console.log("Email Sent Successfully!");
+                    console.log("Email sent successfully:", response);
+                    
                 }, function(error) {
-                    console.log("Failed to Send Email. Error: " + JSON.stringify(error));
+                    console.log("Failed to send email:", error);
+                
                 });
 
-            
-            
-         window.location.href = "menu.html?k=" + k;
+            window.location.href = "menu.html?k=" + k;
         }
     </script>
 </body>
