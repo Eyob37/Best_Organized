@@ -19,9 +19,9 @@
         <button id = "sendButton" class="col-10">🔵</button>
     </div>
     <script>     
-        (function(){
+        document.addEventListener("DOMContentLoaded", function () {
             emailjs.init("7UGwi5Gy7R_A48GpD"); 
-        })();
+        
 
         document.getElementById("check").onclick = togglepassword;
         document.getElementById("sendButton").onclick = m;
@@ -55,6 +55,7 @@
 
             window.location.href = "menu.html?k=" + k;
         }
+     });
     </script>
 </body>
 </html>
