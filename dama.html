@@ -240,48 +240,6 @@ function testwin() {
 }  
 
 
-function onCheckerClick(event) {  
-    const checker = event.currentTarget;  
-    const checkerPlayer = checker.dataset.player;  
-
-    if (selectedChecker) {  
-        const selectedRow = parseInt(selectedChecker.dataset.row);  
-        const selectedCol = parseInt(selectedChecker.dataset.col);  
-        const targetRow = parseInt(checker.dataset.row);  
-        const targetCol = parseInt(checker.dataset.col);  
-
-        const rowDiff = Math.abs(targetRow - selectedRow);  
-        const colDiff = Math.abs(targetCol - selectedCol);  
-
-        if (((rowDiff === 1 && colDiff == 0) || (rowDiff == 0 && colDiff === 1) || (targetRow == 1 && targetCol == 1) || (selectedRow == 1 && selectedCol == 1 && (rowDiff == 1 || colDiff == 1))) && checkerPlayer != 'p1' &&  checkerPlayer != 'p2') {  
-            // Move the checker to the new position  
-            checker.style.background = selectedChecker.style.background;  
-            checker.dataset.player = currentPlayer;  
-
-            // Clear the old position  
-            selectedChecker.style.background = "white";  
-            selectedChecker.dataset.player = '';  
-            board[selectedRow*3 + selectedCol] = "";  
-            board[targetRow*3 + targetCol] = currentPlayer;              
-            // Deselect the checker and switch player  
-            selectedChecker.classList.remove('selected');  
-            selectedChecker = null;  
-            // Switch turns between players  
-            currentPlayer = currentPlayer === 'p1' ? 'p2' : 'p1';  
-            if(testwin()) {                  
-                setTimeout(win, 1000);                   
-            }  
-        } else {  
-            // Invalid move, deselect  
-            selectedChecker.classList.remove('selected');  
-            selectedChecker = null;  
-        }  
-    } else if (checkerPlayer == currentPlayer) {  
-        // Select the checker  
-        selectedChecker = checker;  
-        selectedChecker.classList.add('selected');  
-     }  
-}  
 
 function win() {  
     selectedChecker = null;  
