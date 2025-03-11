@@ -6,8 +6,7 @@
     <link rel="stylesheet" href="./css/ama.css">
     <title>OX Game</title>   
     <style>
-
-        #damaboard {            
+                #damaboard {            
             width: 300px;
             height: 300px;
             display: flex;
@@ -134,17 +133,11 @@ h2{
     right: 5px;
 }
 
-        h2{
-            font-size: 40px;
-        }
-        p{
-            font-size: 30px;
-        }
     </style>
 </head>
 <body>
     <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>    
-    <h2>dama play</h2>
+    <h2>Dama Play</h2>
     <div id="damaboard">
         <hr class="a1">
         <hr class="a2">
@@ -152,204 +145,154 @@ h2{
         <hr class="a4">
     </div>
     <div id="inputs">
-        <button type="number" id="I1">
-        <button type="number" id="I2">
-        <button type="number" id="I3">
-        <button type="number" id="I4">
-        <button type="number" id="I5">
-        <button type="number" id="I6">
-        <button type="number" id="I7">
-        <button type="number" id="I8">
-        <button type="number" id="I9">    
+        <button type="button" id="I1"></button>
+        <button type="button" id="I2"></button>
+        <button type="button" id="I3"></button>
+        <button type="button" id="I4"></button>
+        <button type="button" id="I5"></button>
+        <button type="button" id="I6"></button>
+        <button type="button" id="I7"></button>
+        <button type="button" id="I8"></button>
+        <button type="button" id="I9"></button>
     </div>
-    <button id="gosp" onclick="window.location.href = 'second dama.html'">spacial dama</button>
-<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js"></script>
-<script>
-  const firebaseConfig = {
-  apiKey: "AIzaSyDT3k2mhNrQxI4pA0JmXH5WwRKk-d8LU_Q",
-  authDomain: "dama-2e8d6.firebaseapp.com",
-  projectId: "dama-2e8d6",
-  storageBucket: "dama-2e8d6.firebasestorage.app",
-  messagingSenderId: "712822202797",
-  appId: "1:712822202797:web:403d918a89cab03da94124",
-  measurementId: "G-S7HV2CR34Z"
-};
-  firebase.initializeApp(firebaseConfig);
-</script>
-  <script>  
-        let selectedChecker = null;  
-let firstStarter = Math.floor(Math.random()* 2)+1;  
-let currentPlayer = '';   
- firstStarter == 1 ? currentPlayer = 'p1':currentPlayer = 'p2';  
- let board = ['p1', 'p1', 'p1', '', '', '', 'p2', 'p2', 'p2'];  
-const $ = (selector)=>{  
-   return document.getElementById(selector);  
-}  
+    <button id="gosp" onclick="window.location.href = 'second dama.html'">Special Dama</button>
 
-var inputs = [];  
-const I1 = $("I1");  
-const I2 = $("I2");  
-const I3 = $("I3");  
-const I4 = $("I4");  
-const I5 = $("I5");  
-const I6 = $("I6");  
-const I7 = $("I7");  
-const I8 = $("I8");  
-const I9 = $("I9");  
-inputs.push(I1,I2,I3,I4,I5,I6,I7,I8,I9);  
-function damagenerate() {  
-    for(let i = 0; i < inputs.length; i++){                        
-        inputs[i].dataset.row = Math.floor(i / 3);    
-        inputs[i].dataset.col = i % 3;      
-        inputs[i].style.background = "white";     
-        inputs[i].style.transform = "scale(1.0)";  
-        inputs[i].addEventListener('click', onCheckerClick);    
-        inputs[i].dataset.player = '';  
-        if (i < 3) {  
-            inputs[i].style.background = "red";  
-            inputs[i].dataset.player = 'p1';  
-        }    
-        if (i > 5){  
-            inputs[i].style.background = "blue";  
-            inputs[i].dataset.player = 'p2';  
-        }  
-    }  
-}  
-function testwin() {  
-    const winningCombos = [  
-                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows  
-                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns  
-                [0, 4, 8], [2, 4, 6]             // Diagonals  
-            ];  
-    for (let combo of winningCombos) {  
-                const [a, b, c] = combo;  
-                if (board[a] && board[a] === board[b] && board[a] === board[c]) {  
-                if((a == 0 && b == 1 && c == 2 && board[a] == "p1") || (a == 6 && b == 7 && c == 8 && board[a] == "p2")) {  
-                    return false;  
-                }  
-                console.log(combo);                  
-                    inputs[a].style.transform = "scale(1.5)";   
-                    inputs[b].style.transform = "scale(1.5)";   
-                    inputs[c].style.transform = "scale(1.5)";                            
-                    return true;                                                                              
-                 }                   
-            }  
-            return false;  
-}  
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
+        const firebaseConfig = {
+            apiKey: "AIzaSyDT3k2mhNrQxI4pA0JmXH5WwRKk-d8LU_Q",
+            authDomain: "dama-2e8d6.firebaseapp.com",
+            projectId: "dama-2e8d6",
+            storageBucket: "dama-2e8d6.firebasestorage.app",
+            messagingSenderId: "712822202797",
+            appId: "1:712822202797:web:403d918a89cab03da94124",
+            measurementId: "G-S7HV2CR34Z"
+        };
 
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const auth = getAuth();
+        let userId = null;
+        let gameRef = ref(db, "games/dama");
 
-function win() {  
-    selectedChecker = null;  
-    alert(currentPlayer+" is winner");        
-    board = ['p1', 'p1', 'p1', '', '', '', 'p2', 'p2', 'p2'];  
-    firstStarter = Math.floor(Math.random()* 2)+1;  
-    currentPlayer = '';   
- firstStarter == 1 ? currentPlayer = 'p1':currentPlayer = 'p2';                                                                  
-    damagenerate();    
-}  
-damagenerate();  
+        // Anonymous Authentication
+        signInAnonymously(auth).then(user => {
+            userId = user.user.uid;
+            checkGameState();
+        });
 
-    </script>  
+        let selectedChecker = null;
+        let firstStarter = Math.random() < 0.5 ? 'p1' : 'p2';
+        let currentPlayer = firstStarter;
+        let board = ['p1', 'p1', 'p1', '', '', '', 'p2', 'p2', 'p2'];
 
-    <script>
-        const db = firebase.database();
-let userId = null;
-let gameRef = db.ref("games/dama"); // Game state in Firebase
+        const inputs = [
+            document.getElementById("I1"), document.getElementById("I2"), document.getElementById("I3"),
+            document.getElementById("I4"), document.getElementById("I5"), document.getElementById("I6"),
+            document.getElementById("I7"), document.getElementById("I8"), document.getElementById("I9")
+        ];
 
-// Anonymous authentication
-firebase.auth().signInAnonymously().then(user => {
-    userId = user.user.uid;
-    checkGameState();
-});
+        function damagenerate() {
+            inputs.forEach((btn, i) => {
+                btn.dataset.row = Math.floor(i / 3);
+                btn.dataset.col = i % 3;
+                btn.style.background = "white";
+                btn.style.transform = "scale(1.0)";
+                btn.removeEventListener('click', onCheckerClick);
+                btn.addEventListener('click', onCheckerClick);
+                btn.dataset.player = '';
 
-// Function to update Firebase with new game state
-function updateGameState() {
-    gameRef.set({
-        board,
-        currentPlayer,
-    });
-}
-
-// Listen for game state changes in Firebase
-gameRef.on("value", snapshot => {
-    if (snapshot.exists()) {
-        const data = snapshot.val();
-        board = data.board;
-        currentPlayer = data.currentPlayer;
-        updateUI();
-    }
-});
-
-// Update UI when game state changes
-function updateUI() {
-    for (let i = 0; i < inputs.length; i++) {
-        inputs[i].dataset.player = board[i];
-        if (board[i] === "p1") {
-            inputs[i].style.background = "red";
-        } else if (board[i] === "p2") {
-            inputs[i].style.background = "blue";
-        } else {
-            inputs[i].style.background = "white";
+                if (i < 3) {
+                    btn.style.background = "red";
+                    btn.dataset.player = 'p1';
+                }
+                if (i > 5) {
+                    btn.style.background = "blue";
+                    btn.dataset.player = 'p2';
+                }
+            });
         }
-    }
-}
 
-// Modify onCheckerClick to sync with Firebase
-function onCheckerClick(event) {
-    if (userId !== currentPlayer) return; // Only current player can move
+        function onCheckerClick(event) {
+            if (userId !== currentPlayer) return;
 
-    const checker = event.currentTarget;
-    const checkerPlayer = checker.dataset.player;
+            const checker = event.currentTarget;
+            const checkerPlayer = checker.dataset.player;
 
-    if (selectedChecker) {
-        const selectedRow = parseInt(selectedChecker.dataset.row);
-        const selectedCol = parseInt(selectedChecker.dataset.col);
-        const targetRow = parseInt(checker.dataset.row);
-        const targetCol = parseInt(checker.dataset.col);
+            if (selectedChecker) {
+                const selectedRow = parseInt(selectedChecker.dataset.row);
+                const selectedCol = parseInt(selectedChecker.dataset.col);
+                const targetRow = parseInt(checker.dataset.row);
+                const targetCol = parseInt(checker.dataset.col);
 
-        const rowDiff = Math.abs(targetRow - selectedRow);
-        const colDiff = Math.abs(targetCol - selectedCol);
+                const rowDiff = Math.abs(targetRow - selectedRow);
+                const colDiff = Math.abs(targetCol - selectedCol);
 
-        if (((rowDiff === 1 && colDiff == 0) || (rowDiff == 0 && colDiff === 1)) &&
-            checkerPlayer !== 'p1' && checkerPlayer !== 'p2') {
+                if (((rowDiff === 1 && colDiff == 0) || (rowDiff == 0 && colDiff === 1)) &&
+                    checkerPlayer !== 'p1' && checkerPlayer !== 'p2') {
 
-            checker.style.background = selectedChecker.style.background;
-            checker.dataset.player = currentPlayer;
+                    checker.style.background = selectedChecker.style.background;
+                    checker.dataset.player = currentPlayer;
 
-            selectedChecker.style.background = "white";
-            selectedChecker.dataset.player = '';
-            board[selectedRow * 3 + selectedCol] = "";
-            board[targetRow * 3 + targetCol] = currentPlayer;
+                    selectedChecker.style.background = "white";
+                    selectedChecker.dataset.player = '';
+                    board[selectedRow * 3 + selectedCol] = "";
+                    board[targetRow * 3 + targetCol] = currentPlayer;
 
-            selectedChecker.classList.remove('selected');
-            selectedChecker = null;
+                    selectedChecker.classList.remove('selected');
+                    selectedChecker = null;
 
-            currentPlayer = currentPlayer === 'p1' ? 'p2' : 'p1';
-            updateGameState(); // Sync with Firebase
-        } else {
-            selectedChecker.classList.remove('selected');
-            selectedChecker = null;
+                    currentPlayer = currentPlayer === 'p1' ? 'p2' : 'p1';
+                    updateGameState();
+                } else {
+                    selectedChecker.classList.remove('selected');
+                    selectedChecker = null;
+                }
+            } else if (checkerPlayer === currentPlayer) {
+                selectedChecker = checker;
+                selectedChecker.classList.add('selected');
+            }
         }
-    } else if (checkerPlayer == currentPlayer) {
-        selectedChecker = checker;
-        selectedChecker.classList.add('selected');
-    }
-}
 
-// Start game
-function checkGameState() {
-    gameRef.once("value", snapshot => {
-        if (!snapshot.exists()) {
-            gameRef.set({ board, currentPlayer: "p1" }); // Initialize game
+        function updateGameState() {
+            set(gameRef, { board, currentPlayer });
         }
-    });
-}
 
-damagenerate();
+        onValue(gameRef, snapshot => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                board = data.board;
+                currentPlayer = data.currentPlayer;
+                updateUI();
+            }
+        });
 
+        function updateUI() {
+            inputs.forEach((btn, i) => {
+                btn.dataset.player = board[i];
+                if (board[i] === "p1") {
+                    btn.style.background = "red";
+                } else if (board[i] === "p2") {
+                    btn.style.background = "blue";
+                } else {
+                    btn.style.background = "white";
+                }
+            });
+        }
+
+        function checkGameState() {
+            get(gameRef).then(snapshot => {
+                if (!snapshot.exists()) {
+                    set(gameRef, { board, currentPlayer });
+                }
+            });
+        }
+
+        damagenerate();
     </script>
 </body>
 </html>
