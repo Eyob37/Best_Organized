@@ -163,6 +163,21 @@ h2{
         <button type="number" id="I9">    
     </div>
     <button id="gosp" onclick="window.location.href = 'second dama.html'">spacial dama</button>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js"></script>
+<script>
+  const firebaseConfig = {
+  apiKey: "AIzaSyDT3k2mhNrQxI4pA0JmXH5WwRKk-d8LU_Q",
+  authDomain: "dama-2e8d6.firebaseapp.com",
+  projectId: "dama-2e8d6",
+  storageBucket: "dama-2e8d6.firebasestorage.app",
+  messagingSenderId: "712822202797",
+  appId: "1:712822202797:web:403d918a89cab03da94124",
+  measurementId: "G-S7HV2CR34Z"
+};
+  firebase.initializeApp(firebaseConfig);
+</script>
     <script>
         let selectedChecker = null;
 let firstStarter = Math.floor(Math.random()* 2)+1;
