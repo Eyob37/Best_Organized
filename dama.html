@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="./css/ama.css">
     <title>OX Game</title>   
     <style>
-                        #damaboard {
+       #damaboard {
             width: 300px;
             height: 300px;
             display: flex;
@@ -123,7 +123,7 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getDatabase, ref, set, get, onValue, child, push } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+        import { getDatabase, ref, set, get, onValue, child } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
         const firebaseConfig = {
@@ -141,16 +141,15 @@
         const db = getDatabase(app);
         const auth = getAuth();
         let userId = null;
-        let gameRef = null; // Will be set dynamically based on the game room
+        let gameRef = ref(db, "games/dama");
         let presenceRef = ref(db, "presence");
         let playerRole = null; // 'p1' or 'p2'
-        let currentGameId = null; // ID of the current game room
 
         // Anonymous Authentication
         signInAnonymously(auth).then(user => {
             userId = user.user.uid;
             setupPresence();
-            joinOrCreateGame();
+            joinGame();
         });
 
         let selectedChecker = null;
@@ -189,63 +188,26 @@
             });
         }
 
-        // Join or create a game room
-        function joinOrCreateGame() {
-            const gamesRef = ref(db, "games");
-            onValue(gamesRef, (snapshot) => {
-                const games = snapshot.val() || {};
-                let joined = false;
-
-                // Find the first available game room
-                for (const gameId in games) {
-                    const players = games[gameId].players || {};
-                    if (Object.keys(players).length < 2) {
-                        joinGame(gameId);
-                        joined = true;
-                        break;
-                    }
-                }
-
-                // If no available room, create a new one
-                if (!joined) {
-                    createGame();
-                }
-            });
-        }
-
-        // Join an existing game room
-        function joinGame(gameId) {
-            currentGameId = gameId;
-            gameRef = ref(db, `games/${gameId}`);
-            const playersRef = ref(db, `games/${gameId}/players`);
-
+        // Join the game and assign player role
+        function joinGame() {
+            const playersRef = ref(db, "games/dama/players");
             onValue(playersRef, (snapshot) => {
                 const players = snapshot.val() || {};
                 if (Object.keys(players).length === 0) {
                     // First player joins as p1
-                    set(ref(db, `games/${gameId}/players/p1`), userId);
+                    set(ref(db, "games/dama/players/p1"), userId);
                     playerRole = 'p1';
                 } else if (Object.keys(players).length === 1 && !players.p2) {
                     // Second player joins as p2
-                    set(ref(db, `games/${gameId}/players/p2`), userId);
+                    set(ref(db, "games/dama/players/p2"), userId);
                     playerRole = 'p2';
                 } else {
-                    // Game is full (should not happen due to joinOrCreateGame logic)
-                    alert("This game is full. Please try again.");
+                    // Game is full
+                    alert("The game is full. Please try again later.");
                     return;
                 }
                 checkGameState();
             });
-        }
-
-        // Create a new game room
-        function createGame() {
-            const newGameRef = push(ref(db, "games"));
-            currentGameId = newGameRef.key;
-            gameRef = ref(db, `games/${currentGameId}`);
-            set(gameRef, { board, currentPlayer, players: { p1: userId } });
-            playerRole = 'p1';
-            checkGameState();
         }
 
         function damagenerate() {
