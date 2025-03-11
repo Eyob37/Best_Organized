@@ -132,6 +132,10 @@ h2{
     bottom: 5px;
     right: 5px;
 }
+.checker {
+    pointer-events: auto;
+    cursor: pointer;
+}
 
     </style>
 </head>
@@ -292,6 +296,14 @@ h2{
                 }
             });
         }
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('.checker').forEach(checker => {
+    checker.addEventListener('click', function() {
+        console.log("Checker selected:", this);
+        this.classList.toggle('selected'); // Add a visual effect
+    });
+});
+});
 
         damagenerate();
     </script>
