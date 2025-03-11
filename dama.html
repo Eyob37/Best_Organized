@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="./css/ama.css">
     <title>OX Game</title>   
     <style>
-                #damaboard {
+                        #damaboard {
             width: 300px;
             height: 300px;
             display: flex;
@@ -98,6 +98,9 @@
 <body>
     <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>    
     <h2>Dama Play</h2>
+    <div id="onlinePlayers">
+        <p>Online Players: <span id="onlineCount">0</span></p>
+    </div>
     <div id="damaboard">
         <hr class="a1">
         <hr class="a2">
@@ -120,7 +123,7 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+        import { getDatabase, ref, set, get, onValue, child } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
         const firebaseConfig = {
@@ -139,11 +142,13 @@
         const auth = getAuth();
         let userId = null;
         let gameRef = ref(db, "games/dama");
+        let presenceRef = ref(db, "presence");
 
         // Anonymous Authentication
         signInAnonymously(auth).then(user => {
             userId = user.user.uid;
             checkGameState();
+            setupPresence();
         });
 
         let selectedChecker = null;
@@ -156,6 +161,32 @@
             document.getElementById("I4"), document.getElementById("I5"), document.getElementById("I6"),
             document.getElementById("I7"), document.getElementById("I8"), document.getElementById("I9")
         ];
+
+        // Track online players presence
+        function setupPresence() {
+            const userStatusRef = ref(db, 'presence/' + userId);
+            const connectedRef = ref(db, ".info/connected");
+
+            onValue(connectedRef, (snapshot) => {
+                if (snapshot.val() === true) {
+                    set(userStatusRef, true);
+
+                    // Remove user when they disconnect
+                    userStatusRef.onDisconnect().set(false);
+                }
+            });
+
+            // Listen to the presence of users
+            onValue(presenceRef, (snapshot) => {
+                let onlinePlayers = 0;
+                snapshot.forEach((childSnapshot) => {
+                    if (childSnapshot.val() === true) {
+                        onlinePlayers++;
+                    }
+                });
+                document.getElementById("onlineCount").textContent = onlinePlayers;
+            });
+        }
 
         function damagenerate() {
             inputs.forEach((btn, i) => {
