@@ -163,31 +163,34 @@
         ];
 
         // Track online players presence
- 	function setupPresence() {
-	    const userStatusRef = ref(db, 'presence/' + userId);
-	    const connectedRef = ref(db, ".info/connected");
-	
-	    onValue(connectedRef, (snapshot) => {
-	        if (snapshot.val() === true) {
-	            // When the user connects, we set their status to true
-	            set(userStatusRef, true);
-	
-	            // Set user status to false when they disconnect
-	            userStatusRef.onDisconnect().set(false);
-	        }
-	    });
-	
-	    // Listen to the presence of users
-	    onValue(presenceRef, (snapshot) => {
-	        let onlinePlayers = 0;
-	        snapshot.forEach((childSnapshot) => {
-	            if (childSnapshot.val() === true) {
-	                onlinePlayers++;
-	            }
-	        });
-	        document.getElementById("onlineCount").textContent = onlinePlayers;
-	    });
-	}
+ 	import { getDatabase, ref, set, onDisconnect } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+// Inside setupPresence function:
+function setupPresence() {
+    const userStatusRef = ref(db, 'presence/' + userId);
+    const connectedRef = ref(db, ".info/connected");
+
+    onValue(connectedRef, (snapshot) => {
+        if (snapshot.val() === true) {
+            // When the user connects, we set their status to true
+            set(userStatusRef, true);
+
+            // Set user status to false when they disconnect
+            onDisconnect(userStatusRef).set(false);
+        }
+    });
+
+    // Listen to the presence of users
+    onValue(presenceRef, (snapshot) => {
+        let onlinePlayers = 0;
+        snapshot.forEach((childSnapshot) => {
+            if (childSnapshot.val() === true) {
+                onlinePlayers++;
+            }
+        });
+        document.getElementById("onlineCount").textContent = onlinePlayers;
+    });
+}
 
         function joinGame() {
     const playersRef = ref(db, "games/dama/players");
