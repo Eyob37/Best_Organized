@@ -143,17 +143,17 @@
         let userId = null;
         let gameRef = ref(db, "games/dama");
         let presenceRef = ref(db, "presence");
+        let playerRole = null; // 'p1' or 'p2'
 
         // Anonymous Authentication
         signInAnonymously(auth).then(user => {
             userId = user.user.uid;
-            checkGameState();
             setupPresence();
+            joinGame();
         });
 
         let selectedChecker = null;
-        let firstStarter = Math.random() < 0.5 ? 'p1' : 'p2';
-        let currentPlayer = firstStarter;
+        let currentPlayer = 'p1'; // Start with player 1
         let board = ['p1', 'p1', 'p1', '', '', '', 'p2', 'p2', 'p2'];
 
         const inputs = [
@@ -188,6 +188,28 @@
             });
         }
 
+        // Join the game and assign player role
+        function joinGame() {
+            const playersRef = ref(db, "games/dama/players");
+            onValue(playersRef, (snapshot) => {
+                const players = snapshot.val() || {};
+                if (Object.keys(players).length === 0) {
+                    // First player joins as p1
+                    set(ref(db, "games/dama/players/p1"), userId);
+                    playerRole = 'p1';
+                } else if (Object.keys(players).length === 1 && !players.p2) {
+                    // Second player joins as p2
+                    set(ref(db, "games/dama/players/p2"), userId);
+                    playerRole = 'p2';
+                } else {
+                    // Game is full
+                    alert("The game is full. Please try again later.");
+                    return;
+                }
+                checkGameState();
+            });
+        }
+
         function damagenerate() {
             inputs.forEach((btn, i) => {
                 btn.dataset.row = Math.floor(i / 3);
@@ -210,13 +232,10 @@
         }
 
         function onCheckerClick(event) {
-            if (userId !== currentPlayer) return;
+            if (playerRole !== currentPlayer) return;
 
             const checker = event.currentTarget;
             const checkerPlayer = checker.dataset.player;
-
-            console.log('Selected Checker:', selectedChecker);
-            console.log('Clicked Checker:', checker);
 
             if (selectedChecker) {
                 const selectedRow = parseInt(selectedChecker.dataset.row);
