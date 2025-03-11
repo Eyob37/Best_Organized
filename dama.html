@@ -189,42 +189,42 @@
         }
 
         // Join the game and assign player role
-        function joinGame() {
-    const playersRef = ref(db, "games/dama/players");
-
-    // Check the current players in the game
-    get(playersRef).then((snapshot) => {
-        const players = snapshot.val() || {};
-
-        if (!players.p1) {
-            // First player joins as p1
-            set(ref(db, "games/dama/players/p1"), userId)
-                .then(() => {
-                    playerRole = 'p1';
-                    console.log("You are Player 1 (Red)");
-                })
-                .catch((error) => {
-                    console.error("Error assigning Player 1:", error);
-                });
-        } else if (!players.p2) {
-            // Second player joins as p2
-            set(ref(db, "games/dama/players/p2"), userId)
-                .then(() => {
-                    playerRole = 'p2';
-                    console.log("You are Player 2 (Blue)");
-                })
-                .catch((error) => {
-                    console.error("Error assigning Player 2:", error);
-                });
-        } else {
-            // Game is full
-            alert("The game is full. Please try again later.");
-            return;
-        }
-    }).catch((error) => {
-        console.error("Error fetching players:", error);
-    });
-}
+     		function joinGame() {
+					    const playersRef = ref(db, "games/dama/players");
+					
+					    // Check the current players in the game
+					    get(playersRef).then((snapshot) => {
+					        const players = snapshot.val() || {};
+					
+					        if (!players.p1) {
+					            // First player joins as p1
+					            set(ref(db, "games/dama/players/p1"), userId)
+					                .then(() => {
+					                    playerRole = 'p1';
+					                    alert("You are Player 1 (Red)");
+					                })
+					                .catch((error) => {
+					                    console.error("Error assigning Player 1:", error);
+					                });
+					        } else if (!players.p2) {
+					            // Second player joins as p2
+					            set(ref(db, "games/dama/players/p2"), userId)
+					                .then(() => {
+					                    playerRole = 'p2';
+					                    alert("You are Player 2 (Blue)");
+					                })
+					                .catch((error) => {
+					                    console.error("Error assigning Player 2:", error);
+					                });
+					        } else {
+					            // Game is full
+					            alert("The game is full. Please try again later.");
+					            return;
+					        }
+					    }).catch((error) => {
+					        console.error("Error fetching players:", error);
+					    });
+					}
 
         function damagenerate() {
             inputs.forEach((btn, i) => {
