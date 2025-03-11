@@ -190,32 +190,36 @@
 
         // Join the game and assign player role
      		function joinGame() {
-						    const playersRef = ref(db, "games/dama/players");
-						    onValue(playersRef, (snapshot) => {
-						        const players = snapshot.val() || {};
-						        const playerCount = Object.keys(players).length; // Count the number of players
-						
-						        if (playerCount === 0) {
-						            // First player joins as p1
-						            set(ref(db, "games/dama/players/p1"), userId);
-						            playerRole = 'p1';
-						        } else if (playerCount === 1 && !players.p2) {
-						            // Second player joins as p2
-						            set(ref(db, "games/dama/players/p2"), userId);
-						            playerRole = 'p2';
-						        } else if (playerCount === 3) {
-						            // Game is full, but ensure the player is added to the correct role if necessary
-						            alert("The game is full. Please try again later.");
-						            return;
-						        } else {
-						            // Handle cases where there are unexpected player states, in case there's an issue with the database
-						            alert("Unexpected error occurred. Please try again later.");
-						            return;
-						        }
-						
-						        checkGameState();
-						    });
-						}
+					    const playersRef = ref(db, "games/dama/players");
+					    onValue(playersRef, (snapshot) => {
+					        const players = snapshot.val() || {};
+					
+					        const playerCount = Object.keys(players).length; // Count the number of players
+					        if (playerCount === 0) {
+					            // First player joins as p1
+					            set(ref(db, "games/dama/players/p1"), userId)
+					                .then(() => {
+					                    playerRole = 'p1';
+					                    checkGameState();
+					                })
+					                .catch(err => alert("Error joining as p1: " + err));
+					        } else if (playerCount === 1 && !players.p2) {
+					            // Second player joins as p2
+					            set(ref(db, "games/dama/players/p2"), userId)
+					                .then(() => {
+					                    playerRole = 'p2';
+					                    checkGameState();
+					                })
+					                .catch(err => alert("Error joining as p2: " + err));
+					        } else if (playerCount >= 2) {
+					            // Game is full
+					            alert("The game is full. Please try again later.");
+					        } else {
+					            // Unexpected error case
+					            alert("Unexpected error occurred. Please try again later.");
+					        }
+					    });
+					}
 
         function damagenerate() {
             inputs.forEach((btn, i) => {
