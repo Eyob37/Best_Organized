@@ -164,14 +164,15 @@ h2{
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyDT3k2mhNrQxI4pA0JmXH5WwRKk-d8LU_Q",
-            authDomain: "dama-2e8d6.firebaseapp.com",
-            projectId: "dama-2e8d6",
-            storageBucket: "dama-2e8d6.firebasestorage.app",
-            messagingSenderId: "712822202797",
-            appId: "1:712822202797:web:403d918a89cab03da94124",
-            measurementId: "G-S7HV2CR34Z"
-        };
+  apiKey: "AIzaSyDT3k2mhNrQxI4pA0JmXH5WwRKk-d8LU_Q",
+  authDomain: "dama-2e8d6.firebaseapp.com",
+  databaseURL: "https://dama-2e8d6-default-rtdb.firebaseio.com",
+  projectId: "dama-2e8d6",
+  storageBucket: "dama-2e8d6.firebasestorage.app",
+  messagingSenderId: "712822202797",
+  appId: "1:712822202797:web:403d918a89cab03da94124",
+  measurementId: "G-S7HV2CR34Z"
+};
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
