@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/ama.css">
-    <title>OX Game</title>   
+    <title>OX Game</title>
     <style>
-                #damaboard {            
+        #damaboard {
             width: 300px;
             height: 300px;
             display: flex;
@@ -37,110 +37,66 @@
         }
 
         .checker {
-
             width: 80%;
             height: 80%;
             border-radius: 50%;
+            pointer-events: auto;
+            cursor: pointer;
         }
 
-   .selected {
-    box-shadow: 0 0 15px 5px yellow; 
-    outline: 3px solid yellow;       
-    transform: scale(1.1);            
-    transition: all 0.3s ease;       
-    border-radius: 50%;              
-}
+        .selected {
+            box-shadow: 0 0 15px 5px yellow;
+            outline: 3px solid yellow;
+            transform: scale(1.1);
+            transition: all 0.3s ease;
+            border-radius: 50%;
+        }
 
-hr{
-    position: relative;    
-    border: 2px solid black;
-    height: 101%;
-    margin: auto;
-}
-.a1{
-    transform: rotate(0deg);
-    top: -5px;
-    left: 114px;
-}
-.a2{
-    transform: rotate(45deg);
-    left: 40px;
-    height: 145%;
-    bottom: 70px;
-}
-.a3{
-    transform: rotate(90deg);
-    right: 35px;
-    bottom: 3px;
-}
-.a4{
-  transform: rotate(135deg);  
-  right: 112px;
-  height: 145%;
-  bottom: 70px;
-}
-#inputs button{
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-}
-#I1{
-    top: 220px;
-    left:calc(50% - 170px);
-}
-#I2{
-    top: 220px;
-    left: calc(50% - 18px);
-}
-#I3{
-    top: 220px;
-    right: calc(50% - 160px);
-}
-#I4{
-    top: 370px;
-    left:calc(50% - 170px);
-}
-#I5{
-    top: 370px;
-    left: calc(50% - 18px);
-}
-#I6{
-    top: 370px;
-    right: calc(50% - 160px);
-}
-#I7{
-    top: 525px;
-    left:calc(50% - 170px);
-}
-#I8{
-    top: 525px;
-    left: calc(50% - 18px);
-}
-#I9{
-    top: 525px;
-    right: calc(50% - 160px);
-}
-h2{
-    color: green;
-    text-align: center;
-}
-#gosp{
-    position: fixed;
-    width: 20%;
-    border-radius: 5px;
-    bottom: 5px;
-    right: 5px;
-}
-.checker {
-    pointer-events: auto;
-    cursor: pointer;
-}
+        hr {
+            position: relative;
+            border: 2px solid black;
+            height: 101%;
+            margin: auto;
+        }
 
+        .a1 { transform: rotate(0deg); top: -5px; left: 114px; }
+        .a2 { transform: rotate(45deg); left: 40px; height: 145%; bottom: 70px; }
+        .a3 { transform: rotate(90deg); right: 35px; bottom: 3px; }
+        .a4 { transform: rotate(135deg); right: 112px; height: 145%; bottom: 70px; }
+
+        #inputs button {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        #I1 { top: 220px; left: calc(50% - 170px); }
+        #I2 { top: 220px; left: calc(50% - 18px); }
+        #I3 { top: 220px; right: calc(50% - 160px); }
+        #I4 { top: 370px; left: calc(50% - 170px); }
+        #I5 { top: 370px; left: calc(50% - 18px); }
+        #I6 { top: 370px; right: calc(50% - 160px); }
+        #I7 { top: 525px; left: calc(50% - 170px); }
+        #I8 { top: 525px; left: calc(50% - 18px); }
+        #I9 { top: 525px; right: calc(50% - 160px); }
+
+        h2 {
+            color: green;
+            text-align: center;
+        }
+
+        #gosp {
+            position: fixed;
+            width: 20%;
+            border-radius: 5px;
+            bottom: 5px;
+            right: 5px;
+        }
     </style>
 </head>
 <body>
-    <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>    
+    <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>
     <h2>Dama Play</h2>
     <div id="damaboard">
         <hr class="a1">
@@ -148,7 +104,7 @@ h2{
         <hr class="a3">
         <hr class="a4">
     </div>
-   <div class="checker" id="inputs" data-player="1">  
+    <div class="checker" id="inputs" data-player="1">
         <button type="button" id="I1"></button>
         <button type="button" id="I2"></button>
         <button type="button" id="I3"></button>
@@ -168,15 +124,15 @@ h2{
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
         const firebaseConfig = {
-  apiKey: "AIzaSyDT3k2mhNrQxI4pA0JmXH5WwRKk-d8LU_Q",
-  authDomain: "dama-2e8d6.firebaseapp.com",
-  databaseURL: "https://dama-2e8d6-default-rtdb.firebaseio.com",
-  projectId: "dama-2e8d6",
-  storageBucket: "dama-2e8d6.firebasestorage.app",
-  messagingSenderId: "712822202797",
-  appId: "1:712822202797:web:403d918a89cab03da94124",
-  measurementId: "G-S7HV2CR34Z"
-};
+            apiKey: "AIzaSyDT3k2mhNrQxI4pA0JmXH5WwRKk-d8LU_Q",
+            authDomain: "dama-2e8d6.firebaseapp.com",
+            databaseURL: "https://dama-2e8d6-default-rtdb.firebaseio.com",
+            projectId: "dama-2e8d6",
+            storageBucket: "dama-2e8d6.firebasestorage.app",
+            messagingSenderId: "712822202797",
+            appId: "1:712822202797:web:403d918a89cab03da94124",
+            measurementId: "G-S7HV2CR34Z"
+        };
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
@@ -185,10 +141,14 @@ h2{
         let gameRef = ref(db, "games/dama");
 
         // Anonymous Authentication
-        signInAnonymously(auth).then(user => {
-            userId = user.user.uid;
-            checkGameState();
-        });
+        signInAnonymously(auth)
+            .then(user => {
+                userId = user.user.uid;
+                checkGameState();
+            })
+            .catch(error => {
+                console.error("Authentication failed:", error);
+            });
 
         let selectedChecker = null;
         let firstStarter = Math.random() < 0.5 ? 'p1' : 'p2';
@@ -201,7 +161,7 @@ h2{
             document.getElementById("I7"), document.getElementById("I8"), document.getElementById("I9")
         ];
 
-        function damagenerate() {
+        function initializeGame() {
             inputs.forEach((btn, i) => {
                 btn.dataset.row = Math.floor(i / 3);
                 btn.dataset.col = i % 3;
@@ -264,7 +224,10 @@ h2{
         }
 
         function updateGameState() {
-            set(gameRef, { board, currentPlayer });
+            set(gameRef, { board, currentPlayer })
+                .catch(error => {
+                    console.error("Failed to update game state:", error);
+                });
         }
 
         onValue(gameRef, snapshot => {
@@ -290,22 +253,20 @@ h2{
         }
 
         function checkGameState() {
-            get(gameRef).then(snapshot => {
-                if (!snapshot.exists()) {
-                    set(gameRef, { board, currentPlayer });
-                }
-            });
+            get(gameRef)
+                .then(snapshot => {
+                    if (!snapshot.exists()) {
+                        set(gameRef, { board, currentPlayer });
+                    }
+                })
+                .catch(error => {
+                    console.error("Failed to check game state:", error);
+                });
         }
-document.addEventListener("DOMContentLoaded", function() {
-    document.querySelectorAll('.checker').forEach(checker => {
-    checker.addEventListener('click', function() {
-        console.log("Checker selected:", this);
-        this.classList.toggle('selected'); // Add a visual effect
-    });
-});
-});
 
-        damagenerate();
+        document.addEventListener("DOMContentLoaded", function () {
+            initializeGame();
+        });
     </script>
 </body>
 </html>
