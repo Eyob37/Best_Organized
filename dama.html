@@ -197,7 +197,7 @@
                     // First player joins as p1
                     set(ref(db, "games/dama/players/p1"), userId);
                     playerRole = 'p1';
-                } else if (Object.keys(players).length == 1 && !players.p2) {
+                } else if (Object.keys(players).length === 1 && !players.p2) {
                     // Second player joins as p2
                     set(ref(db, "games/dama/players/p2"), userId);
                     playerRole = 'p2';
