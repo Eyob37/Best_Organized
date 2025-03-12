@@ -192,39 +192,43 @@ function setupPresence() {
     });
 }
 
-        function joinGame() {
+function joinGame() {
     const playersRef = ref(db, "games/dama/players");
-    onValue(playersRef, (snapshot) => {
+    get(playersRef).then((snapshot) => {
         const players = snapshot.val() || {};
-
         const playerCount = Object.keys(players).length; // Count the number of players
-        if (playerCount === 0) {
+
+        console.log("playerCount === 1: ", playerCount === 1);
+        console.log("players.p1: ", players.p1);
+        console.log("playerCount === 2: ", playerCount === 2);
+        console.log("players.p2: ", players.p2);
+
+        if (players.p1 === userId || players.p2 === userId) {
+            // User is already in the game
+            playerRole = players.p1 === userId ? "p1" : "p2";
+            console.log("User is already assigned as:", playerRole);
+            return;
+        }
+
+        if (!players.p1) {
             // First player joins as p1
             set(ref(db, "games/dama/players/p1"), userId)
                 .then(() => {
-                    playerRole = 'p1';
+                    playerRole = "p1";
                     checkGameState();
                 })
-                .catch(err => alert("Error joining as p1: " + err));
-        } else if (playerCount === 1 && !players.p2) {
+                .catch((err) => alert("Error joining as p1: " + err));
+        } else if (!players.p2) {
             // Second player joins as p2
             set(ref(db, "games/dama/players/p2"), userId)
                 .then(() => {
-                    playerRole = 'p2';
+                    playerRole = "p2";
                     checkGameState();
                 })
-                .catch(err => alert("Error joining as p2: " + err));
-        } else if (playerCount === 2) {
+                .catch((err) => alert("Error joining as p2: " + err));
+        } else {
             // Game is full
             alert("The game is full. Please try again later.");
- console.log("playerCount === 1: ",playerCount === 1);
-console.log("players.p1: ",players.p1);
-console.log("playerCount === 2: ",playerCount === 2);
-console.log("players.p2: ",players.p2);
-
-        } else {
-            // Unexpected error case
-            alert("Unexpected error occurred. Please try again later.");
         }
     });
 }
