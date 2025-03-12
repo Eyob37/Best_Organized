@@ -148,6 +148,7 @@
         // Anonymous Authentication
         signInAnonymously(auth).then(user => {
             userId = user.user.uid;
+            console.log("Signed in:", user.user.uid);
             setupPresence();
             joinGame();
         });
