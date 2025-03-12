@@ -1,104 +1,104 @@
-<!DOCTYPE html>  
-<html lang="en">  
-<head>  
-    <meta charset="UTF-8">  
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <link rel="stylesheet" href="./css/ama.css">  
-    <title>OX Game</title>     
-    <style>  
-       #damaboard {  
-            width: 300px;  
-            height: 300px;  
-            display: flex;  
-            justify-content: center;  
-            align-content: center;  
-            border: 4px solid black;  
-            margin: auto;  
-            overflow: hidden;  
-            margin-top: 100px;  
-        }  
-  
-        .square {  
-            width: 50px;  
-            height: 50px;  
-            display: flex;  
-            justify-content: center;  
-            align-items: center;  
-            font-size: 24px;  
-            font-weight: bold;  
-        }  
-  
-        .square.white {  
-            background-color: #80ff98;  
-        }  
-  
-        .square.black {  
-            background-color: #b58863;  
-        }  
-  
-        .checker {  
-            width: 80%;  
-            height: 80%;  
-            border-radius: 50%;  
-            pointer-events: auto;  
-            cursor: pointer;  
-        }  
-  
-        .selected {  
-            box-shadow: 0 0 15px 5px yellow;  
-            outline: 3px solid yellow;  
-            transform: scale(1.1);  
-            transition: all 0.3s ease;  
-            border-radius: 50%;  
-        }  
-  
-        hr {  
-            position: relative;  
-            border: 2px solid black;  
-            height: 101%;  
-            margin: auto;  
-        }  
-  
-        .a1 { transform: rotate(0deg); top: -5px; left: 114px; }  
-        .a2 { transform: rotate(45deg); left: 40px; height: 145%; bottom: 70px; }  
-        .a3 { transform: rotate(90deg); right: 35px; bottom: 3px; }  
-        .a4 { transform: rotate(135deg); right: 112px; height: 145%; bottom: 70px; }  
-  
-        #inputs button {  
-            position: absolute;  
-            width: 30px;  
-            height: 30px;  
-            border-radius: 50%;  
-        }  
-  
-        #I1 { top: 220px; left: calc(50% - 170px); }  
-        #I2 { top: 220px; left: calc(50% - 18px); }  
-        #I3 { top: 220px; right: calc(50% - 160px); }  
-        #I4 { top: 370px; left: calc(50% - 170px); }  
-        #I5 { top: 370px; left: calc(50% - 18px); }  
-        #I6 { top: 370px; right: calc(50% - 160px); }  
-        #I7 { top: 525px; left: calc(50% - 170px); }  
-        #I8 { top: 525px; left: calc(50% - 18px); }  
-        #I9 { top: 525px; right: calc(50% - 160px); }  
-  
-        h2 {  
-            color: green;  
-            text-align: center;  
-        }  
-  
-        #gosp {  
-            position: fixed;  
-            width: 20%;  
-            border-radius: 5px;  
-            bottom: 5px;  
-            right: 5px;  
-        }  
-    </style>  
-</head>  
-<body>  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/ama.css">
+    <title>OX Game</title>
+    <style>
+        #damaboard {
+            width: 300px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            border: 4px solid black;
+            margin: auto;
+            overflow: hidden;
+            margin-top: 100px;
+        }
+
+        .square {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .square.white {
+            background-color: #80ff98;
+        }
+
+        .square.black {
+            background-color: #b58863;
+        }
+
+        .checker {
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            pointer-events: auto;
+            cursor: pointer;
+        }
+
+        .selected {
+            box-shadow: 0 0 15px 5px yellow;
+            outline: 3px solid yellow;
+            transform: scale(1.1);
+            transition: all 0.3s ease;
+            border-radius: 50%;
+        }
+
+        hr {
+            position: relative;
+            border: 2px solid black;
+            height: 101%;
+            margin: auto;
+        }
+
+        .a1 { transform: rotate(0deg); top: -5px; left: 114px; }
+        .a2 { transform: rotate(45deg); left: 40px; height: 145%; bottom: 70px; }
+        .a3 { transform: rotate(90deg); right: 35px; bottom: 3px; }
+        .a4 { transform: rotate(135deg); right: 112px; height: 145%; bottom: 70px; }
+
+        #inputs button {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        #I1 { top: 220px; left: calc(50% - 170px); }
+        #I2 { top: 220px; left: calc(50% - 18px); }
+        #I3 { top: 220px; right: calc(50% - 160px); }
+        #I4 { top: 370px; left: calc(50% - 170px); }
+        #I5 { top: 370px; left: calc(50% - 18px); }
+        #I6 { top: 370px; right: calc(50% - 160px); }
+        #I7 { top: 525px; left: calc(50% - 170px); }
+        #I8 { top: 525px; left: calc(50% - 18px); }
+        #I9 { top: 525px; right: calc(50% - 160px); }
+
+        h2 {
+            color: green;
+            text-align: center;
+        }
+
+        #gosp {
+            position: fixed;
+            width: 20%;
+            border-radius: 5px;
+            bottom: 5px;
+            right: 5px;
+        }
+    </style>
+</head>
+<body>
     <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>      
     <h2>Dama Play</h2>  
-    <div id="onlinePlayers">  
+    <div id="onlinePlayers">
         <p>Online Players: <span id="onlineCount">0</span></p>  
     </div>  
     <div id="damaboard">  
@@ -119,219 +119,236 @@
         <button type="button" id="I9"></button>  
     </div>  
     <button id="gosp" onclick="window.location.href = 'second dama.html'">Special Dama</button>  
-  
-    <!-- Firebase SDK -->  
-    <script type="module">  
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";  
-        import { getDatabase, ref, set, get, onValue, child, onDisconnect} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";  
-        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";  
-  
-        const firebaseConfig = {  
-            apiKey: "AIzaSyDT3k2mhNrQxI4pA0JmXH5WwRKk-d8LU_Q",  
-            authDomain: "dama-2e8d6.firebaseapp.com",  
-            databaseURL: "https://dama-2e8d6-default-rtdb.firebaseio.com",  
-            projectId: "dama-2e8d6",  
-            storageBucket: "dama-2e8d6.firebasestorage.app",  
-            messagingSenderId: "712822202797",  
-            appId: "1:712822202797:web:403d918a89cab03da94124",  
-            measurementId: "G-S7HV2CR34Z"  
-        };  
-  
-        const app = initializeApp(firebaseConfig);  
-        const db = getDatabase(app);  
-        const auth = getAuth();  
-        let userId = null;  
-        let gameRef = ref(db, "games/dama");  
-        let presenceRef = ref(db, "presence");  
-        let playerRole = null; // 'p1' or 'p2'  
-  
-        // Anonymous Authentication  
-        signInAnonymously(auth).then(user => {  
-            userId = user.user.uid;  
-            setupPresence();  
-            joinGame();  
-        });  
-  
-        let selectedChecker = null;  
-        let currentPlayer = 'p1'; // Start with player 1  
-        let board = ['p1', 'p1', 'p1', '', '', '', 'p2', 'p2', 'p2'];  
-  
-        const inputs = [  
-            document.getElementById("I1"), document.getElementById("I2"), document.getElementById("I3"),  
-            document.getElementById("I4"), document.getElementById("I5"), document.getElementById("I6"),  
-            document.getElementById("I7"), document.getElementById("I8"), document.getElementById("I9")  
-        ];  
-  
-        // Track online players presence  
-  
-  
-// Inside setupPresence function:  
-function setupPresence() {  
-    const userStatusRef = ref(db, 'presence/' + userId);  
-    const connectedRef = ref(db, ".info/connected");  
-  
-    onValue(connectedRef, (snapshot) => {  
-        if (snapshot.val() === true) {  
-            // When the user connects, we set their status to true  
-            set(userStatusRef, true);  
-  
-            // Set user status to false when they disconnect  
-            onDisconnect(userStatusRef).set(false);  
-        }  
-    });  
-  
-    // Listen to the presence of users  
-    onValue(presenceRef, (snapshot) => {  
-        let onlinePlayers = 0;  
-        snapshot.forEach((childSnapshot) => {  
-            if (childSnapshot.val() === true) {  
-                onlinePlayers++;  
-            }  
-        });  
-        document.getElementById("onlineCount").textContent = onlinePlayers;  
-    });  
-}  
-  
-function joinGame() {  
-    const playersRef = ref(db, "games/dama/players");  
-    get(playersRef).then((snapshot) => {  
-        const players = snapshot.val() || {};  
-        const playerCount = Object.keys(players).length; // Count the number of players  
-  
-        console.log("playerCount === 1: ", playerCount === 1);  
-        console.log("players.p1: ", players.p1);  
-        console.log("playerCount === 2: ", playerCount === 2);  
-        console.log("players.p2: ", players.p2);  
-  
-        if (players.p1 === userId || players.p2 === userId) {  
-            // User is already in the game  
-            playerRole = players.p1 === userId ? "p1" : "p2";  
-            console.log("User is already assigned as:", playerRole);  
-            return;  
-        }  
-  
-        if (!players.p1) {  
-            // First player joins as p1  
-            set(ref(db, "games/dama/players/p1"), userId)  
-                .then(() => {  
-                    playerRole = "p1";  
-                    checkGameState();  
-                })  
-                .catch((err) => alert("Error joining as p1: " + err));  
-        } else if (!players.p2) {  
-            // Second player joins as p2  
-            set(ref(db, "games/dama/players/p2"), userId)  
-                .then(() => {  
-                    playerRole = "p2";  
-                    checkGameState();  
-                })  
-                .catch((err) => alert("Error joining as p2: " + err));  
-        } else {  
-            // Game is full  
-            alert("The game is full. Please try again later.");  
-        }  
-    });  
-}  
-        function damagenerate() {  
-            inputs.forEach((btn, i) => {  
-                btn.dataset.row = Math.floor(i / 3);  
-                btn.dataset.col = i % 3;  
-                btn.style.background = "white";  
-                btn.style.transform = "scale(1.0)";  
-                btn.removeEventListener('click', onCheckerClick);  
-                btn.addEventListener('click', onCheckerClick);  
-                btn.dataset.player = '';  
-  
-                if (i < 3) {  
-                    btn.style.background = "red";  
-                    btn.dataset.player = 'p1';  
-                }  
-                if (i > 5) {  
-                    btn.style.background = "blue";  
-                    btn.dataset.player = 'p2';  
-                }  
-            });  
-        }  
-  
-        function onCheckerClick(event) {  
-            if (playerRole !== currentPlayer) return;  
-  
-            const checker = event.currentTarget;  
-            const checkerPlayer = checker.dataset.player;  
-  
-            if (selectedChecker) {  
-                const selectedRow = parseInt(selectedChecker.dataset.row);  
-                const selectedCol = parseInt(selectedChecker.dataset.col);  
-                const targetRow = parseInt(checker.dataset.row);  
-                const targetCol = parseInt(checker.dataset.col);  
-  
-                const rowDiff = Math.abs(targetRow - selectedRow);  
-                const colDiff = Math.abs(targetCol - selectedCol);  
-  
-                if (((rowDiff === 1 && colDiff == 0) || (rowDiff == 0 && colDiff === 1)) &&  
-                    checkerPlayer !== 'p1' && checkerPlayer !== 'p2') {  
-  
-                    checker.style.background = selectedChecker.style.background;  
-                    checker.dataset.player = currentPlayer;  
-  
-                    selectedChecker.style.background = "white";  
-                    selectedChecker.dataset.player = '';  
-                    board[selectedRow * 3 + selectedCol] = "";  
-                    board[targetRow * 3 + targetCol] = currentPlayer;  
-  
-                    selectedChecker.classList.remove('selected');  
-                    selectedChecker = null;  
-  
-                    currentPlayer = currentPlayer === 'p1' ? 'p2' : 'p1';  
-                    updateGameState();  
-                } else {  
-                    selectedChecker.classList.remove('selected');  
-                    selectedChecker = null;  
-                }  
-            } else if (checkerPlayer === currentPlayer) {  
-                selectedChecker = checker;  
-                selectedChecker.classList.add('selected');  
-            }  
-        }  
-  
-        function updateGameState() {  
-            set(gameRef, { board, currentPlayer });  
-        }  
-  
-        onValue(gameRef, snapshot => {  
-            if (snapshot.exists()) {  
-                const data = snapshot.val();  
-                board = data.board;  
-                currentPlayer = data.currentPlayer;  
-                updateUI();  
-            }  
-        });  
-  
-        function updateUI() {  
-            inputs.forEach((btn, i) => {  
-                btn.dataset.player = board[i];  
-                if (board[i] === "p1") {  
-                    btn.style.background = "red";  
-                } else if (board[i] === "p2") {  
-                    btn.style.background = "blue";  
-                } else {  
-                    btn.style.background = "white";  
-                }  
-            });  
-        }  
-  
-        function checkGameState() {  
-            get(gameRef).then(snapshot => {  
-                if (!snapshot.exists()) {  
-                    set(gameRef, { board, currentPlayer });  
-                }  
-            });  
-        }  
-  
-        // Initialize the game when the page loads  
-        document.addEventListener("DOMContentLoaded", function() {  
-            damagenerate();  
-        });  
-    </script>  
-</body>  
+
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
+
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getDatabase, ref, set, get, onValue, child, onDisconnect } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDT3k2mhNrQxI4pA0JmXH5WwRKk-d8LU_Q",
+        authDomain: "dama-2e8d6.firebaseapp.com",
+        databaseURL: "https://dama-2e8d6-default-rtdb.firebaseio.com",
+        projectId: "dama-2e8d6",
+        storageBucket: "dama-2e8d6.firebasestorage.app",
+        messagingSenderId: "712822202797",
+        appId: "1:712822202797:web:403d918a89cab03da94124",
+        measurementId: "G-S7HV2CR34Z"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const auth = getAuth();
+    let userId = null;
+    let gameRef = ref(db, "games/dama");
+    let presenceRef = ref(db, "presence");
+    let playerRole = null; // 'p1' or 'p2'
+
+    // Anonymous Authentication
+    signInAnonymously(auth).then(user => {
+        userId = user.user.uid;
+        console.log("User signed in with UID:", userId);  // Log the user UID
+        setupPresence();
+        joinGame();
+    });
+
+    let selectedChecker = null;
+    let currentPlayer = 'p1'; // Start with player 1
+    let board = ['p1', 'p1', 'p1', '', '', '', 'p2', 'p2', 'p2'];
+
+    const inputs = [
+        document.getElementById("I1"), document.getElementById("I2"), document.getElementById("I3"),
+        document.getElementById("I4"), document.getElementById("I5"), document.getElementById("I6"),
+        document.getElementById("I7"), document.getElementById("I8"), document.getElementById("I9")
+    ];
+
+    // Track online players presence
+    function setupPresence() {
+        const userStatusRef = ref(db, 'presence/' + userId);
+        const connectedRef = ref(db, ".info/connected");
+
+        onValue(connectedRef, (snapshot) => {
+            if (snapshot.val() === true) {
+                // When the user connects, we set their status to true
+                console.log("User connected to Firebase");
+                set(userStatusRef, true);
+
+                // Set user status to false when they disconnect
+                onDisconnect(userStatusRef).set(false);
+            }
+        });
+
+        // Listen to the presence of users
+        onValue(presenceRef, (snapshot) => {
+            let onlinePlayers = 0;
+            snapshot.forEach((childSnapshot) => {
+                if (childSnapshot.val() === true) {
+                    onlinePlayers++;
+                }
+            });
+            console.log("Online players:", onlinePlayers);  // Log the number of online players
+            document.getElementById("onlineCount").textContent = onlinePlayers;
+        });
+    }
+
+    function joinGame() {
+        const playersRef = ref(db, "games/dama/players");
+        get(playersRef).then((snapshot) => {
+            const players = snapshot.val() || {};
+            const playerCount = Object.keys(players).length; // Count the number of players
+
+            console.log("playerCount:", playerCount);
+            console.log("players.p1:", players.p1);
+            console.log("players.p2:", players.p2);
+
+            if (players.p1 === userId || players.p2 === userId) {
+                // User is already in the game
+                playerRole = players.p1 === userId ? "p1" : "p2";
+                console.log("User is already assigned as:", playerRole);
+                return;
+            }
+
+            if (!players.p1) {
+                // First player joins as p1
+                set(ref(db, "games/dama/players/p1"), userId)
+                    .then(() => {
+                        playerRole = "p1";
+                        checkGameState();
+                    })
+                    .catch((err) => {
+                        console.error("Error joining as p1:", err);
+                        alert("Error joining as p1: " + err);
+                    });
+            } else if (!players.p2) {
+                // Second player joins as p2
+                set(ref(db, "games/dama/players/p2"), userId)
+                    .then(() => {
+                        playerRole = "p2";
+                        checkGameState();
+                    })
+                    .catch((err) => {
+                        console.error("Error joining as p2:", err);
+                        alert("Error joining as p2: " + err);
+                    });
+            } else {
+                // Game is full
+                alert("The game is full. Please try again later.");
+            }
+        }).catch((error) => {
+            console.error("Error fetching players:", error);  // Log errors when fetching players
+        });
+    }
+
+    function damagenerate() {
+        inputs.forEach((btn, i) => {
+            btn.dataset.row = Math.floor(i / 3);
+            btn.dataset.col = i % 3;
+            btn.style.background = "white";
+            btn.style.transform = "scale(1.0)";
+            btn.removeEventListener('click', onCheckerClick);
+            btn.addEventListener('click', onCheckerClick);
+            btn.dataset.player = '';
+
+            if (i < 3) {
+                btn.style.background = "red";
+                btn.dataset.player = 'p1';
+            }
+            if (i > 5) {
+                btn.style.background = "blue";
+                btn.dataset.player = 'p2';
+            }
+        });
+    }
+
+    function onCheckerClick(event) {
+        if (playerRole !== currentPlayer) return;
+
+        const checker = event.currentTarget;
+        const checkerPlayer = checker.dataset.player;
+
+        if (selectedChecker) {
+            const selectedRow = parseInt(selectedChecker.dataset.row);
+            const selectedCol = parseInt(selectedChecker.dataset.col);
+            const targetRow = parseInt(checker.dataset.row);
+            const targetCol = parseInt(checker.dataset.col);
+
+            const rowDiff = Math.abs(targetRow - selectedRow);
+            const colDiff = Math.abs(targetCol - selectedCol);
+
+            if (((rowDiff === 1 && colDiff == 0) || (rowDiff == 0 && colDiff === 1)) &&
+                checkerPlayer !== 'p1' && checkerPlayer !== 'p2') {
+
+                checker.style.background = selectedChecker.style.background;
+                checker.dataset.player = currentPlayer;
+
+                selectedChecker.style.background = "white";
+                selectedChecker.dataset.player = '';
+                board[selectedRow * 3 + selectedCol] = "";
+                board[targetRow * 3 + targetCol] = currentPlayer;
+
+                selectedChecker.classList.remove('selected');
+                selectedChecker = null;
+
+                currentPlayer = currentPlayer === 'p1' ? 'p2' : 'p1';
+                updateGameState();
+            } else {
+                selectedChecker.classList.remove('selected');
+                selectedChecker = null;
+            }
+        } else if (checkerPlayer === currentPlayer) {
+            selectedChecker = checker;
+            selectedChecker.classList.add('selected');
+        }
+    }
+
+    function updateGameState() {
+        console.log("Updating game state...");
+        set(gameRef, { board, currentPlayer });
+    }
+
+    onValue(gameRef, snapshot => {
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            console.log("Received game data:", data);  // Log the received game data
+            board = data.board;
+            currentPlayer = data.currentPlayer;
+            updateUI();
+        } else {
+            console.log("No game data found in the database");
+        }
+    });
+
+    function updateUI() {
+        inputs.forEach((btn, i) => {
+            btn.dataset.player = board[i];
+            if (board[i] === "p1") {
+                btn.style.background = "red";
+            } else if (board[i] === "p2") {
+                btn.style.background = "blue";
+            } else {
+                btn.style.background = "white";
+            }
+        });
+    }
+
+    function checkGameState() {
+        get(gameRef).then(snapshot => {
+            if (!snapshot.exists()) {
+                console.log("No game data found. Setting initial game state...");
+                set(gameRef, { board, currentPlayer });
+            }
+        }).catch((error) => {
+            console.error("Error checking game state:", error);  // Log errors when checking game state
+        });
+    }
+
+    // Initialize the game when the page loads
+    document.addEventListener("DOMContentLoaded", function () {
+        damagenerate();
+    });
+</script>
 </html>
