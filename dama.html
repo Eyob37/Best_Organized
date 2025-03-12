@@ -124,7 +124,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
 
-    <script type="module">
+   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getDatabase, ref, set, get, onValue, child, onDisconnect } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
     import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -140,25 +140,25 @@
         measurementId: "G-S7HV2CR34Z"
     };
 
+    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const auth = getAuth();
     let userId = null;
     let gameRef = ref(db, "games/dama");
-    let presenceRef = ref(db, "presence");
     let playerRole = null; // 'p1' or 'p2'
 
-    // Anonymous Authentication
+    // Sign in anonymously
     signInAnonymously(auth).then(user => {
         userId = user.user.uid;
-        console.log("User signed in with UID:", userId);  // Log the user UID
-        setupPresence();
+        console.log("User signed in with UID:", userId);
         joinGame();
+    }).catch(error => {
+        console.error("Authentication failed:", error);
     });
 
-    let selectedChecker = null;
     let currentPlayer = 'p1'; // Start with player 1
-    let board = ['p1', 'p1', 'p1', '', '', '', 'p2', 'p2', 'p2'];
+    let board = ["", "", "", "", "", "", "", "", ""]; // Empty board
 
     const inputs = [
         document.getElementById("I1"), document.getElementById("I2"), document.getElementById("I3"),
@@ -166,189 +166,72 @@
         document.getElementById("I7"), document.getElementById("I8"), document.getElementById("I9")
     ];
 
-    // Track online players presence
-    function setupPresence() {
-        const userStatusRef = ref(db, 'presence/' + userId);
-        const connectedRef = ref(db, ".info/connected");
-
-        onValue(connectedRef, (snapshot) => {
-            if (snapshot.val() === true) {
-                // When the user connects, we set their status to true
-                console.log("User connected to Firebase");
-                set(userStatusRef, true);
-
-                // Set user status to false when they disconnect
-                onDisconnect(userStatusRef).set(false);
-            }
-        });
-
-        // Listen to the presence of users
-        onValue(presenceRef, (snapshot) => {
-            let onlinePlayers = 0;
-            snapshot.forEach((childSnapshot) => {
-                if (childSnapshot.val() === true) {
-                    onlinePlayers++;
-                }
-            });
-            console.log("Online players:", onlinePlayers);  // Log the number of online players
-            document.getElementById("onlineCount").textContent = onlinePlayers;
-        });
-    }
-
     function joinGame() {
         const playersRef = ref(db, "games/dama/players");
         get(playersRef).then((snapshot) => {
             const players = snapshot.val() || {};
-            const playerCount = Object.keys(players).length; // Count the number of players
-
-            console.log("playerCount:", playerCount);
-            console.log("players.p1:", players.p1);
-            console.log("players.p2:", players.p2);
+            console.log("Current players:", players);
 
             if (players.p1 === userId || players.p2 === userId) {
-                // User is already in the game
                 playerRole = players.p1 === userId ? "p1" : "p2";
-                console.log("User is already assigned as:", playerRole);
+                console.log("User already assigned as:", playerRole);
                 return;
             }
 
             if (!players.p1) {
-                // First player joins as p1
-                set(ref(db, "games/dama/players/p1"), userId)
-                    .then(() => {
-                        playerRole = "p1";
-                        checkGameState();
-                    })
-                    .catch((err) => {
-                        console.error("Error joining as p1:", err);
-                        alert("Error joining as p1: " + err);
-                    });
+                set(ref(db, "games/dama/players/p1"), userId).then(() => {
+                    playerRole = "p1";
+                });
             } else if (!players.p2) {
-                // Second player joins as p2
-                set(ref(db, "games/dama/players/p2"), userId)
-                    .then(() => {
-                        playerRole = "p2";
-                        checkGameState();
-                    })
-                    .catch((err) => {
-                        console.error("Error joining as p2:", err);
-                        alert("Error joining as p2: " + err);
-                    });
+                set(ref(db, "games/dama/players/p2"), userId).then(() => {
+                    playerRole = "p2";
+                });
             } else {
-                // Game is full
-                alert("The game is full. Please try again later.");
+                alert("The game is full.");
             }
         }).catch((error) => {
-            console.error("Error fetching players:", error);  // Log errors when fetching players
-        });
-    }
-
-    function damagenerate() {
-        inputs.forEach((btn, i) => {
-            btn.dataset.row = Math.floor(i / 3);
-            btn.dataset.col = i % 3;
-            btn.style.background = "white";
-            btn.style.transform = "scale(1.0)";
-            btn.removeEventListener('click', onCheckerClick);
-            btn.addEventListener('click', onCheckerClick);
-            btn.dataset.player = '';
-
-            if (i < 3) {
-                btn.style.background = "red";
-                btn.dataset.player = 'p1';
-            }
-            if (i > 5) {
-                btn.style.background = "blue";
-                btn.dataset.player = 'p2';
-            }
+            console.error("Error fetching players:", error);
         });
     }
 
     function onCheckerClick(event) {
         if (playerRole !== currentPlayer) return;
-
         const checker = event.currentTarget;
-        const checkerPlayer = checker.dataset.player;
+        const index = parseInt(checker.dataset.index);
 
-        if (selectedChecker) {
-            const selectedRow = parseInt(selectedChecker.dataset.row);
-            const selectedCol = parseInt(selectedChecker.dataset.col);
-            const targetRow = parseInt(checker.dataset.row);
-            const targetCol = parseInt(checker.dataset.col);
-
-            const rowDiff = Math.abs(targetRow - selectedRow);
-            const colDiff = Math.abs(targetCol - selectedCol);
-
-            if (((rowDiff === 1 && colDiff == 0) || (rowDiff == 0 && colDiff === 1)) &&
-                checkerPlayer !== 'p1' && checkerPlayer !== 'p2') {
-
-                checker.style.background = selectedChecker.style.background;
-                checker.dataset.player = currentPlayer;
-
-                selectedChecker.style.background = "white";
-                selectedChecker.dataset.player = '';
-                board[selectedRow * 3 + selectedCol] = "";
-                board[targetRow * 3 + targetCol] = currentPlayer;
-
-                selectedChecker.classList.remove('selected');
-                selectedChecker = null;
-
-                currentPlayer = currentPlayer === 'p1' ? 'p2' : 'p1';
-                updateGameState();
-            } else {
-                selectedChecker.classList.remove('selected');
-                selectedChecker = null;
-            }
-        } else if (checkerPlayer === currentPlayer) {
-            selectedChecker = checker;
-            selectedChecker.classList.add('selected');
+        if (board[index] === "") {
+            board[index] = currentPlayer;
+            currentPlayer = currentPlayer === "p1" ? "p2" : "p1";
+            updateGameState();
         }
     }
 
     function updateGameState() {
-        console.log("Updating game state...");
-        set(gameRef, { board, currentPlayer });
+        set(gameRef, { board, currentPlayer }).catch((error) => {
+            console.error("Error updating game:", error);
+        });
     }
 
     onValue(gameRef, snapshot => {
         if (snapshot.exists()) {
             const data = snapshot.val();
-            console.log("Received game data:", data);  // Log the received game data
             board = data.board;
             currentPlayer = data.currentPlayer;
             updateUI();
-        } else {
-            console.log("No game data found in the database");
         }
     });
 
     function updateUI() {
         inputs.forEach((btn, i) => {
-            btn.dataset.player = board[i];
-            if (board[i] === "p1") {
-                btn.style.background = "red";
-            } else if (board[i] === "p2") {
-                btn.style.background = "blue";
-            } else {
-                btn.style.background = "white";
-            }
+            btn.textContent = board[i] === "p1" ? "X" : board[i] === "p2" ? "O" : "";
         });
     }
 
-    function checkGameState() {
-        get(gameRef).then(snapshot => {
-            if (!snapshot.exists()) {
-                console.log("No game data found. Setting initial game state...");
-                set(gameRef, { board, currentPlayer });
-            }
-        }).catch((error) => {
-            console.error("Error checking game state:", error);  // Log errors when checking game state
-        });
-    }
-
-    // Initialize the game when the page loads
     document.addEventListener("DOMContentLoaded", function () {
-        damagenerate();
+        inputs.forEach((btn, i) => {
+            btn.dataset.index = i;
+            btn.addEventListener('click', onCheckerClick);
+        });
     });
 </script>
 </html>
