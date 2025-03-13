@@ -1,170 +1,315 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Dama Game</title>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
-    <style>
-        body { text-align: center; font-family: Arial, sans-serif; }
-        #board { display: grid; grid-template-columns: repeat(3, 80px); gap: 5px; justify-content: center; margin-top: 20px; }
-        .cell { width: 80px; height: 80px; background: white; font-size: 24px; font-weight: bold; border: 2px solid black; }
-        .p1 { background: red; }
-        .p2 { background: blue; }
-        .selected { outline: 3px solid yellow; }
-    </style>
-</head>
-<body>
-    <h2>Online Dama Game</h2>
-    <div id="status">Waiting for opponent...</div>
-    <div id="board"></div>
-    <button id="leave" onclick="leaveGame()">Leave Game</button>
-   <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
-    <script>
-        // **1. Initialize Firebase**
-        const firebaseConfig = {
-  apiKey: "AIzaSyDT3k2mhNrQxI4pA0JmXH5WwRKk-d8LU_Q",
-  authDomain: "dama-2e8d6.firebaseapp.com",
-  databaseURL: "https://dama-2e8d6-default-rtdb.firebaseio.com",
-  projectId: "dama-2e8d6",
-  storageBucket: "dama-2e8d6.firebasestorage.app",
-  messagingSenderId: "712822202797",
-  appId: "1:712822202797:web:403d918a89cab03da94124",
-  measurementId: "G-S7HV2CR34Z"
-};
-
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
-        // **2. Join or Create Game Room**
-        let gameRoom = db.ref("gameRooms/room1");
-        let currentPlayer = null;
-        let board = ["p1", "p1", "p1", "", "", "", "p2", "p2", "p2"];
-
-        gameRoom.once("value", (snapshot) => {
-            const data = snapshot.val();
-            if (!data || !data.player1) {
-                gameRoom.set({ player1: "joined", board, turn: "p1" });
-                currentPlayer = "p1";
-                document.getElementById("status").innerText = "You are Player 1 (Red)";
-            } else if (!data.player2) {
-                gameRoom.update({ player2: "joined" });
-                currentPlayer = "p2";
-                document.getElementById("status").innerText = "You are Player 2 (Blue)";
-            } else {
-                alert("Room is full. Try again later.");
-                return;
-            }
-        });
-
-        // **3. Generate Board**
-        const boardElement = document.getElementById("board");
-        function createBoard() {
-            boardElement.innerHTML = "";
-            for (let i = 0; i < 9; i++) {
-                let cell = document.createElement("div");
-                cell.classList.add("cell");
-                cell.dataset.index = i;
-                cell.addEventListener("click", onCellClick);
-                boardElement.appendChild(cell);
-            }
-        }
-        createBoard();
-
-        // **4. Update UI Based on Firebase**
-        gameRoom.child("board").on("value", (snapshot) => {
-            if (snapshot.exists()) {
-                board = snapshot.val();
-                updateUI();
-            }
-        });
-
-        function updateUI() {
-            document.querySelectorAll(".cell").forEach((cell, index) => {
-                cell.classList.remove("p1", "p2", "selected");
-                if (board[index] === "p1") cell.classList.add("p1");
-                if (board[index] === "p2") cell.classList.add("p2");
-            });
-        }
-
-        // **5. Handle Moves**
-        let selectedCell = null;
-        function onCellClick(event) {
-            let index = event.target.dataset.index;
-            let cell = event.target;
-
-            if (selectedCell) {
-                // Move piece if valid
-                if (board[index] === "" && isValidMove(selectedCell, index)) {
-                    board[selectedCell] = "";
-                    board[index] = currentPlayer;
-                    gameRoom.child("board").set(board);
-                    gameRoom.child("turn").set(currentPlayer === "p1" ? "p2" : "p1");
-                }
-                selectedCell = null;
-            } else if (board[index] === currentPlayer) {
-                // Select piece
-                selectedCell = index;
-                cell.classList.add("selected");
-            }
-        }
-
-        function isValidMove(from, to) {
-            let rowDiff = Math.abs(Math.floor(from / 3) - Math.floor(to / 3));
-            let colDiff = Math.abs((from % 3) - (to % 3));
-            return (rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1);
-        }
-
-        // **6. Track Turns**
-        gameRoom.child("turn").on("value", (snapshot) => {
-            let turn = snapshot.val();
-            if (turn === currentPlayer) {
-                document.getElementById("status").innerText = "Your Turn!";
-            } else {
-                document.getElementById("status").innerText = "Opponent's Turn!";
-            }
-        });
-
-        // **7. Check for Winner**
-        function checkWin() {
-            const winningCombos = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
-            for (let combo of winningCombos) {
-                const [a, b, c] = combo;
-                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-                    gameRoom.child("winner").set(currentPlayer);
-                    alert(currentPlayer + " Wins!");
-                    resetGame();
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        gameRoom.child("winner").on("value", (snapshot) => {
-            if (snapshot.exists()) {
-                alert(snapshot.val() + " Wins!");
-                resetGame();
-            }
-        });
-
-        // **8. Handle Player Leaving**
-        function leaveGame() {
-            gameRoom.child(currentPlayer).remove();
-            resetGame();
-        }
-
-        window.addEventListener("beforeunload", leaveGame);
-
-        // **9. Reset Game**
-        function resetGame() {
-            setTimeout(() => {
-                gameRoom.remove();
-                location.reload();
-            }, 1000);
-        }
-    </script>
-</body>
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <link rel="stylesheet" href="./css/ama.css">  
+    <title>OX Game</title>     
+    <style>  
+    #damaboard {  
+            width: 300px;  
+            height: 300px;  
+            display: flex;  
+            justify-content: center;  
+            align-content: center;  
+            border: 4px solid black;  
+            margin: auto;  
+            overflow: hidden;  
+            margin-top: 100px;  
+        }  
+  
+        .square {  
+            width: 50px;  
+            height: 50px;  
+            display: flex;  
+            justify-content: center;  
+            align-items: center;  
+            font-size: 24px;  
+            font-weight: bold;  
+        }  
+  
+        .square.white {  
+            background-color: #80ff98;  
+        }  
+  
+        .square.black {  
+            background-color: #b58863;  
+        }  
+  
+        .checker {  
+            width: 80%;  
+            height: 80%;  
+            border-radius: 50%;  
+            pointer-events: auto;  
+            cursor: pointer;  
+        }  
+  
+        .selected {  
+            box-shadow: 0 0 15px 5px yellow;  
+            outline: 3px solid yellow;  
+            transform: scale(1.1);  
+            transition: all 0.3s ease;  
+            border-radius: 50%;  
+        }  
+  
+        hr {  
+            position: relative;  
+            border: 2px solid black;  
+            height: 101%;  
+            margin: auto;  
+        }  
+  
+        .a1 { transform: rotate(0deg); top: -5px; left: 114px; }  
+        .a2 { transform: rotate(45deg); left: 40px; height: 145%; bottom: 70px; }  
+        .a3 { transform: rotate(90deg); right: 35px; bottom: 3px; }  
+        .a4 { transform: rotate(135deg); right: 112px; height: 145%; bottom: 70px; }  
+  
+        #inputs button {  
+            position: absolute;  
+            width: 30px;  
+            height: 30px;  
+            border-radius: 50%;  
+        }  
+  
+        #I1 { top: 220px; left: calc(50% - 170px); }  
+        #I2 { top: 220px; left: calc(50% - 18px); }  
+        #I3 { top: 220px; right: calc(50% - 160px); }  
+        #I4 { top: 370px; left: calc(50% - 170px); }  
+        #I5 { top: 370px; left: calc(50% - 18px); }  
+        #I6 { top: 370px; right: calc(50% - 160px); }  
+        #I7 { top: 525px; left: calc(50% - 170px); }  
+        #I8 { top: 525px; left: calc(50% - 18px); }  
+        #I9 { top: 525px; right: calc(50% - 160px); }  
+  
+        h2 {  
+            color: green;  
+            text-align: center;  
+        }  
+  
+        #gosp {  
+            position: fixed;  
+            width: 20%;  
+            border-radius: 5px;  
+            bottom: 5px;  
+            right: 5px;  
+        }  
+    </style>  
+</head>  
+<body>  
+    <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>      
+    <h2>Dama Play</h2>  
+    <div id="onlinePlayers">  
+        <p>Online Players: <span id="onlineCount">0</span></p>  
+    </div>  
+    <div id="damaboard">  
+        <hr class="a1">  
+        <hr class="a2">  
+        <hr class="a3">  
+        <hr class="a4">  
+    </div>  
+    <div class="checker" id="inputs" data-player="1">    
+        <button type="button" id="I1"></button>  
+        <button type="button" id="I2"></button>  
+        <button type="button" id="I3"></button>  
+        <button type="button" id="I4"></button>  
+        <button type="button" id="I5"></button>  
+        <button type="button" id="I6"></button>  
+        <button type="button" id="I7"></button>  
+        <button type="button" id="I8"></button>  
+        <button type="button" id="I9"></button>  
+    </div>  
+    <button id="gosp" onclick="window.location.href = 'second dama.html'">Special Dama</button>  
+  
+    <!-- Firebase SDK -->  
+    <script type="module">  
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";  
+        import { getDatabase, ref, set, get, onValue, child } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";  
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";  
+  
+        const firebaseConfig = {  
+            apiKey: "AIzaSyDT3k2mhNrQxI4pA0JmXH5WwRKk-d8LU_Q",  
+            authDomain: "dama-2e8d6.firebaseapp.com",  
+            databaseURL: "https://dama-2e8d6-default-rtdb.firebaseio.com",  
+            projectId: "dama-2e8d6",  
+            storageBucket: "dama-2e8d6.firebasestorage.app",  
+            messagingSenderId: "712822202797",  
+            appId: "1:712822202797:web:403d918a89cab03da94124",  
+            measurementId: "G-S7HV2CR34Z"  
+        };  
+  
+        const app = initializeApp(firebaseConfig);  
+        const db = getDatabase(app);  
+        const auth = getAuth();  
+        let userId = null;  
+        let gameRef = ref(db, "games/dama");  
+        let presenceRef = ref(db, "presence");  
+        let playerRole = null; // 'p1' or 'p2'  
+  
+        // Anonymous Authentication  
+        signInAnonymously(auth).then(user => {  
+            userId = user.user.uid;  
+            setupPresence();  
+            joinGame();  
+        });  
+  
+        let selectedChecker = null;  
+        let currentPlayer = 'p1'; // Start with player 1  
+        let board = ['p1', 'p1', 'p1', '', '', '', 'p2', 'p2', 'p2'];  
+  
+        const inputs = [  
+            document.getElementById("I1"), document.getElementById("I2"), document.getElementById("I3"),  
+            document.getElementById("I4"), document.getElementById("I5"), document.getElementById("I6"),  
+            document.getElementById("I7"), document.getElementById("I8"), document.getElementById("I9")  
+        ];  
+  
+        // Track online players presence  
+        function setupPresence() {  
+            const userStatusRef = ref(db, 'presence/' + userId);  
+            const connectedRef = ref(db, ".info/connected");  
+  
+            onValue(connectedRef, (snapshot) => {  
+                if (snapshot.val() === true) {  
+                    set(userStatusRef, true);  
+  
+                    // Remove user when they disconnect  
+                    userStatusRef.onDisconnect().set(false);  
+                }  
+            });  
+  
+            // Listen to the presence of users  
+            onValue(presenceRef, (snapshot) => {  
+                let onlinePlayers = 0;  
+                snapshot.forEach((childSnapshot) => {  
+                    if (childSnapshot.val() === true) {  
+                        onlinePlayers++;  
+                    }  
+                });  
+                document.getElementById("onlineCount").textContent = onlinePlayers;  
+            });  
+        }  
+  
+        // Join the game and assign player role  
+        function joinGame() {  
+            const playersRef = ref(db, "games/dama/players");  
+            onValue(playersRef, (snapshot) => {  
+                const players = snapshot.val() || {};  
+                if (Object.keys(players).length === 0) {  
+                    // First player joins as p1  
+                    set(ref(db, "games/dama/players/p1"), userId);  
+                    playerRole = 'p1';  
+                } else if (Object.keys(players).length === 1 && !players.p2) {  
+                    // Second player joins as p2  
+                    set(ref(db, "games/dama/players/p2"), userId);  
+                    playerRole = 'p2';  
+                } else {  
+                    // Game is full  
+                    alert("The game is full. Please try again later.");  
+                    return;  
+                }  
+                checkGameState();  
+            });  
+        }  
+  
+        function damagenerate() {  
+            inputs.forEach((btn, i) => {  
+                btn.dataset.row = Math.floor(i / 3);  
+                btn.dataset.col = i % 3;  
+                btn.style.background = "white";  
+                btn.style.transform = "scale(1.0)";  
+                btn.removeEventListener('click', onCheckerClick);  
+                btn.addEventListener('click', onCheckerClick);  
+                btn.dataset.player = '';  
+  
+                if (i < 3) {  
+                    btn.style.background = "red";  
+                    btn.dataset.player = 'p1';  
+                }  
+                if (i > 5) {  
+                    btn.style.background = "blue";  
+                    btn.dataset.player = 'p2';  
+                }  
+            });  
+        }  
+  
+        function onCheckerClick(event) {  
+            if (playerRole !== currentPlayer) return;  
+  
+            const checker = event.currentTarget;  
+            const checkerPlayer = checker.dataset.player;  
+  
+            if (selectedChecker) {  
+                const selectedRow = parseInt(selectedChecker.dataset.row);  
+                const selectedCol = parseInt(selectedChecker.dataset.col);  
+                const targetRow = parseInt(checker.dataset.row);  
+                const targetCol = parseInt(checker.dataset.col);  
+  
+                const rowDiff = Math.abs(targetRow - selectedRow);  
+                const colDiff = Math.abs(targetCol - selectedCol);  
+  
+                if (((rowDiff === 1 && colDiff == 0) || (rowDiff == 0 && colDiff === 1)) &&  
+                    checkerPlayer !== 'p1' && checkerPlayer !== 'p2') {  
+  
+                    checker.style.background = selectedChecker.style.background;  
+                    checker.dataset.player = currentPlayer;  
+  
+                    selectedChecker.style.background = "white";  
+                    selectedChecker.dataset.player = '';  
+                    board[selectedRow * 3 + selectedCol] = "";  
+                    board[targetRow * 3 + targetCol] = currentPlayer;  
+  
+                    selectedChecker.classList.remove('selected');  
+                    selectedChecker = null;  
+  
+                    currentPlayer = currentPlayer === 'p1' ? 'p2' : 'p1';  
+                    updateGameState();  
+                } else {  
+                    selectedChecker.classList.remove('selected');  
+                    selectedChecker = null;  
+                }  
+            } else if (checkerPlayer === currentPlayer) {  
+                selectedChecker = checker;  
+                selectedChecker.classList.add('selected');  
+            }  
+        }  
+  
+        function updateGameState() {  
+            set(gameRef, { board, currentPlayer });  
+        }  
+  
+        onValue(gameRef, snapshot => {  
+            if (snapshot.exists()) {  
+                const data = snapshot.val();  
+                board = data.board;  
+                currentPlayer = data.currentPlayer;  
+                updateUI();  
+            }  
+        });  
+  
+        function updateUI() {  
+            inputs.forEach((btn, i) => {  
+                btn.dataset.player = board[i];  
+                if (board[i] === "p1") {  
+                    btn.style.background = "red";  
+                } else if (board[i] === "p2") {  
+                    btn.style.background = "blue";  
+                } else {  
+                    btn.style.background = "white";  
+                }  
+            });  
+        }  
+  
+        function checkGameState() {  
+            get(gameRef).then(snapshot => {  
+                if (!snapshot.exists()) {  
+                    set(gameRef, { board, currentPlayer });  
+                }  
+            });  
+        }  
+  
+        // Initialize the game when the page loads  
+        document.addEventListener("DOMContentLoaded", function() {  
+            damagenerate();  
+        });  
+    </script>  
+</body>  
 </html>
