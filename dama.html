@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/ama.css">
-    <title>OX Game</title>
+    <title>OX Game</title>   
     <style>
-        #damaboard {
+       #damaboard {
             width: 300px;
             height: 300px;
             display: flex;
@@ -96,141 +96,220 @@
     </style>
 </head>
 <body>
-    <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>      
-    <h2>Dama Play</h2>  
+    <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>    
+    <h2>Dama Play</h2>
     <div id="onlinePlayers">
-        <p>Online Players: <span id="onlineCount">0</span></p>  
-    </div>  
-    <div id="damaboard">  
-        <hr class="a1">  
-        <hr class="a2">  
-        <hr class="a3">  
-        <hr class="a4">  
-    </div>  
-    <div class="checker" id="inputs" data-player="1">    
-        <button type="button" id="I1"></button>  
-        <button type="button" id="I2"></button>  
-        <button type="button" id="I3"></button>  
-        <button type="button" id="I4"></button>  
-        <button type="button" id="I5"></button>  
-        <button type="button" id="I6"></button>  
-        <button type="button" id="I7"></button>  
-        <button type="button" id="I8"></button>  
-        <button type="button" id="I9"></button>  
-    </div>  
-    <button id="gosp" onclick="window.location.href = 'second dama.html'">Special Dama</button>  
+        <p>Online Players: <span id="onlineCount">0</span></p>
+    </div>
+    <div id="damaboard">
+        <hr class="a1">
+        <hr class="a2">
+        <hr class="a3">
+        <hr class="a4">
+    </div>
+    <div class="checker" id="inputs" data-player="1">  
+        <button type="button" id="I1"></button>
+        <button type="button" id="I2"></button>
+        <button type="button" id="I3"></button>
+        <button type="button" id="I4"></button>
+        <button type="button" id="I5"></button>
+        <button type="button" id="I6"></button>
+        <button type="button" id="I7"></button>
+        <button type="button" id="I8"></button>
+        <button type="button" id="I9"></button>
+    </div>
+    <button id="gosp" onclick="window.location.href = 'second dama.html'">Special Dama</button>
 
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getDatabase, ref, set, get, onValue, child } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDT3k2mhNrQxI4pA0JmXH5WwRKk-d8LU_Q",
+            authDomain: "dama-2e8d6.firebaseapp.com",
+            databaseURL: "https://dama-2e8d6-default-rtdb.firebaseio.com",
+            projectId: "dama-2e8d6",
+            storageBucket: "dama-2e8d6.firebasestorage.app",
+            messagingSenderId: "712822202797",
+            appId: "1:712822202797:web:403d918a89cab03da94124",
+            measurementId: "G-S7HV2CR34Z"
+        };
 
-   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-    import { getDatabase, ref, set, get, onValue, child, onDisconnect } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
-    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const auth = getAuth();
+        let userId = null;
+        let gameRef = ref(db, "games/dama");
+        let presenceRef = ref(db, "presence");
+        let playerRole = null; // 'p1' or 'p2'
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyDT3k2mhNrQxI4pA0JmXH5WwRKk-d8LU_Q",
-        authDomain: "dama-2e8d6.firebaseapp.com",
-        databaseURL: "https://dama-2e8d6-default-rtdb.firebaseio.com",
-        projectId: "dama-2e8d6",
-        storageBucket: "dama-2e8d6.firebasestorage.app",
-        messagingSenderId: "712822202797",
-        appId: "1:712822202797:web:403d918a89cab03da94124",
-        measurementId: "G-S7HV2CR34Z"
-    };
+        // Anonymous Authentication
+        signInAnonymously(auth).then(user => {
+            userId = user.user.uid;
+            setupPresence();
+            joinGame();
+        });
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const auth = getAuth();
-    let userId = null;
-    let gameRef = ref(db, "games/dama");
-    let playerRole = null; // 'p1' or 'p2'
+        let selectedChecker = null;
+        let currentPlayer = 'p1'; // Start with player 1
+        let board = ['p1', 'p1', 'p1', '', '', '', 'p2', 'p2', 'p2'];
 
-    // Sign in anonymously
-    signInAnonymously(auth).then(user => {
-        userId = user.user.uid;
-        console.log("User signed in with UID:", userId);
-        joinGame();
-    }).catch(error => {
-        console.error("Authentication failed:", error);
-    });
+        const inputs = [
+            document.getElementById("I1"), document.getElementById("I2"), document.getElementById("I3"),
+            document.getElementById("I4"), document.getElementById("I5"), document.getElementById("I6"),
+            document.getElementById("I7"), document.getElementById("I8"), document.getElementById("I9")
+        ];
 
-    let currentPlayer = 'p1'; // Start with player 1
-    let board = ["", "", "", "", "", "", "", "", ""]; // Empty board
+        // Track online players presence
+        function setupPresence() {
+            const userStatusRef = ref(db, 'presence/' + userId);
+            const connectedRef = ref(db, ".info/connected");
 
-    const inputs = [
-        document.getElementById("I1"), document.getElementById("I2"), document.getElementById("I3"),
-        document.getElementById("I4"), document.getElementById("I5"), document.getElementById("I6"),
-        document.getElementById("I7"), document.getElementById("I8"), document.getElementById("I9")
-    ];
+            onValue(connectedRef, (snapshot) => {
+                if (snapshot.val() === true) {
+                    set(userStatusRef, true);
 
-    function joinGame() {
-        const playersRef = ref(db, "games/dama/players");
-        get(playersRef).then((snapshot) => {
-            const players = snapshot.val() || {};
-            console.log("Current players:", players);
+                    // Remove user when they disconnect
+                    userStatusRef.onDisconnect().set(false);
+                }
+            });
 
-            if (players.p1 === userId || players.p2 === userId) {
-                playerRole = players.p1 === userId ? "p1" : "p2";
-                console.log("User already assigned as:", playerRole);
-                return;
-            }
-
-            if (!players.p1) {
-                set(ref(db, "games/dama/players/p1"), userId).then(() => {
-                    playerRole = "p1";
+            // Listen to the presence of users
+            onValue(presenceRef, (snapshot) => {
+                let onlinePlayers = 0;
+                snapshot.forEach((childSnapshot) => {
+                    if (childSnapshot.val() === true) {
+                        onlinePlayers++;
+                    }
                 });
-            } else if (!players.p2) {
-                set(ref(db, "games/dama/players/p2"), userId).then(() => {
-                    playerRole = "p2";
-                });
-            } else {
-                alert("The game is full.");
+                document.getElementById("onlineCount").textContent = onlinePlayers;
+            });
+        }
+
+        // Join the game and assign player role
+        function joinGame() {
+            const playersRef = ref(db, "games/dama/players");
+            onValue(playersRef, (snapshot) => {
+                const players = snapshot.val() || {};
+                if (Object.keys(players).length === 0) {
+                    // First player joins as p1
+                    set(ref(db, "games/dama/players/p1"), userId);
+                    playerRole = 'p1';
+                } else if (Object.keys(players).length === 1 && !players.p2) {
+                    // Second player joins as p2
+                    set(ref(db, "games/dama/players/p2"), userId);
+                    playerRole = 'p2';
+                } else {
+                    // Game is full
+                    alert("The game is full. Please try again later.");
+                    return;
+                }
+                checkGameState();
+            });
+        }
+
+        function damagenerate() {
+            inputs.forEach((btn, i) => {
+                btn.dataset.row = Math.floor(i / 3);
+                btn.dataset.col = i % 3;
+                btn.style.background = "white";
+                btn.style.transform = "scale(1.0)";
+                btn.removeEventListener('click', onCheckerClick);
+                btn.addEventListener('click', onCheckerClick);
+                btn.dataset.player = '';
+
+                if (i < 3) {
+                    btn.style.background = "red";
+                    btn.dataset.player = 'p1';
+                }
+                if (i > 5) {
+                    btn.style.background = "blue";
+                    btn.dataset.player = 'p2';
+                }
+            });
+        }
+
+        function onCheckerClick(event) {
+            if (playerRole !== currentPlayer) return;
+
+            const checker = event.currentTarget;
+            const checkerPlayer = checker.dataset.player;
+
+            if (selectedChecker) {
+                const selectedRow = parseInt(selectedChecker.dataset.row);
+                const selectedCol = parseInt(selectedChecker.dataset.col);
+                const targetRow = parseInt(checker.dataset.row);
+                const targetCol = parseInt(checker.dataset.col);
+
+                const rowDiff = Math.abs(targetRow - selectedRow);
+                const colDiff = Math.abs(targetCol - selectedCol);
+
+                if (((rowDiff === 1 && colDiff == 0) || (rowDiff == 0 && colDiff === 1)) &&
+                    checkerPlayer !== 'p1' && checkerPlayer !== 'p2') {
+
+                    checker.style.background = selectedChecker.style.background;
+                    checker.dataset.player = currentPlayer;
+
+                    selectedChecker.style.background = "white";
+                    selectedChecker.dataset.player = '';
+                    board[selectedRow * 3 + selectedCol] = "";
+                    board[targetRow * 3 + targetCol] = currentPlayer;
+
+                    selectedChecker.classList.remove('selected');
+                    selectedChecker = null;
+
+                    currentPlayer = currentPlayer === 'p1' ? 'p2' : 'p1';
+                    updateGameState();
+                } else {
+                    selectedChecker.classList.remove('selected');
+                    selectedChecker = null;
+                }
+            } else if (checkerPlayer === currentPlayer) {
+                selectedChecker = checker;
+                selectedChecker.classList.add('selected');
             }
-        }).catch((error) => {
-            console.error("Error fetching players:", error);
-        });
-    }
-
-    function onCheckerClick(event) {
-        if (playerRole !== currentPlayer) return;
-        const checker = event.currentTarget;
-        const index = parseInt(checker.dataset.index);
-
-        if (board[index] === "") {
-            board[index] = currentPlayer;
-            currentPlayer = currentPlayer === "p1" ? "p2" : "p1";
-            updateGameState();
         }
-    }
 
-    function updateGameState() {
-        set(gameRef, { board, currentPlayer }).catch((error) => {
-            console.error("Error updating game:", error);
-        });
-    }
-
-    onValue(gameRef, snapshot => {
-        if (snapshot.exists()) {
-            const data = snapshot.val();
-            board = data.board;
-            currentPlayer = data.currentPlayer;
-            updateUI();
+        function updateGameState() {
+            set(gameRef, { board, currentPlayer });
         }
-    });
 
-    function updateUI() {
-        inputs.forEach((btn, i) => {
-            btn.textContent = board[i] === "p1" ? "X" : board[i] === "p2" ? "O" : "";
+        onValue(gameRef, snapshot => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                board = data.board;
+                currentPlayer = data.currentPlayer;
+                updateUI();
+            }
         });
-    }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        inputs.forEach((btn, i) => {
-            btn.dataset.index = i;
-            btn.addEventListener('click', onCheckerClick);
+        function updateUI() {
+            inputs.forEach((btn, i) => {
+                btn.dataset.player = board[i];
+                if (board[i] === "p1") {
+                    btn.style.background = "red";
+                } else if (board[i] === "p2") {
+                    btn.style.background = "blue";
+                } else {
+                    btn.style.background = "white";
+                }
+            });
+        }
+
+        function checkGameState() {
+            get(gameRef).then(snapshot => {
+                if (!snapshot.exists()) {
+                    set(gameRef, { board, currentPlayer });
+                }
+            });
+        }
+
+        // Initialize the game when the page loads
+        document.addEventListener("DOMContentLoaded", function() {
+            damagenerate();
         });
-    });
-</script>
+    </script>
+</body>
 </html>
