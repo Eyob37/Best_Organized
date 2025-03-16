@@ -80,6 +80,63 @@
     
     <h3>Get in Touch</h3>
     <p>Have suggestions or feedback? Reach out to us to help improve <strong>Eyob's Website</strong>. Your input is invaluable to us.</p>
+<p>If you want to write comment to me: <call style="color: blue;">0922750426</call> is my number and</p>
+    
+    <aside id="sidebar">
+          <div class="dark">
+            <h3>Get A Quote</h3>
+            <form class="quote">
+  						<div>
+  							<label>Name</label><br>
+  							<input type="text" placeholder="Name">
+  						</div>
+  						<div>
+  							<label>Email</label><br>
+  							<input type="email" placeholder="Enter your email Address">
+  						</div>
+  						<div>
+  							<label>Message</label><br>
+  							<textarea placeholder="Message" required></textarea>
+  						</div>
+  						<button onclick="sendToemail()" class="button_1" type="submit">Send</button>
+					</form>
+          </div>
+        </aside>   
   </section>
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+      emailjs.init("7UGwi5Gy7R_A48GpD"); 
+});
+      const $ = selector => {
+          return document.querySelector(selector);
+      }
+      
+      function sendToemail() {
+          let Name = $('[placeholder *= "Name"]').value;
+          let Email = $('[placeholder *= "email"]').value;
+          let Message = $('[placeholder *= "Message"]').value;
+          if(!Message) {
+              return;
+          }
+          
+          var params = {
+                name: Name,
+                email: Email,
+                message: Message
+            };
+
+            console.log("Sending email with params:", params); // Debugging
+
+            emailjs.send("service_sjp7z9x", "template_bcmnf95", params)
+                .then(function(response) {
+                    console.log("Email sent successfully:", response);
+                    alert("you sent message successfully");
+
+                }, function(error) {
+                    console.log("Failed to send email:", error);
+
+                }); 
+      }          
+  </script>
 </body>
 </html>
