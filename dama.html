@@ -121,8 +121,7 @@
     <button id="gosp" onclick="window.location.href = 'second dama.html'">Special Dama</button>  
 
     <!-- Firebase SDK -->  
-   <!-- Firebase SDK -->
-<script type="module">
+   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getDatabase, ref, set, get, onValue, child, onDisconnect } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
     import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -153,6 +152,16 @@
         setupPresence();
         joinGame();
     });
+
+    let selectedChecker = null;
+    let currentPlayer = 'p1'; // Start with player 1
+    let board = ['p1', 'p1', 'p1', '', '', '', 'p2', 'p2', 'p2'];
+
+    const inputs = [
+        document.getElementById("I1"), document.getElementById("I2"), document.getElementById("I3"),
+        document.getElementById("I4"), document.getElementById("I5"), document.getElementById("I6"),
+        document.getElementById("I7"), document.getElementById("I8"), document.getElementById("I9")
+    ];
 
     // Track online players presence
     function setupPresence() {
