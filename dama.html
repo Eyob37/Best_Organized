@@ -166,37 +166,36 @@ h2{
     </div>  
     <button id="gosp" onclick="window.location.href = 'second dama.html'">spacial dama</button>
     <script type="module">
-        // Import Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getDatabase, ref, set, onValue, get, onDisconnect } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+// Import Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getDatabase, ref, set, onValue, get, onDisconnect } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
-        // **Your Firebase Configuration**
-        const firebaseConfig = {
-          apiKey: "AIzaSyDT3k2mhNrQxI4pA0JmXH5WwRKk-d8LU_Q",
-          authDomain: "dama-2e8d6.firebaseapp.com",
-          databaseURL: "https://dama-2e8d6-default-rtdb.firebaseio.com",
-          projectId: "dama-2e8d6",
-          storageBucket: "dama-2e8d6.firebasestorage.app",
-          messagingSenderId: "712822202797",
-          appId: "1:712822202797:web:403d918a89cab03da94124",
-          measurementId: "G-S7HV2CR34Z"
-       };
+// **Your Firebase Configuration**
+const firebaseConfig = {
+    apiKey: "AIzaSyDT3k2mhNrQxI4pA0JmXH5WwRKk-d8LU_Q",
+    authDomain: "dama-2e8d6.firebaseapp.com",
+    databaseURL: "https://dama-2e8d6-default-rtdb.firebaseio.com",
+    projectId: "dama-2e8d6",
+    storageBucket: "dama-2e8d6.firebasestorage.app",
+    messagingSenderId: "712822202797",
+    appId: "1:712822202797:web:403d918a89cab03da94124",
+    measurementId: "G-S7HV2CR34Z"
+};
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-        const gameRef = ref(database, "damaGame");
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+const gameRef = ref(database, "damaGame");
 
-        let player = null;
-        let currentPlayer = null;
-        let selectedChecker = null;
-        let board = ["p1", "p1", "p1", "", "", "", "p2", "p2", "p2"];
-        const statusText = document.getElementById("status");
-        const WhichPlayer = document.getElementById("WhichPlayer");
+let player = null;
+let currentPlayer = null;
+let selectedChecker = null;
+let board = ["p1", "p1", "p1", "", "", "", "p2", "p2", "p2"];
+const statusText = document.getElementById("status");
+const WhichPlayer = document.getElementById("WhichPlayer");
 
-
-const $ = (selector)=>{
-   return document.getElementById(selector);
+const $ = (selector) => {
+    return document.getElementById(selector);
 }
 
 var inputs = [];
@@ -209,34 +208,36 @@ const I6 = $("I6");
 const I7 = $("I7");
 const I8 = $("I8");
 const I9 = $("I9");
-inputs.push(I1,I2,I3,I4,I5,I6,I7,I8,I9);
+inputs.push(I1, I2, I3, I4, I5, I6, I7, I8, I9);
+
 function damagenerate() {
-    for(let i = 0; i < inputs.length; i++){                      
-        inputs[i].dataset.row = Math.floor(i / 3);  
-        inputs[i].dataset.col = i % 3;    
-        inputs[i].style.background = "white";   
+    for (let i = 0; i < inputs.length; i++) {
+        inputs[i].dataset.row = Math.floor(i / 3);
+        inputs[i].dataset.col = i % 3;
+        inputs[i].style.background = "white";
         inputs[i].style.transform = "scale(1.0)";
-        inputs[i].addEventListener('click', onCheckerClick);  
+        inputs[i].addEventListener('click', onCheckerClick);
         inputs[i].dataset.player = '';
         if (i < 3) {
             inputs[i].style.background = "red";
             inputs[i].dataset.player = 'p1';
-        }  
-        if (i > 5){
+        }
+        if (i > 5) {
             inputs[i].style.background = "blue";
             inputs[i].dataset.player = 'p2';
         }
     }
 }
+
 function createBoard() {
-    for(let i = 0; i < inputs.length; i++){                      
+    for (let i = 0; i < inputs.length; i++) {
         inputs[i].dataset.player = '';
-        inputs[i].style.background = "white";          
+        inputs[i].style.background = "white";
         if (board[i] == "p1") {
             inputs[i].style.background = "red";
             inputs[i].dataset.player = 'p1';
-        }  
-        if (board[i] == "p2"){
+        }
+        if (board[i] == "p2") {
             inputs[i].style.background = "blue";
             inputs[i].dataset.player = 'p2';
         }
@@ -245,67 +246,66 @@ function createBoard() {
 
 function testwin() {
     const winningCombos = [
-                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-                [0, 4, 8], [2, 4, 6]             // Diagonals
-            ];
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+        [0, 4, 8], [2, 4, 6]             // Diagonals
+    ];
     for (let combo of winningCombos) {
-                const [a, b, c] = combo;
-                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-                if((a == 0 && b == 1 && c == 2 && board[a] == "p1") || (a == 6 && b == 7 && c == 8 && board[a] == "p2")) {
-                    return false;
-                }
-                console.log(combo);                
-                    inputs[a].style.transform = "scale(1.5)"; 
-                    inputs[b].style.transform = "scale(1.5)"; 
-                    inputs[c].style.transform = "scale(1.5)";                          
-                    return true;                                                                            
-                 }                 
+        const [a, b, c] = combo;
+        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+            if ((a == 0 && b == 1 && c == 2 && board[a] == "p1") || (a == 6 && b == 7 && c == 8 && board[a] == "p2")) {
+                return false;
             }
-            return false;
+            console.log(combo);
+            inputs[a].style.transform = "scale(1.5)";
+            inputs[b].style.transform = "scale(1.5)";
+            inputs[c].style.transform = "scale(1.5)";
+            return true;
+        }
+    }
+    return false;
 }
 
-                // **Assign Player**
-        async function assignPlayer() {
-            try {
-                const snapshot = await get(gameRef);
-                const data = snapshot.val();
+// **Assign Player**
+async function assignPlayer() {
+    try {
+        const snapshot = await get(gameRef);
+        const data = snapshot.val();
 
-                if (!data || !data.player1) {
-                    player = "p1";
-                    await set(ref(database, "damaGame/player1"), true);
-                } else if (!data.player2) {
-                    player = "p2";
-                    await set(ref(database, "damaGame/player2"), true);
-                } else {
-                    alert("Game is full! Try again later.");
-                }
-
-                // Update the status text to show the player's role
-                WhichPlayer.textContent = `You are Player ${player === "p1" ? "1 (Red)" : "2 (Blue)"}`;
-            } catch (error) {
-                console.error("Error assigning player:", error);
-                statusText.textContent = "Error connecting to the game. Please check your internet connection.";
-            }
+        if (!data || !data.player1) {
+            player = "p1";
+            await set(ref(database, "damaGame/player1"), true);
+        } else if (!data.player2) {
+            player = "p2";
+            await set(ref(database, "damaGame/player2"), true);
+        } else {
+            alert("Game is full! Try again later.");
         }
 
-        // **Update Board from Firebase**
-        onValue(ref(database, "damaGame/board"), (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                board = data;
-                createBoard();
-            }
-        });
+        // Update the status text to show the player's role
+        WhichPlayer.textContent = `You are Player ${player === "p1" ? "1 (Red)" : "2 (Blue)"}`;
+    } catch (error) {
+        console.error("Error assigning player:", error);
+        statusText.textContent = "Error connecting to the game. Please check your internet connection.";
+    }
+}
 
-        // **Sync Turn**
-        onValue(ref(database, "damaGame/currentPlayer"), (snapshot) => {
-            currentPlayer = snapshot.val();
-            // Update the status text to show whose turn it is
-            statusText.textContent = `Turn: ${currentPlayer === "p1" ? "Player 1 (Red)" : "Player 2 (Blue)"}`;
-        });
-        
-        
+// **Update Board from Firebase**
+onValue(ref(database, "damaGame/board"), (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+        board = data;
+        createBoard();
+    }
+});
+
+// **Sync Turn**
+onValue(ref(database, "damaGame/currentPlayer"), (snapshot) => {
+    currentPlayer = snapshot.val();
+    // Update the status text to show whose turn it is
+    statusText.textContent = `Turn: ${currentPlayer === "p1" ? "Player 1 (Red)" : "Player 2 (Blue)"}`;
+});
+
 function onCheckerClick(event) {
     if (player !== currentPlayer) return;
     const checker = event.currentTarget;
@@ -320,7 +320,7 @@ function onCheckerClick(event) {
         const rowDiff = Math.abs(targetRow - selectedRow);
         const colDiff = Math.abs(targetCol - selectedCol);
 
-        if (((rowDiff === 1 && colDiff == 0) || (rowDiff == 0 && colDiff === 1) || (targetRow == 1 && targetCol == 1) || (selectedRow == 1 && selectedCol == 1 && (rowDiff == 1 || colDiff == 1))) && checkerPlayer != 'p1' &&  checkerPlayer != 'p2') {
+        if (((rowDiff === 1 && colDiff == 0) || (rowDiff == 0 && colDiff === 1) || (targetRow == 1 && targetCol == 1) || (selectedRow == 1 && selectedCol == 1 && (rowDiff == 1 || colDiff == 1))) && checkerPlayer != 'p1' && checkerPlayer != 'p2') {
             // Move the checker to the new position
             checker.style.background = selectedChecker.style.background;
             checker.dataset.player = currentPlayer;
@@ -328,16 +328,16 @@ function onCheckerClick(event) {
             // Clear the old position
             selectedChecker.style.background = "white";
             selectedChecker.dataset.player = '';
-            board[selectedRow*3 + selectedCol] = "";
-            board[targetRow*3 + targetCol] = currentPlayer;            
+            board[selectedRow * 3 + selectedCol] = "";
+            board[targetRow * 3 + targetCol] = currentPlayer;
             // Deselect the checker and switch player
             selectedChecker.classList.remove('selected');
             set(ref(database, "damaGame/board"), board);
             selectedChecker = null;
-             currentPlayer = currentPlayer === "p1" ? "p2" : "p1";
-             set(ref(database, "damaGame/currentPlayer"), currentPlayer);
-            if(testwin()) {                
-                setTimeout(win, 1000);                 
+            currentPlayer = currentPlayer === "p1" ? "p2" : "p1";
+            set(ref(database, "damaGame/currentPlayer"), currentPlayer);
+            if (testwin()) {
+                setTimeout(win, 1000);
             }
         } else {
             // Invalid move, deselect
@@ -348,37 +348,36 @@ function onCheckerClick(event) {
         // Select the checker
         selectedChecker = checker;
         selectedChecker.classList.add('selected');
-     }
+    }
 }
 
 function win() {
     selectedChecker = null;
-    alert(currentPlayer+" is winner");      
+    alert(currentPlayer + " is winner");
     board = ['p1', 'p1', 'p1', '', '', '', 'p2', 'p2', 'p2'];
-    firstStarter = Math.floor(Math.random()* 2)+1;
-    currentPlayer = ''; 
- firstStarter == 1 ? currentPlayer = 'p1':currentPlayer = 'p2';                                                                
-    damagenerate();  
+    const firstStarter = Math.floor(Math.random() * 2) + 1;
+    currentPlayer = '';
+    firstStarter == 1 ? currentPlayer = 'p1' : currentPlayer = 'p2';
+    damagenerate();
 }
 
-        // **Initialize Game**
-        async function startGame() {
-            await assignPlayer();
-            onValue(gameRef, (snapshot) => {
-                if (!snapshot.exists()) {
-                    set(ref(database, "damaGame"), { board, currentPlayer: "p1" });
-                }
-            });
-
-            // Detect when the client disconnects and update the Firebase game status
-            onDisconnect(gameRef).remove();
-
-            createBoard();
+// **Initialize Game**
+async function startGame() {
+    await assignPlayer();
+    onValue(gameRef, (snapshot) => {
+        if (!snapshot.exists()) {
+            set(ref(database, "damaGame"), { board, currentPlayer: "p1" });
         }
+    });
 
-        startGame();
+    // Detect when the client disconnects and update the Firebase game status
+    onDisconnect(gameRef).remove();
+
+    createBoard();
+}
+
+startGame();
 damagenerate();
-
     </script>
 </body>
 </html>
