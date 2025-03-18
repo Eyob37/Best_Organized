@@ -282,7 +282,7 @@ function testwin() {
                 }
 
                 // Update the status text to show the player's role
-                statusText.textContent = `You are Player ${player === "p1" ? "1 (Red)" : "2 (Blue)"}`;
+                WhichPlayer.textContent = `You are Player ${player === "p1" ? "1 (Red)" : "2 (Blue)"}`;
             } catch (error) {
                 console.error("Error assigning player:", error);
                 statusText.textContent = "Error connecting to the game. Please check your internet connection.";
