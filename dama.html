@@ -145,6 +145,7 @@ h2{
 <body>
     <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>    
         <p id="status">Connecting...</p>
+        <p id="WhichPlayer"></p>
     <h2>dama play</h2>
     <div id="damaboard">
         <hr class="a1">
@@ -191,6 +192,7 @@ h2{
         let selectedChecker = null;
         let board = ["p1", "p1", "p1", "", "", "", "p2", "p2", "p2"];
         const statusText = document.getElementById("status");
+        const WhichPlayer = document.getElementById("WhichPlayer");
 
 
 const $ = (selector)=>{
