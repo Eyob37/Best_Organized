@@ -241,6 +241,9 @@ function createBoard() {
             inputs[i].style.background = "blue";
             inputs[i].dataset.player = 'p2';
         }
+        if (testwin()) {
+            setTimeout(win, 1000);
+        }
     }
 }
 
