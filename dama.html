@@ -300,6 +300,20 @@ onValue(ref(database, "damaGame/board"), (snapshot) => {
     }
 });
 
+// **check win from Firebase**
+onValue(ref(database, "damaGame/win"), (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+        currentPlayer = data;
+        selectedChecker = null;
+        alert(currentPlayer + " is winner");
+        board = ['p1', 'p1', 'p1', '', '', '', 'p2', 'p2', 'p2'];    
+        currentPlayer = null;        
+        createBoard();
+        startGame();
+    }
+});
+
 // **Sync Turn**
 onValue(ref(database, "damaGame/currentPlayer"), (snapshot) => {
     currentPlayer = snapshot.val();
@@ -367,15 +381,19 @@ function win() {
     selectedChecker = null;
     alert(currentPlayer + " is winner");
     board = ['p1', 'p1', 'p1', '', '', '', 'p2', 'p2', 'p2'];
-    const firstStarter = Math.floor(Math.random() * 2) + 1;
-    currentPlayer = '';
-    firstStarter == 1 ? currentPlayer = 'p1' : currentPlayer = 'p2';
+    set(ref(database, "damaGame/win"), currentPlayer);  
+    currentPlayer = null;
     damagenerate();
+    startGame();
 }
 
 // **Initialize Game**
 async function startGame() {
     await assignPlayer();
+/*
+    currentPlayer = '';
+    firstStarter == 1 ? currentPlayer = 'p1' : currentPlayer = 'p2';
+    currentPlayer = firstStarter == 1 ? 'p1': 'p2';*/
     onValue(gameRef, (snapshot) => {
         if (!snapshot.exists()) {
             set(ref(database, "damaGame"), { board, currentPlayer: "p1" });
