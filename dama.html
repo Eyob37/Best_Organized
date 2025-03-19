@@ -168,7 +168,7 @@ h2{
     <script type="module">
 // Import Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getDatabase, ref, set, onValue, get, onDisconnect } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+import { getDatabase, ref, set, onValue, get, onDisconnect, remove } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
 // **Your Firebase Configuration**
 const firebaseConfig = {
@@ -176,7 +176,7 @@ const firebaseConfig = {
     authDomain: "dama-2e8d6.firebaseapp.com",
     databaseURL: "https://dama-2e8d6-default-rtdb.firebaseio.com",
     projectId: "dama-2e8d6",
-    storageBucket: "dama-2e8d6.firebasestorage.app",
+    storageBucket: "dama-2e8d6.appspot.com",
     messagingSenderId: "712822202797",
     appId: "1:712822202797:web:403d918a89cab03da94124",
     measurementId: "G-S7HV2CR34Z"
@@ -194,55 +194,43 @@ let board = ["p1", "p1", "p1", "", "", "", "p2", "p2", "p2"];
 const statusText = document.getElementById("status");
 const WhichPlayer = document.getElementById("WhichPlayer");
 
-const $ = (selector) => {
-    return document.getElementById(selector);
-}
+const $ = (selector) => document.getElementById(selector);
 
-var inputs = [];
-const I1 = $("I1");
-const I2 = $("I2");
-const I3 = $("I3");
-const I4 = $("I4");
-const I5 = $("I5");
-const I6 = $("I6");
-const I7 = $("I7");
-const I8 = $("I8");
-const I9 = $("I9");
-inputs.push(I1, I2, I3, I4, I5, I6, I7, I8, I9);
+const inputs = Array.from({ length: 9 }, (_, i) => $(`I${i + 1}`));
 
 function damagenerate() {
-    for (let i = 0; i < inputs.length; i++) {
-        inputs[i].dataset.row = Math.floor(i / 3);
-        inputs[i].dataset.col = i % 3;
-        inputs[i].style.background = "white";
-        inputs[i].style.transform = "scale(1.0)";
-        inputs[i].addEventListener('click', onCheckerClick);
-        inputs[i].dataset.player = '';
+    inputs.forEach((input, i) => {
+        input.dataset.row = Math.floor(i / 3);
+        input.dataset.col = i % 3;
+        input.style.background = "white";
+        input.style.transform = "scale(1.0)";
+        input.addEventListener("click", onCheckerClick);
+        input.dataset.player = "";
+
         if (i < 3) {
-            inputs[i].style.background = "red";
-            inputs[i].dataset.player = 'p1';
+            input.style.background = "red";
+            input.dataset.player = "p1";
         }
         if (i > 5) {
-            inputs[i].style.background = "blue";
-            inputs[i].dataset.player = 'p2';
+            input.style.background = "blue";
+            input.dataset.player = "p2";
         }
-    }
+    });
 }
 
 function createBoard() {
-    for (let i = 0; i < inputs.length; i++) {
-        inputs[i].dataset.player = '';
-        inputs[i].style.background = "white";
-        if (board[i] == "p1") {
-            inputs[i].style.background = "red";
-            inputs[i].dataset.player = 'p1';
+    inputs.forEach((input, i) => {
+        input.dataset.player = "";
+        input.style.background = "white";
+        if (board[i] === "p1") {
+            input.style.background = "red";
+            input.dataset.player = "p1";
         }
-        if (board[i] == "p2") {
-            inputs[i].style.background = "blue";
-            inputs[i].dataset.player = 'p2';
+        if (board[i] === "p2") {
+            input.style.background = "blue";
+            input.dataset.player = "p2";
         }
-        
-    }
+    });
 }
 
 function testwin() {
@@ -251,16 +239,13 @@ function testwin() {
         [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
         [0, 4, 8], [2, 4, 6]             // Diagonals
     ];
-    for (let combo of winningCombos) {
-        const [a, b, c] = combo;
+    for (let [a, b, c] of winningCombos) {
         if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-            if ((a == 0 && b == 1 && c == 2 && board[a] == "p1") || (a == 6 && b == 7 && c == 8 && board[a] == "p2")) {
+            if ((a === 0 && b === 1 && c === 2 && board[a] === "p1") || 
+                (a === 6 && b === 7 && c === 8 && board[a] === "p2")) {
                 return false;
             }
-            console.log(combo);
-            inputs[a].style.transform = "scale(1.5)";
-            inputs[b].style.transform = "scale(1.5)";
-            inputs[c].style.transform = "scale(1.5)";
+            [inputs[a], inputs[b], inputs[c]].forEach(el => el.style.transform = "scale(1.5)");
             return true;
         }
     }
@@ -283,7 +268,6 @@ async function assignPlayer() {
             alert("Game is full! Try again later.");
         }
 
-        // Update the status text to show the player's role
         WhichPlayer.textContent = `You are Player ${player === "p1" ? "1 (Red)" : "2 (Blue)"}`;
     } catch (error) {
         console.error("Error assigning player:", error);
@@ -300,30 +284,25 @@ onValue(ref(database, "damaGame/board"), (snapshot) => {
     }
 });
 
-// **check win from Firebase**
+// **Check Win from Firebase**
 onValue(ref(database, "damaGame/win"), (snapshot) => {
     const data = snapshot.val();
     if (data) {
         currentPlayer = data;
         selectedChecker = null;
-        alert(currentPlayer + " is winner");
-        board = ['p1', 'p1', 'p1', '', '', '', 'p2', 'p2', 'p2'];    
-        currentPlayer = null;        
-        gameRef.remove();
-        createBoard();
-        startGame();
+        alert(`${currentPlayer} is the winner!`);
+        resetGame();
     }
 });
 
 // **Sync Turn**
 onValue(ref(database, "damaGame/currentPlayer"), (snapshot) => {
     currentPlayer = snapshot.val();
-    // Update the status text to show whose turn it is
     statusText.textContent = `Turn: ${currentPlayer === "p1" ? "Player 1 (Red)" : "Player 2 (Blue)"}`;
 });
 
 function onCheckerClick(event) {
-    if (player !== currentPlayer) return; // Prevent moves if it's not the player's turn
+    if (player !== currentPlayer) return;
 
     const checker = event.currentTarget;
     const checkerPlayer = checker.dataset.player;
@@ -337,54 +316,46 @@ function onCheckerClick(event) {
         const rowDiff = Math.abs(targetRow - selectedRow);
         const colDiff = Math.abs(targetCol - selectedCol);
 
-        // Ensure the move is valid (adjacent squares or valid diagonal movement)
-        if (
-            (rowDiff === 1 && colDiff === 0) || // Vertical move
-            (rowDiff === 0 && colDiff === 1) || // Horizontal move
-            (rowDiff === 1 && colDiff === 1)    // Diagonal move (for a more flexible game logic)
-        ) {
-            if (checkerPlayer === "") {
-                // Move the checker to the new position
+        if ((rowDiff === 1 && colDiff === 0) || 
+            (rowDiff === 0 && colDiff === 1) || 
+            (rowDiff === 1 && colDiff === 1)) {
+            
+            if (!checkerPlayer) {
                 checker.style.background = selectedChecker.style.background;
                 checker.dataset.player = currentPlayer;
-
-                // Clear the old position
                 selectedChecker.style.background = "white";
-                selectedChecker.dataset.player = '';
+                selectedChecker.dataset.player = "";
                 board[selectedRow * 3 + selectedCol] = "";
                 board[targetRow * 3 + targetCol] = currentPlayer;
 
-                // Deselect the checker and switch player
-                selectedChecker.classList.remove('selected');
+                selectedChecker.classList.remove("selected");
                 set(ref(database, "damaGame/board"), board);
                 selectedChecker = null;
                 currentPlayer = currentPlayer === "p1" ? "p2" : "p1";
                 set(ref(database, "damaGame/currentPlayer"), currentPlayer);
 
-                if (testwin()) {
-                    setTimeout(win, 1000);
-                }
+                if (testwin()) setTimeout(win, 1000);
             } else {
-                // Invalid move, deselect
-                selectedChecker.classList.remove('selected');
+                selectedChecker.classList.remove("selected");
                 selectedChecker = null;
             }
         }
     } else if (checkerPlayer === currentPlayer) {
-        // Select the checker if it's the player's piece
         selectedChecker = checker;
-        selectedChecker.classList.add('selected');
+        selectedChecker.classList.add("selected");
     }
 }
 
-
 function win() {
     selectedChecker = null;
-    alert(currentPlayer + " is winner");
-    board = ['p1', 'p1', 'p1', '', '', '', 'p2', 'p2', 'p2'];
-    set(ref(database, "damaGame/win"), currentPlayer);  
-    currentPlayer = null;
-    gameRef.remove();
+    alert(`${currentPlayer} is the winner!`);
+    set(ref(database, "damaGame/win"), currentPlayer);
+    resetGame();
+}
+
+function resetGame() {
+    board = ["p1", "p1", "p1", "", "", "", "p2", "p2", "p2"];
+    remove(gameRef);
     damagenerate();
     startGame();
 }
@@ -392,17 +363,13 @@ function win() {
 // **Initialize Game**
 async function startGame() {
     await assignPlayer();
-/*
-    currentPlayer = '';
-    firstStarter == 1 ? currentPlayer = 'p1' : currentPlayer = 'p2';
-    currentPlayer = firstStarter == 1 ? 'p1': 'p2';*/
+
     onValue(gameRef, (snapshot) => {
         if (!snapshot.exists()) {
             set(ref(database, "damaGame"), { board, currentPlayer: "p1" });
         }
     });
 
-    // Detect when the client disconnects and update the Firebase game status
     onDisconnect(gameRef).remove();
 
     createBoard();
