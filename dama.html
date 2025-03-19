@@ -309,6 +309,7 @@ onValue(ref(database, "damaGame/win"), (snapshot) => {
         alert(currentPlayer + " is winner");
         board = ['p1', 'p1', 'p1', '', '', '', 'p2', 'p2', 'p2'];    
         currentPlayer = null;        
+        gameRef.remove();
         createBoard();
         startGame();
     }
@@ -383,6 +384,7 @@ function win() {
     board = ['p1', 'p1', 'p1', '', '', '', 'p2', 'p2', 'p2'];
     set(ref(database, "damaGame/win"), currentPlayer);  
     currentPlayer = null;
+    gameRef.remove();
     damagenerate();
     startGame();
 }
