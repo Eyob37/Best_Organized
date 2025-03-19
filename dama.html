@@ -168,7 +168,7 @@ h2{
     <script type="module">
 // Import Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getDatabase, ref, set, onValue, get, onDisconnect, remove } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+import { getDatabase, ref, set, onValue, get, remove } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
 // **Your Firebase Configuration**
 const firebaseConfig = {
@@ -191,20 +191,18 @@ let player = null;
 let currentPlayer = null;
 let selectedChecker = null;
 let board = ["p1", "p1", "p1", "", "", "", "p2", "p2", "p2"];
+
 const statusText = document.getElementById("status");
 const WhichPlayer = document.getElementById("WhichPlayer");
 
 const $ = (selector) => document.getElementById(selector);
-
 const inputs = Array.from({ length: 9 }, (_, i) => $(`I${i + 1}`));
 
-function damagenerate() {
+function initializeBoard() {
     inputs.forEach((input, i) => {
         input.dataset.row = Math.floor(i / 3);
         input.dataset.col = i % 3;
         input.style.background = "white";
-        input.style.transform = "scale(1.0)";
-        input.addEventListener("click", onCheckerClick);
         input.dataset.player = "";
 
         if (i < 3) {
@@ -215,37 +213,32 @@ function damagenerate() {
             input.style.background = "blue";
             input.dataset.player = "p2";
         }
+
+        input.addEventListener("click", onCheckerClick);
     });
 }
 
-function createBoard() {
+function updateBoard() {
     inputs.forEach((input, i) => {
-        input.dataset.player = "";
-        input.style.background = "white";
-        if (board[i] === "p1") {
-            input.style.background = "red";
-            input.dataset.player = "p1";
-        }
-        if (board[i] === "p2") {
-            input.style.background = "blue";
-            input.dataset.player = "p2";
-        }
+        input.dataset.player = board[i] || "";
+        input.style.background = board[i] === "p1" ? "red" : board[i] === "p2" ? "blue" : "white";
     });
 }
 
-function testwin() {
-    const winningCombos = [
+function checkWin() {
+    const winningPatterns = [
         [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
         [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
         [0, 4, 8], [2, 4, 6]             // Diagonals
     ];
-    for (let [a, b, c] of winningCombos) {
+
+    for (let pattern of winningPatterns) {
+        let [a, b, c] = pattern;
         if (board[a] && board[a] === board[b] && board[a] === board[c]) {
             if ((a === 0 && b === 1 && c === 2 && board[a] === "p1") || 
                 (a === 6 && b === 7 && c === 8 && board[a] === "p2")) {
                 return false;
             }
-            [inputs[a], inputs[b], inputs[c]].forEach(el => el.style.transform = "scale(1.5)");
             return true;
         }
     }
@@ -280,7 +273,7 @@ onValue(ref(database, "damaGame/board"), (snapshot) => {
     const data = snapshot.val();
     if (data) {
         board = data;
-        createBoard();
+        updateBoard();
     }
 });
 
@@ -288,9 +281,7 @@ onValue(ref(database, "damaGame/board"), (snapshot) => {
 onValue(ref(database, "damaGame/win"), (snapshot) => {
     const data = snapshot.val();
     if (data) {
-        currentPlayer = data;
-        selectedChecker = null;
-        alert(`${currentPlayer} is the winner!`);
+        alert(`${data} is the winner!`);
         resetGame();
     }
 });
@@ -313,31 +304,31 @@ function onCheckerClick(event) {
         const targetRow = parseInt(checker.dataset.row);
         const targetCol = parseInt(checker.dataset.col);
 
-        const rowDiff = Math.abs(targetRow - selectedRow);
-        const colDiff = Math.abs(targetCol - selectedCol);
+        if (checkerPlayer === currentPlayer) {
+            selectedChecker.classList.remove("selected");
+            selectedChecker = checker;
+            selectedChecker.classList.add("selected");
+            return;
+        }
 
-        if ((rowDiff === 1 && colDiff === 0) || 
-            (rowDiff === 0 && colDiff === 1) || 
-            (rowDiff === 1 && colDiff === 1)) {
-            
-            if (!checkerPlayer) {
-                checker.style.background = selectedChecker.style.background;
-                checker.dataset.player = currentPlayer;
-                selectedChecker.style.background = "white";
-                selectedChecker.dataset.player = "";
-                board[selectedRow * 3 + selectedCol] = "";
-                board[targetRow * 3 + targetCol] = currentPlayer;
+        if (Math.abs(targetRow - selectedRow) <= 1 && Math.abs(targetCol - selectedCol) <= 1 && !checkerPlayer) {
+            checker.style.background = selectedChecker.style.background;
+            checker.dataset.player = currentPlayer;
+            selectedChecker.style.background = "white";
+            selectedChecker.dataset.player = "";
 
-                selectedChecker.classList.remove("selected");
-                set(ref(database, "damaGame/board"), board);
-                if (testwin()) setTimeout(win, 1000);
-                selectedChecker = null;
+            board[selectedRow * 3 + selectedCol] = "";
+            board[targetRow * 3 + targetCol] = currentPlayer;
+
+            set(ref(database, "damaGame/board"), board);
+            selectedChecker.classList.remove("selected");
+            selectedChecker = null;
+
+            if (checkWin()) {
+                setTimeout(() => declareWin(), 500);
+            } else {
                 currentPlayer = currentPlayer === "p1" ? "p2" : "p1";
                 set(ref(database, "damaGame/currentPlayer"), currentPlayer);
-                
-            } else {
-                selectedChecker.classList.remove("selected");
-                selectedChecker = null;
             }
         }
     } else if (checkerPlayer === currentPlayer) {
@@ -346,8 +337,7 @@ function onCheckerClick(event) {
     }
 }
 
-function win() {
-    selectedChecker = null;
+function declareWin() {
     alert(`${currentPlayer} is the winner!`);
     set(ref(database, "damaGame/win"), currentPlayer);
     resetGame();
@@ -356,7 +346,7 @@ function win() {
 function resetGame() {
     board = ["p1", "p1", "p1", "", "", "", "p2", "p2", "p2"];
     remove(gameRef);
-    damagenerate();
+    initializeBoard();
     startGame();
 }
 
@@ -370,13 +360,10 @@ async function startGame() {
         }
     });
 
-    onDisconnect(gameRef).remove();
-
-    createBoard();
+    initializeBoard();
 }
 
 startGame();
-damagenerate();
     </script>
 </body>
 </html>
