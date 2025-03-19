@@ -330,11 +330,11 @@ function onCheckerClick(event) {
 
                 selectedChecker.classList.remove("selected");
                 set(ref(database, "damaGame/board"), board);
+                if (testwin()) setTimeout(win, 1000);
                 selectedChecker = null;
                 currentPlayer = currentPlayer === "p1" ? "p2" : "p1";
                 set(ref(database, "damaGame/currentPlayer"), currentPlayer);
-
-                if (testwin()) setTimeout(win, 1000);
+                
             } else {
                 selectedChecker.classList.remove("selected");
                 selectedChecker = null;
