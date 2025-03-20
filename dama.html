@@ -162,11 +162,12 @@ let currentPlayer = null;
 let selectedChecker = null;
 let board = ["p1", "p1", "p1", "", "", "", "p2", "p2", "p2"];
 
-const statusText = document.getElementById("status");
-const WhichPlayer = document.getElementById("WhichPlayer");
-
 const $ = (selector) => document.getElementById(selector);
 const inputs = Array.from({ length: 9 }, (_, i) => $(`I${i + 1}`));
+
+const messageContainer = $("message-container");
+const statusText = $("status");
+const WhichPlayer = $("WhichPlayer");
 
 function initializeBoard() {
     inputs.forEach((input, i) => {
