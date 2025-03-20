@@ -175,42 +175,6 @@ hr{
     height: 30px;
     border-radius: 50%;
 }
-#I1{
-    top: 220px;
-    left:calc(50% - 170px);
-}
-#I2{
-    top: 220px;
-    left: calc(50% - 18px);
-}
-#I3{
-    top: 220px;
-    right: calc(50% - 160px);
-}
-#I4{
-    top: 370px;
-    left:calc(50% - 170px);
-}
-#I5{
-    top: 370px;
-    left: calc(50% - 18px);
-}
-#I6{
-    top: 370px;
-    right: calc(50% - 160px);
-}
-#I7{
-    top: 525px;
-    left:calc(50% - 170px);
-}
-#I8{
-    top: 525px;
-    left: calc(50% - 18px);
-}
-#I9{
-    top: 525px;
-    right: calc(50% - 160px);
-}
 h2{
     color: green;
     text-align: center;
@@ -237,6 +201,8 @@ h2{
       <p id="status">Connecting...</p>
         <p id="WhichPlayer"></p>
     <h2>dama play</h2>
+    <input id = "input-message" type ="text" placeholder="Enter any message here"> <button onclick="insertMessage()">Done</button>
+    <p id = "message-container"></p>
     <div id="damaboard">
         <hr class="a1">
         <hr class="a2">
@@ -294,11 +260,12 @@ let currentPlayer = null;
 let selectedChecker = null;
 let board = ["p1", "p1", "p1", "", "", "", "p2", "p2", "p2"];
 
-const statusText = document.getElementById("status");
-const WhichPlayer = document.getElementById("WhichPlayer");
-
 const $ = (selector) => document.getElementById(selector);
 const inputs = Array.from({ length: 9 }, (_, i) => $(`I${i + 1}`));
+
+const messageContainer = $("message-container");
+const statusText = $("status");
+const WhichPlayer = $("WhichPlayer");
 
 function initializeBoard() {
     inputs.forEach((input, i) => {
@@ -318,6 +285,40 @@ function initializeBoard() {
 
         input.addEventListener("click", onCheckerClick);
     });
+}
+
+
+function initializeButtonPosition() {
+const Board = document.getElementById("damaboard");
+const buttons = document.querySelectorAll("#inputs button");
+
+const aksPos = Board.getBoundingClientRect();
+console.log(aksPos.width);
+// Define the button positions relative to the board (ends and center)
+const positions = [
+    { top: aksPos.top , left: aksPos.left }, // Top-left corner
+    { top: aksPos.top, left: aksPos.left + aksPos.width / 2 }, // Top-center
+    { top: aksPos.top, left: aksPos.left + aksPos.width }, // Top-right corner
+    { top: aksPos.top + aksPos.height / 2, left: aksPos.left }, // Middle-left
+    { top: aksPos.top + aksPos.height / 2, left: aksPos.left + aksPos.width / 2 }, // Center
+    { top: aksPos.top + aksPos.height / 2, left: aksPos.left + aksPos.width }, // Middle-right
+    { top: aksPos.top + aksPos. height, left: aksPos.left }, // Bottom-left corner
+    { top: aksPos.top + aksPos. height, left: aksPos.left + aksPos.width / 2 }, // Bottom-center
+    { top: aksPos.top + aksPos. height, left: aksPos.left + aksPos.width } // Bottom-right corner
+];
+
+// Apply the position to each button
+buttons.forEach((button, i) => {
+    let pos = positions[i];
+    button.style.position = 'absolute'; // Ensure absolute positioning for placement
+    button.style.transform = 'translate(-50%, -50%)'; // Center the button on its position
+
+    // Apply the position styles based on the array
+    if (pos.top !== undefined) button.style.top = `${pos.top}px`;
+    if (pos.bottom !== undefined) button.style.bottom = `${pos.bottom}px`;
+    if (pos.left !== undefined) button.style.left = `${pos.left}px`;
+    if (pos.right !== undefined) button.style.right = `${pos.right}px`;
+});
 }
 
 function updateBoard() {
@@ -368,6 +369,22 @@ async function assignPlayer() {
         console.error("Error assigning player:", error);
         statusText.textContent = "Error connecting to the game. Please check your internet connection.";
     }
+    initializeButtonPosition();
+}
+
+// **Update message from Firebase**
+onValue(ref(database, "damaGame/message"), (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+        messageContainer.innerText =  data;
+    }
+    initializeButtonPosition();
+});
+
+function insertMessage() {
+    let input = $("input-message").value;
+    set(ref(database, "damaGame/message"), input);
+    
 }
 
 // **Update Board from Firebase**
@@ -464,7 +481,7 @@ async function startGame() {
 
     initializeBoard();
 }
-
+initializeButtonPosition();
 startGame();
     </script>
 </body>
