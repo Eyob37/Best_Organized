@@ -381,7 +381,7 @@ onValue(ref(database, "damaGame/message"), (snapshot) => {
     initializeButtonPosition();
 });
 
-window.function insertMessage() {
+window.insertMessage = function () {
     let input = $("input-message").value;
     set(ref(database, "damaGame/message"), input);
     
