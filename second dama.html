@@ -256,7 +256,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
-const gameRef = ref(database, "damaGame");
+const gameRef = ref(database, "damaGame2");
 
 let player = null;
 let currentPlayer = null;
@@ -359,10 +359,10 @@ async function assignPlayer() {
 
         if (!data || !data.player1) {
             player = "p1";
-            await set(ref(database, "damaGame/player1"), true);
+            await set(ref(database, "damaGame2/player1"), true);
         } else if (!data.player2) {
             player = "p2";
-            await set(ref(database, "damaGame/player2"), true);
+            await set(ref(database, "damaGame2/player2"), true);
         } else {
             alert("Game is full! Try again later.");
         }
@@ -376,7 +376,7 @@ async function assignPlayer() {
 }
 
 // **Update message from Firebase**
-onValue(ref(database, "damaGame/message"), (snapshot) => {
+onValue(ref(database, "damaGame2/message"), (snapshot) => {
     const data = snapshot.val();
     if (data) {
         messageContainer.innerHTML +=  data + "<br>";
@@ -388,11 +388,11 @@ onValue(ref(database, "damaGame/message"), (snapshot) => {
 window.insertMessage = function () {
     let input = $("input-message").value;
     set(ref(database, "damaGame/message"), input);
-    
+
 }
 
 // **Update Board from Firebase**
-onValue(ref(database, "damaGame/board"), (snapshot) => {
+onValue(ref(database, "damaGame2/board"), (snapshot) => {
     const data = snapshot.val();
     if (data) {
         board = data;
@@ -401,7 +401,7 @@ onValue(ref(database, "damaGame/board"), (snapshot) => {
 });
 
 // **Check Win from Firebase**
-onValue(ref(database, "damaGame/win"), (snapshot) => {
+onValue(ref(database, "damaGame2/win"), (snapshot) => {
     const data = snapshot.val();
     if (data) {
         alert(`${data} is the winner!`);
@@ -410,7 +410,7 @@ onValue(ref(database, "damaGame/win"), (snapshot) => {
 });
 
 // **Sync Turn**
-onValue(ref(database, "damaGame/currentPlayer"), (snapshot) => {
+onValue(ref(database, "damaGame2/currentPlayer"), (snapshot) => {
     currentPlayer = snapshot.val();
     statusText.textContent = `Turn: ${currentPlayer === "p1" ? "Player 1 (Red)" : "Player 2 (Blue)"}`;
 });
@@ -462,7 +462,7 @@ function onCheckerClick(event) {
 
 function declareWin() {
     alert(`${currentPlayer} is the winner!`);
-    set(ref(database, "damaGame/win"), currentPlayer);
+    set(ref(database, "damaGame2/win"), currentPlayer);
     resetGame();
 }
 
@@ -479,7 +479,7 @@ async function startGame() {
 
     onValue(gameRef, (snapshot) => {
         if (!snapshot.exists()) {
-            set(ref(database, "damaGame"), { board, currentPlayer: "p1" });
+            set(ref(database, "damaGame2"), { board, currentPlayer: "p1" });
         }
     });
 
