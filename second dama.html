@@ -379,7 +379,8 @@ async function assignPlayer() {
 onValue(ref(database, "damaGame/message"), (snapshot) => {
     const data = snapshot.val();
     if (data) {
-        messageContainer.innerText +=  data + "<br>";
+        messageContainer.innerHTML +=  data + "<br>";
+        initializeButtonPosition();
     }
     initializeButtonPosition();
 });
