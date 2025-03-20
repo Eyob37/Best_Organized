@@ -186,7 +186,10 @@ h2{
     bottom: 5px;
     left: 5px;
 }
+#message-container{
+   font-size: 15px;
 
+}
    
         h2{
             font-size: 40px;
@@ -376,9 +379,9 @@ async function assignPlayer() {
 onValue(ref(database, "damaGame/message"), (snapshot) => {
     const data = snapshot.val();
     if (data) {
-        messageContainer.innerText =  data;
+        messageContainer.innerText +=  data + "<br>";
     }
-   // initializeButtonPosition();
+    initializeButtonPosition();
 });
 
 window.insertMessage = function () {
