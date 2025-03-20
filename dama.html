@@ -86,42 +86,7 @@ hr{
     height: 30px;
     border-radius: 50%;
 }
-#I1{
-    top: 220px;
-    left:calc(50% - 170px);
-}
-#I2{
-    top: 220px;
-    left: calc(50% - 18px);
-}
-#I3{
-    top: 220px;
-    right: calc(50% - 160px);
-}
-#I4{
-    top: 370px;
-    left:calc(50% - 170px);
-}
-#I5{
-    top: 370px;
-    left: calc(50% - 18px);
-}
-#I6{
-    top: 370px;
-    right: calc(50% - 160px);
-}
-#I7{
-    top: 525px;
-    left:calc(50% - 170px);
-}
-#I8{
-    top: 525px;
-    left: calc(50% - 18px);
-}
-#I9{
-    top: 525px;
-    right: calc(50% - 160px);
-}
+
 h2{
     color: green;
     text-align: center;
@@ -133,7 +98,10 @@ h2{
     bottom: 5px;
     right: 5px;
 }
-   
+#message-container{
+   font-size: 15px;
+
+} 
         h2{
             font-size: 40px;
         }
@@ -147,6 +115,8 @@ h2{
         <p id="status">Connecting...</p>
         <p id="WhichPlayer"></p>
     <h2>dama play</h2>
+    <input id = "input-message" type ="text" placeholder="Enter any message here"> <button onclick="insertMessage()">Done</button>
+    <p id = "message-container"></p>
     <div id="damaboard">
         <hr class="a1">
         <hr class="a2">
@@ -300,6 +270,22 @@ async function assignPlayer() {
         statusText.textContent = "Error connecting to the game. Please check your internet connection.";
     }
 initializeButtonPosition();
+}
+
+// **Update message from Firebase**
+onValue(ref(database, "damaGame/message"), (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+        messageContainer.innerHTML +=  data + "<br>";
+        initializeButtonPosition();
+    }
+    initializeButtonPosition();
+});
+
+window.insertMessage = function () {
+    let input = $("input-message").value;
+    set(ref(database, "damaGame/message"), input);
+
 }
 
 // **Update Board from Firebase**
