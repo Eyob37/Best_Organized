@@ -252,15 +252,16 @@ function checkWin() {
 // **Assign Player**
 async function assignPlayer() {
     try {
-        const snapshot = await get(gameRef);
+        const snapshot = await get(ref(database, "damaGame/firstGame/players"));
         const data = snapshot.val();
 
         if (!data || !data.player1) {
             player = "p1";
-            await set(ref(database, "damaGame/firstGame/player1"), true);
+            await set(ref(database, "damaGame/firstGame/players/player1"), true);
         } else if (!data.player2) {
             player = "p2";
-            await set(ref(database, "damaGame/firstGame/player2"), true);
+            await set(ref(database, "damaGame/firstGame/players/player2"), true);
+            alert("the game is started");
         } else {
             alert("Game is full! Try again later.");
         }
@@ -281,6 +282,14 @@ onValue(ref(database, "damaGame/firstGame/message"), (snapshot) => {
         initializeButtonPosition();
     }
     initializeButtonPosition();
+});
+
+// chack the second player
+onValue(ref(database, "damaGame/firstGame/players"), (snapshot) => {
+    const data = snapshot.val();
+    if (data.player2) {
+        alert("the game is started");
+    }    
 });
 
 window.insertMessage = function () {
