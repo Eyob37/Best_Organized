@@ -375,10 +375,9 @@ function declareWin() {
 
 function resetGame() {
     board = ["p1", "p1", "p1", "", "", "", "p2", "p2", "p2"];
-    remove(gameRef);
-    initializeBoard();
-    startGame();
-}
+    remove(gameRef);    
+    window.location.href = "menu.html";
+ }
 
 // **Initialize Game**
 async function startGame() {
