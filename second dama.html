@@ -468,6 +468,18 @@ function onCheckerClick(event) {
     }
 }
 
+// Remove the game reference when the user leaves
+window.addEventListener("beforeunload", () => {
+    remove(gameRef);
+});
+
+// Handle visibility change (for cases when the user switches tabs)
+document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+        remove(gameRef);
+    }
+});
+
 function declareWin() {
     alert(`${currentPlayer} is the winner!`);
     set(ref(database, "damaGame/secondGame/win"), currentPlayer);
