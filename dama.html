@@ -161,6 +161,7 @@ let player = null;
 let currentPlayer = null;
 let selectedChecker = null;
 let board = ["p1", "p1", "p1", "", "", "", "p2", "p2", "p2"];
+let isGameStarted = false;
 
 const $ = (selector) => document.getElementById(selector);
 const inputs = Array.from({ length: 9 }, (_, i) => $(`I${i + 1}`));
@@ -289,6 +290,7 @@ onValue(ref(database, "damaGame/firstGame/players"), (snapshot) => {
     const data = snapshot.val();
     if (data.player2) {
         alert("the game is started");
+        isGameStarted = true;
     }    
 });
 
@@ -324,6 +326,10 @@ onValue(ref(database, "damaGame/firstGame/currentPlayer"), (snapshot) => {
 
 function onCheckerClick(event) {
     if (player !== currentPlayer) return;
+    if(!isGameStarted){
+       alert("the game is not started yet");
+       return;
+    }
 
     const checker = event.currentTarget;
     const checkerPlayer = checker.dataset.player;
