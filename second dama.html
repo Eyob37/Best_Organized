@@ -476,14 +476,16 @@ onValue(ref(database, "damaGame/secondGame/Alert"), (snapshot) => {
 
 // Remove the game reference when the user leaves
 window.addEventListener("beforeunload", () => {
-    set(ref(database, "damaGame/secondGame/Alert"), ”the another player is get out");
+    let am = "the another player is get out";
+    set(ref(database, "damaGame/secondGame/Alert"), am);
     remove(gameRef);
 });
 
 // Handle visibility change (for cases when the user switches tabs)
 document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
-        set(ref(database, "damaGame/secondGame/Alert"), ”the another player is get out");
+        let am = "the another player is get out";
+        set(ref(database, "damaGame/secondGame/Alert"), am);
         remove(gameRef);
     }
 });
