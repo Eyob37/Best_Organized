@@ -354,15 +354,15 @@ function checkWin() {
 // **Assign Player**
 async function assignPlayer() {
     try {
-        const snapshot = await get(gameRef);
+        const snapshot = await get(ref(database, "damaGame/secondGame/players"));
         const data = snapshot.val();
 
         if (!data || !data.player1) {
             player = "p1";
-            await set(ref(database, "damaGame/secondGame/player1"), true);
+            await set(ref(database, "damaGame/secondGame/players/player1"), true);
         } else if (!data.player2) {
             player = "p2";
-            await set(ref(database, "damaGame/secondGame/player2"), true);
+            await set(ref(database, "damaGame/secondGame/players/player2"), true);
         } else {
             alert("Game is full! Try again later.");
         }
@@ -372,7 +372,7 @@ async function assignPlayer() {
         console.error("Error assigning player:", error);
         statusText.textContent = "Error connecting to the game. Please check your internet connection.";
     }
-    initializeButtonPosition();
+initializeButtonPosition();
 }
 
 // **Update message from Firebase**
@@ -383,6 +383,14 @@ onValue(ref(database, "damaGame/secondGame/message"), (snapshot) => {
         initializeButtonPosition();
     }
     initializeButtonPosition();
+});
+
+// chack the second player
+onValue(ref(database, "damaGame/secondGame/players"), (snapshot) => {
+    const data = snapshot.val();
+    if (data.player2) {
+        alert("the game is started");
+    }    
 });
 
 window.insertMessage = function () {
@@ -468,11 +476,9 @@ function declareWin() {
 
 function resetGame() {
     board = ["p1", "p1", "p1", "", "", "", "p2", "p2", "p2"];
-    remove(gameRef);
-    initializeBoard();
-    startGame();
-}
-
+    remove(gameRef);    
+    window.location.href = "menu.html";
+ }
 // **Initialize Game**
 async function startGame() {
     await assignPlayer();
