@@ -470,6 +470,7 @@ function onCheckerClick(event) {
 
 onValue(ref(database, "damaGame/secondGame/Alert"), (snapshot) => {
     let Alert = snapshot.val();
+    if(!Alert) return;
     alert(Alert);
     window.location.href = "menu.html";
 });
