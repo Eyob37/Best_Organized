@@ -468,14 +468,22 @@ function onCheckerClick(event) {
     }
 }
 
+onValue(ref(database, "damaGame/secondGame/Alert"), (snapshot) => {
+    let Alert = snapshot.val();
+    alert(Alert);
+    window.location.href = "menu.html";
+});
+
 // Remove the game reference when the user leaves
 window.addEventListener("beforeunload", () => {
+    set(ref(database, "damaGame/secondGame/Alert"), ”the another player is get out");
     remove(gameRef);
 });
 
 // Handle visibility change (for cases when the user switches tabs)
 document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
+        set(ref(database, "damaGame/secondGame/Alert"), ”the another player is get out");
         remove(gameRef);
     }
 });
