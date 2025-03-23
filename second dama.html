@@ -472,6 +472,7 @@ onValue(ref(database, "damaGame/secondGame/Alert"), (snapshot) => {
     let Alert = snapshot.val();
     if(!Alert) return;
     alert(Alert);
+    remove(gameRef);
     window.location.href = "menu.html";
 });
 
@@ -482,14 +483,7 @@ window.addEventListener("beforeunload", () => {
     remove(gameRef);
 });
 
-// Handle visibility change (for cases when the user switches tabs)
-document.addEventListener("visibilitychange", () => {
-    if (document.hidden) {
-        let am = "the another player is get out";
-        set(ref(database, "damaGame/secondGame/Alert"), am);
-        remove(gameRef);
-    }
-});
+
 
 function declareWin() {
     alert(`${currentPlayer} is the winner!`);
