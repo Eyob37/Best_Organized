@@ -261,7 +261,7 @@ async function assignPlayer() {
         } else if (!data.player2) {
             player = "p2";
             await set(ref(database, "damaGame/firstGame/players/player2"), true);
-            alert("the game is started");
+            
         } else {
             alert("Game is full! Try again later.");
         }
