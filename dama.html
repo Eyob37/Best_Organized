@@ -367,6 +367,23 @@ function onCheckerClick(event) {
     }
 }
 
+onValue(ref(database, "damaGame/firstGame/Alert"), (snapshot) => {
+    let Alert = snapshot.val();
+    if(!Alert) return;
+    alert(Alert);
+    remove(gameRef);
+    board = ["p1", "p1", "p1", "", "", "", "p2", "p2", "p2"];
+    set(ref(database, "damaGame/firstGame/board"), board);
+    window.location.href = "menu.html";
+});
+
+// Remove the game reference when the user leaves
+window.addEventListener("beforeunload", () => {
+    let am = "the another player is get out";
+    set(ref(database, "damaGame/firstGame/Alert"), am);
+    remove(gameRef);
+});
+
 function declareWin() {
     alert(`${currentPlayer} is the winner!`);
     set(ref(database, "damaGame/firstGame/win"), currentPlayer);
