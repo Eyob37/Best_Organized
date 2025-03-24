@@ -347,7 +347,7 @@ function onCheckerClick(event) {
             return;
         }
 
-        if (((rowDiff === 1 && colDiff == 0) || (rowDiff == 0 && colDiff === 1) || (targetRow == 1 && targetCol == 1) || (selectedRow == 1 && selectedCol == 1 && (rowDiff == 1 || colDiff == 1))) && !checkerPlayer) {
+        if ((rowDiff === 1 && colDiff == 0) || (rowDiff == 0 && colDiff === 1) || (targetRow == 1 && targetCol == 1) || (selectedRow == 1 && selectedCol == 1 && (rowDiff == 1 || colDiff == 1))) {
             checker.style.background = selectedChecker.style.background;
             checker.dataset.player = currentPlayer;
             selectedChecker.style.background = "white";
