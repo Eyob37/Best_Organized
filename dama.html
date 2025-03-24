@@ -340,6 +340,9 @@ function onCheckerClick(event) {
         const targetRow = parseInt(checker.dataset.row);
         const targetCol = parseInt(checker.dataset.col);
 
+        const rowDiff = Math.abs(targetRow - selectedRow);
+        const colDiff = Math.abs(targetCol - selectedCol);
+
         if (checkerPlayer === currentPlayer) {
             selectedChecker.classList.remove("selected");
             selectedChecker = checker;
@@ -347,7 +350,7 @@ function onCheckerClick(event) {
             return;
         }
 
-        if ((rowDiff === 1 && colDiff == 0) || (rowDiff == 0 && colDiff === 1) || (targetRow == 1 && targetCol == 1) || (selectedRow == 1 && selectedCol == 1 && (rowDiff == 1 || colDiff == 1))) {
+        if (((rowDiff === 1 && colDiff == 0) || (rowDiff == 0 && colDiff === 1) || (targetRow == 1 && targetCol == 1) || (selectedRow == 1 && selectedCol == 1 && (rowDiff == 1 || colDiff == 1)))&& !checkerPlayer) {
             checker.style.background = selectedChecker.style.background;
             checker.dataset.player = currentPlayer;
             selectedChecker.style.background = "white";
