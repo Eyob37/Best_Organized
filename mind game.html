@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mind game</title>
+    <style>
+ body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 20px;
+}
+
+h2 {
+    color: #333;
+}
+
+#numbers-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Align items to the left */
+    width: 90%;
+    margin: 20px auto;
+    gap: 10px; /* Adds space between numbers */
+    padding: 10px;
+    border: 2px solid #333;
+    min-height: 50px;
+    background-color: #f9f9f9;
+    white-space: normal; /* Ensures wrapping works */
+}
+
+#numbers-container span {
+    display: inline-block;
+    padding: 5px 10px;
+    background: lightblue;
+    border-radius: 5px;
+    font-size: 16px;
+}
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+#yes {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#no {
+    background-color: #f44336;
+    color: white;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+img{
+    position: absolute;
+    bottom: 5px;
+    right: 40%;
+    display: none;
+}
+    </style>
+</head>
+<body>
+    <h2>Welcome to this mind game</h2>
+    <div id="numbers-container"></div>
+    <p id="result"></p>
+    <button onclick = "acceptAnswer('yes')" id="yes">Yes</button>
+    <button onclick = "acceptAnswer('no')" id="no">No</button>
+    <img onclick="showResult()" width="100px" src="finger print.jpg">
+    <script>
+        
+const numbersContainer = document.getElementById("numbers-container");
+const result = document.getElementById("result");
+const firstButton = document.getElementById("yes");
+const secondButton = document.getElementById("no");
+const img = document.querySelector("img");
+
+img.addEventListener("mousedown", startHold);
+img.addEventListener("mouseup", clearHold);
+img.addEventListener("mouseleave", clearHold);
+img.addEventListener("touchstart", startHold);
+img.addEventListener("touchend", clearHold);
+
+let holdTimeout;
+
+function startHold() {
+    holdTimeout = setTimeout(showResult, 1000); // Triggers after 1 second of hold
+}
+
+function clearHold() {
+    clearTimeout(holdTimeout); // Clears if released early
+}
+
+let fullPureNumber = [];
+let firstPureNumber = [];
+let secondPureNumber = [];
+let ak = 1;
+
+function acceptAnswer(answer) {
+    if (ak === 1) {
+        answer === 'yes' ? organizeNext() : start();
+        console.log("it is get in");
+        ak++;
+        return;       
+    }
+
+    fullPureNumber = answer === 'yes' ? firstPureNumber : secondPureNumber;    
+
+    if (fullPureNumber.length === 1) {
+        result.innerText = "Enter your finger print";
+        firstButton.style.display = "none";
+        secondButton.style.display = "none";
+        img.style.display = "block";                        
+        return;
+    }
+    
+    ak++;
+    organizeNext();    
+}
+
+function splitNumber() {
+    let mid = Math.floor(fullPureNumber.length / 2);
+    firstPureNumber = fullPureNumber.slice(0, mid);
+    secondPureNumber = fullPureNumber.slice(mid);
+}
+
+function showFirst() {
+    numbersContainer.innerHTML = "";
+    result.innerText = "";
+
+    let displayedNumbers = [];
+
+    // Collect all numbers (firstPureNumber + random ones)
+    for (let i = 0; i < 64; i++) {
+        if (firstPureNumber[i]) {
+            displayedNumbers.push(firstPureNumber[i]);
+        } else {
+            let randomNumber;
+            do {
+                randomNumber = Math.floor(Math.random() * 2000) + 1131;
+            } while (fullPureNumber.includes(randomNumber));
+            displayedNumbers.push(randomNumber);
+        }
+    }
+
+    // Sort only displayedNumbers (does not affect firstPureNumber)
+    displayedNumbers.sort((a, b) => a - b);
+
+    // Convert sorted numbers to HTML
+    numbersContainer.innerHTML = displayedNumbers.map(num => `<span>${num}</span>`).join(" ");
+
+    result.innerText = "Is the number you are keeping in your mind here?";
+}
+
+function organizeNext() {
+    splitNumber();
+    showFirst();
+}
+
+function start() {
+    numbersContainer.innerHTML = "";
+    result.innerText = "";
+    alert("The game has started!");
+
+    fullPureNumber = [];
+    let SP = Math.floor(Math.random() * 900) + 1131;
+
+    let displayedNumbers = [];
+    for (let i = 0; i < 64; i++) {
+        let oneNumber = SP + i * 7;
+        fullPureNumber.push(oneNumber);
+        displayedNumbers.push(`<span>${oneNumber}</span>`);
+    }
+
+    numbersContainer.innerHTML = displayedNumbers.join(" ");    
+    result.innerText = "Save one number on your mind.";
+    ak = 1;
+}
+
+function showResult() {    
+        alert("I know what you're keeping in your mind. That is " + fullPureNumber[0]);
+        firstButton.style.display = "inline";
+        secondButton.style.display = "inline";
+        img.style.display = "none";
+        start();    
+}
+
+start();
+    </script>
+</body>
+</html>
