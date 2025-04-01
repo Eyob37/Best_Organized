@@ -88,7 +88,7 @@ function handleSquareClick(event) {
                 audio.play();
 
                 // Switch player turn
-                currentPlayer = currentPlayer === 'darkred' ? 'black' : 'black';
+                currentPlayer = currentPlayer === 'darkred' ? 'black' : 'darkred';
             } else {
                 // Invalid move, deselect piece
                 selectedPiece.classList.remove('selected');
