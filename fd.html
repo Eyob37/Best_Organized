@@ -3,200 +3,418 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drawing</title>
-    <link rel="stylesheet" href="./css/style.css">
+    <title>Drawing Canvas</title>
     <style>
         body {
-            margin: 20px;
-            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            overflow-x: hidden;
+            touch-action: none;
         }
-   .p{
-    margin-top: 1px;
-    font-size: 25px;
-}
+        .p {
+            margin-top: 1px;
+            font-size: 25px;
+            padding-left: 20px;
+        }
         .current {
-  color:#ff001f;
-  font-weight:bold;
-}
-header {
-  background-color: #007bff;
-  color: #fff;
-  padding: 10px 0;
-  text-align: center;
-}
-
-header nav ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-header nav ul li {
-  display: inline;
-  margin-right: 20px;
-}
-
-header nav ul li a {
-  color: #fff;
-  text-decoration: none;
-}
-
-header nav ul li a:hover {
-  text-decoration: underline;
-}
-
-.container {
-  max-width: 500px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+            color: #ff001f;
+            font-weight: bold;
+        }
+        header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        header nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+        header nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+        header nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+        header nav ul li a:hover {
+            text-decoration: underline;
+            color: #ffeb3b;
+        }
+        .container {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #494949;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .canvas-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px auto;
+            max-width: 500px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .canvas-container.fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            max-width: 100%;
+            max-height: 100%;
+            margin: 0;
+            padding: 0;
+            border-radius: 0;
+            z-index: 1000;
+            background-color: white;
+        }
+        .tools {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        .tools.fullscreen-tools {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            justify-content: center;
+            z-index: 1001;
+        }
+        .tools input, .tools button {
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+        .tools button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .tools button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        #clearButton {
+            background-color: #dc3545;
+        }
+        #clearButton:hover {
+            background-color: #a71d2a;
+        }
+        #undoButton {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        #undoButton:hover {
+            background-color: #e0a800;
+        }
+        #downloadButton {
+            background-color: #28a745;
+        }
+        #downloadButton:hover {
+            background-color: #218838;
+        }
         canvas {
             display: block;
-            border: 1px solid #000;
+            border: 1px solid #ddd;
+            background-color: white;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            touch-action: none;
         }
-      #fillButton{
-          width: 100px;
-      }
-      #clearButton{
-          width: 100px;
-      }
-      labl {
-     
-      margin-bottom: 10px;
-      text-align: left;
-      font-weight: bold;
-    }
-     
+        .fullscreen-toggle {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 10;
+            transition: all 0.3s;
+        }
+        .fullscreen-toggle:hover {
+            transform: scale(1.1);
+            background-color: #0056b3;
+        }
+        .fullscreen-icon {
+            display: block;
+            position: relative;
+            width: 20px;
+            height: 20px;
+        }
+        .fullscreen-icon::before,
+        .fullscreen-icon::after {
+            content: "";
+            position: absolute;
+            background-color: white;
+        }
+        .fullscreen-icon::before {
+            top: 5px;
+            left: 0;
+            right: 0;
+            height: 2px;
+        }
+        .fullscreen-icon::after {
+            bottom: 5px;
+            left: 0;
+            right: 0;
+            height: 2px;
+        }
+        .fullscreen-toggle.fullscreen .fullscreen-icon::before {
+            transform: rotate(45deg);
+            top: 9px;
+            left: 4px;
+            right: 4px;
+        }
+        .fullscreen-toggle.fullscreen .fullscreen-icon::after {
+            transform: rotate(-45deg);
+            bottom: 9px;
+            left: 4px;
+            right: 4px;
+        }
     </style>
 </head>
 <body>
-   <header>
-  <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>     
-      </div class="container">
-        <nav>
-          <ul>
-            <li><a href="water body.html">water body</a></li>
-            <li class="current">
-                <a href="fd.html">drawing</a>
-            </li>
-            
-          </ul>
-        </nav>
-      </div>
+    <header>
+        <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>     
+        <div class="container">
+            <nav>
+                <ul>
+                    <li><a href="water body.html">water body</a></li>
+                    <li><a href="sorce.html">img</a></li>
+                    <li class="current"><a href="fd.html">drawing</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>   
- <input type="color" id="colorPicker" value="#000000">
-    <input type="range" id="penSize" min="1" max="20" value="5">
-   
-    <button id="fillButton">Fill Canvas</button>
-    <button id="clearButton">Clear Canvas</button>
-   
-    <canvas id="gameCanvas" width="400" height="400"></canvas> 
-
+    
+    <div class="canvas-container" id="canvasContainer">
+        <div class="tools" id="tools">
+            <div class="color-size-container">
+                <input type="color" id="colorPicker" value="#000000">
+                <input type="range" id="penSize" min="1" max="20" value="5">
+                <span id="penSizeValue">5</span>
+            </div>
+            <div class="button-group">
+                <button id="fillButton">Fill Canvas</button>
+                <button id="undoButton">Undo</button>
+                <button id="clearButton">Clear</button>
+                <button id="downloadButton">Download</button>
+            </div>
+        </div>
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+        <button class="fullscreen-toggle" id="fullscreenToggle">
+            <span class="fullscreen-icon"></span>
+        </button>
+    </div>
     
     <script>
-           
         const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        const canvasContainer = document.getElementById('canvasContainer');
+        const tools = document.getElementById('tools');
+        const fullscreenToggle = document.getElementById('fullscreenToggle');
         let isDrawing = false;
+        let drawingHistory = [];
+        let historyIndex = -1;
+        let isFullscreen = false;
 
+        // Initialize canvas with white background
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        saveCanvasState();
+
+        // Event listeners
+        fullscreenToggle.addEventListener('click', toggleFullscreen);
+        canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+        canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+        canvas.addEventListener('touchend', handleTouchEnd);
         canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('touchstart', startDrawing);
         canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('touchmove', draw);
         canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('touchend', stopDrawing);
         canvas.addEventListener('mouseout', stopDrawing);
 
+        // Tool controls
         const colorPicker = document.getElementById('colorPicker');
         colorPicker.addEventListener('input', function() {
             ctx.strokeStyle = colorPicker.value;
         });
 
         const penSize = document.getElementById('penSize');
+        const penSizeValue = document.getElementById('penSizeValue');
         penSize.addEventListener('input', function() {
             ctx.lineWidth = penSize.value;
+            penSizeValue.textContent = penSize.value;
         });
 
         const fillButton = document.getElementById('fillButton');
         fillButton.addEventListener('click', function() {
             ctx.fillStyle = colorPicker.value;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
+            saveCanvasState();
         });
 
         const clearButton = document.getElementById('clearButton');
         clearButton.addEventListener('click', function() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            saveCanvasState();
         });
 
-        function startDrawing(e) {
-            isDrawing = true;
-            draw(e);
+        const undoButton = document.getElementById('undoButton');
+        undoButton.addEventListener('click', undoLastAction);
+
+        const downloadButton = document.getElementById('downloadButton');
+        downloadButton.addEventListener('click', downloadCanvas);
+
+        function toggleFullscreen() {
+            isFullscreen = !isFullscreen;
+            
+            if (isFullscreen) {
+                canvasContainer.classList.add('fullscreen');
+                tools.classList.add('fullscreen-tools');
+                fullscreenToggle.classList.add('fullscreen');
+                
+                // Resize canvas to fit screen
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight - 100; // Leave space for tools
+                
+                // Redraw the current content scaled up
+                const imageData = drawingHistory[historyIndex];
+                if (imageData) {
+                    ctx.putImageData(imageData, 0, 0);
+                }
+            } else {
+                canvasContainer.classList.remove('fullscreen');
+                tools.classList.remove('fullscreen-tools');
+                fullscreenToggle.classList.remove('fullscreen');
+                
+                // Reset canvas size
+                canvas.width = 400;
+                canvas.height = 400;
+                
+                // Redraw the current content scaled down
+                const imageData = drawingHistory[historyIndex];
+                if (imageData) {
+                    ctx.putImageData(imageData, 0, 0);
+                }
+            }
         }
 
-        function draw(e) {
+        function getCanvasCoordinates(clientX, clientY) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: (clientX - rect.left) * (canvas.width / rect.width),
+                y: (clientY - rect.top) * (canvas.height / rect.height)
+            };
+        }
+
+        function handleTouchStart(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const pos = getCanvasCoordinates(touch.clientX, touch.clientY);
+            startDrawing(pos);
+        }
+
+        function handleTouchMove(e) {
+            e.preventDefault();
             if (!isDrawing) return;
+            const touch = e.touches[0];
+            const pos = getCanvasCoordinates(touch.clientX, touch.clientY);
+            draw(pos);
+        }
+
+        function handleTouchEnd() {
+            stopDrawing();
+        }
+
+        function startDrawing(pos) {
+            isDrawing = true;
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+            saveCanvasState();
+        }
+
+        function draw(pos) {
+            if (!isDrawing) return;
+            
+            ctx.strokeStyle = colorPicker.value;
+            ctx.lineWidth = penSize.value;
             ctx.lineCap = 'round';
-            if (e.type === 'touchmove') {
-                e.preventDefault();
-                const touch = e.touches[0];
-                ctx.lineTo(touch.clientX - canvas.offsetLeft, touch.clientY - canvas.offsetTop);
-            } else {
-                ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
-            }
+            ctx.lineJoin = 'round';
+            
+            ctx.lineTo(pos.x, pos.y);
             ctx.stroke();
             ctx.beginPath();
-            if (e.type === 'touchmove') {
-                const touch = e.touches[0];
-                ctx.moveTo(touch.clientX - canvas.offsetLeft, touch.clientY - canvas.offsetTop);
-            } else {
-                ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
-            }
+            ctx.moveTo(pos.x, pos.y);
         }
 
         function stopDrawing() {
-            isDrawing = false;
-            ctx.beginPath();
-        }
-     function drawShape(type) {
-            if (type === 'circle') {                
-                const x = Number(document.getElementById('positionX').value);
-                const y = Number(document.getElementById('positionY').value);
-                const size = Number(document.getElementById('size').value);
-                ctx.beginPath();
-                ctx.arc(x, y, size, 0, 2 * Math.PI);
-                ctx.stroke();
-                ctx.fillStyle = colorPicker.value;
-                ctx.fill();
-                ctx.beginPath();
-            } else if (type === 'rectangle') {
-                const x = Number(document.getElementById('positionX').value);
-                const y = Number(document.getElementById('positionY').value);
-                const size = Number(document.getElementById('size').value);
-                ctx.beginPath();
-                ctx.rect(x, y, size, size);
-                ctx.stroke();
-                ctx.fillStyle = colorPicker.value;
-                ctx.fill();
-                ctx.beginPath();
-            } else if (type === 'triangle') {
-                const x = Number(document.getElementById('positionX').value);
-                const y = Number(document.getElementById('positionY').value);
-                const size = Number(document.getElementById('size').value);
-                ctx.beginPath();
-                ctx.moveTo(x, y);
-                ctx.lineTo(x + size, y + size);
-                ctx.lineTo(x - size, y + size);
-                ctx.closePath();
-                ctx.stroke();
-                ctx.fillStyle = colorPicker.value;
-                ctx.fill();
+            if (isDrawing) {
+                isDrawing = false;
                 ctx.beginPath();
             }
         }
+
+        function saveCanvasState() {
+            if (historyIndex < drawingHistory.length - 1) {
+                drawingHistory = drawingHistory.slice(0, historyIndex + 1);
+            }
+            
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            drawingHistory.push(imageData);
+            historyIndex = drawingHistory.length - 1;
+        }
+
+        function undoLastAction() {
+            if (historyIndex > 0) {
+                historyIndex--;
+                ctx.putImageData(drawingHistory[historyIndex], 0, 0);
+            } else if (historyIndex === 0) {
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                historyIndex = -1;
+            }
+        }
+
+        function downloadCanvas() {
+            const link = document.createElement('a');
+            link.download = 'drawing-' + new Date().toISOString().slice(0, 10) + '.png';
+            link.href = canvas.toDataURL('image/png');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
     </script>
 </body>
-</html>
 </html>
