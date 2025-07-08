@@ -308,12 +308,15 @@
                 // Resize canvas to fit screen
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight - 100; // Leave space for tools
-                
+                                
                 // Redraw the current content scaled up
                 const imageData = drawingHistory[historyIndex];
                 if (imageData) {
                     ctx.putImageData(imageData, 0, 0);
                 }
+                ctx.fillStyle = white;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                saveCanvasState();
             } else {
                 canvasContainer.classList.remove('fullscreen');
                 tools.classList.remove('fullscreen-tools');
