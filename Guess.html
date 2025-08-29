@@ -3,136 +3,375 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guss game</title>
-    <link rel="stylesheet" href="./css/style.css">
+    <title>Guess the Number Game</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-    div{
-     
-      padding: 20px;
-      background-color: #ffd295;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-      text-align:center;
-    }
-   .p{
-    margin-top: 1px;
-    font-size: 25px;
-}
-      .current {
-  color:#ff001f;
-  font-weight:bold;
-}
-header {
-  background-color: #007bff;
-  color: #fff;
-  padding: 10px 0;
-  text-align: center;
-}
-
-header nav ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-header nav ul li {
-  display: inline;
-  margin-right: 20px;
-}
-
-header nav ul li a {
-  color: #fff;
-  text-decoration: none;
-}
-
-header nav ul li a:hover {
-  text-decoration: underline;
-}
-
-.container {
-  max-width: 500px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-marquee{
-   position: fixed;
-   bottom: 5px;
- }  
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        header {
+            width: 100%;
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 15px 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .back-button {
+            font-size: 24px;
+            color: #6e8efb;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+        
+        .back-button:hover {
+            transform: scale(1.1);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+        
+        nav a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .current {
+            background-color: #6e8efb;
+            color: white;
+        }
+        
+        .current:hover {
+            background-color: #5a7de0;
+        }
+        
+        .game-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+            background: linear-gradient(to right, #6e8efb, #a777e3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .instructions {
+            color: #555;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        
+        .attempts-counter {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #6e8efb;
+            font-weight: 600;
+        }
+        
+        .input-container {
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        #guessInput {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #ddd;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+        
+        #guessInput:focus {
+            outline: none;
+            border-color: #6e8efb;
+            box-shadow: 0 0 0 3px rgba(110, 142, 251, 0.2);
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(to right, #6e8efb, #a777e3);
+            color: white;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(110, 142, 251, 0.4);
+        }
+        
+        .refresh-btn {
+            background-color: #f8f9fa;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        
+        .refresh-btn:hover {
+            background-color: #e9ecef;
+        }
+        
+        #result {
+            min-height: 80px;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .success {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+            border: 1px solid #28a745;
+        }
+        
+        .error {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border: 1px solid #dc3545;
+        }
+        
+        .hint {
+            margin-top: 10px;
+            font-weight: 600;
+        }
+        
+        .attempts-display {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .attempt-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ddd;
+        }
+        
+        .attempt-dot.used {
+            background-color: #dc3545;
+        }
+        
+        footer {
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 600px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                gap: 10px;
+            }
+            
+            .game-container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
     <audio id="myAudio">
         <source src="./audio/ashenf.mp3" type="audio/mp3">
     </audio>
+    
     <header>
-      </div class="container">
-         <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>     
-        <nav>
-          <ul>
-            <li class="current"><a href="Guess.html">Guess number</a></li>
-           <li><a href="click game.html">Click game</a></li> 
-            
-          </ul>
-        </nav>
-      </div>
+        <div class="header-content">
+            <a href="menu.html" class="back-button"><i class="fas fa-arrow-left"></i></a>
+            <nav>
+                <ul>
+                    <li><a href="Guess.html" class="current">Guess number</a></li>
+                    <li><a href="click game.html">Click game</a></li> 
+                </ul>
+            </nav>
+        </div>
     </header> 
     
-     <h1>Guess the Number Game</h1>
-     <div>
-     <p>Enter a number between 1 and 10:</p>
-     <input type="number" id="guessInput">
-     <button onclick="checkGuess()">Submit</button>
-     <p id="result"></p>
-</div>
-     <script>
+    <div class="game-container">
+        <h1>Guess the Number</h1>
+        <p class="instructions">I'm thinking of a number between 1 and 10. Can you guess it in 3 tries?</p>
+        
+        <div class="attempts-counter">Attempts remaining: <span id="attemptsCount">3</span></div>
+        
+        <div class="input-container">
+            <input type="number" id="guessInput" min="1" max="10" placeholder="Enter your guess">
+        </div>
+        
+        <div class="buttons">
+            <button class="submit-btn" onclick="checkGuess()"><i class="fas fa-paper-plane"></i> Submit</button>
+            <button class="refresh-btn" onclick="start()"><i class="fas fa-redo"></i> New Game</button>
+        </div>
+        
+        <div class="attempts-display">
+            <div class="attempt-dot" id="attempt1"></div>
+            <div class="attempt-dot" id="attempt2"></div>
+            <div class="attempt-dot" id="attempt3"></div>
+        </div>
+        
+        <div id="result"></div>
+    </div>
+    
+    <footer>
+        <p>Made with <i class="fas fa-heart" style="color: #dc3545;"></i> | Guess the Number Game</p>
+    </footer>
+
+    <script>
         var audio = document.getElementById("myAudio"); 
         var attempts;
         var randomNumber;
-    function start() {   
-         document.getElementById("result").innerHTML = "";                
-         randomNumber = Math.floor(Math.random() * 10) + 1;
-         attempts = 3;
-    }
- function checkGuess() {
-     var guess = parseInt(document.getElementById("guessInput").value);
-     
-
-     if (guess === randomNumber) {
-        audio.play(); document.getElementById("result").innerHTML = "Congratulations! You guessed the correct number.";
-         document.getElementById("result").style.color = "green";   
-         alert("Congratulations! You guessed the correct number.");
-         start();      
-     } else {
-         attempts--;
-
-         if (attempts > 0) {
-             var message = "Wrong guess! Try again.<br>you have " + attempts + " chance.<br>";
-             if (guess < randomNumber) {
-                 message += " Try a higher number<br><b>-></b>";
-             } else {
-                 message += " Try a lower number<br><b><-</b>.";
-             }
-             document.getElementById("result").innerHTML = message;
-             document.getElementById("result").style.color = "red";
-         } else {
-             document.getElementById("result").innerHTML = "Game Over! The correct number was " + randomNumber;
-             document.getElementById("result").style.color = "red";
-             alert("Game Over! The correct number was "+ randomNumber);
-             start();
-         }
-     }
-
-     document.getElementById("guessInput").value = "";
- }
- 	start();
- 	
-</script>
-<marquee bgcolor="#eeeeee" direction="left" scrollamount="10" width="100%" height="20">
-	ከአንድ እስከ አስር እየገመታችሁ መጫወት ትችላላችሁ እና መድገም ከፈለጋችሁ refresh አድርጉት 
-	
-	</marquee>
+        var maxAttempts = 3;
+        
+        function start() {   
+            document.getElementById("result").innerHTML = "";
+            document.getElementById("result").className = "";                
+            randomNumber = Math.floor(Math.random() * 10) + 1;
+            attempts = maxAttempts;
+            updateAttemptsDisplay();
+            console.log("Random number: " + randomNumber); // For debugging
+        }
+        
+        function updateAttemptsDisplay() {
+            document.getElementById("attemptsCount").textContent = attempts;
+            
+            // Update attempt dots
+            for (let i = 1; i <= maxAttempts; i++) {
+                const dot = document.getElementById("attempt" + i);
+                dot.classList.toggle("used", i > attempts);
+            }
+        }
+        
+        function checkGuess() {
+            const guessInput = document.getElementById("guessInput");
+            const resultDiv = document.getElementById("result");
+            let guess = parseInt(guessInput.value);
+            
+            // Validate input
+            if (isNaN(guess) || guess < 1 || guess > 10) {
+                resultDiv.innerHTML = "Please enter a valid number between 1 and 10";
+                resultDiv.className = "error";
+                return;
+            }
+            
+            if (guess === randomNumber) {
+                audio.play(); 
+                resultDiv.innerHTML = "<i class='fas fa-trophy' style='font-size: 24px; margin-bottom: 10px;'></i><br>Congratulations! You guessed the correct number.";
+                resultDiv.className = "success";
+                setTimeout(() => {
+                    alert("Congratulations! You guessed the correct number.");
+                    start();
+                }, 500);
+            } else {
+                attempts--;
+                updateAttemptsDisplay();
+                
+                if (attempts > 0) {
+                    let message = `<i class='fas fa-times-circle' style='font-size: 24px; margin-bottom: 10px;'></i><br>Wrong guess! Try again.<br>You have ${attempts} ${attempts === 1 ? 'chance' : 'chances'} left.`;
+                    message += `<div class="hint">Hint: Try a ${guess < randomNumber ? 'higher' : 'lower'} number <i class="fas ${guess < randomNumber ? 'fa-arrow-up' : 'fa-arrow-down'}"></i></div>`;
+                    
+                    resultDiv.innerHTML = message;
+                    resultDiv.className = "error";
+                } else {
+                    resultDiv.innerHTML = `<i class='fas fa-gamepad' style='font-size: 24px; margin-bottom: 10px;'></i><br>Game Over! The correct number was ${randomNumber}.`;
+                    resultDiv.className = "error";
+                    setTimeout(() => {
+                        alert(`Game Over! The correct number was ${randomNumber}`);
+                        start();
+                    }, 500);
+                }
+            }
+            
+            guessInput.value = "";
+            guessInput.focus();
+        }
+        
+        // Add event listener for Enter key
+        document.getElementById("guessInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                checkGuess();
+            }
+        });
+        
+        // Initialize the game
+        start();
+    </script>
 </body>
 </html>
