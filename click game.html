@@ -1,263 +1,453 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <title>Action Game</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* CSS code */
-    div{
-     
-      padding: 20px;
-      background-color: #ffd295;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-      text-align:center;
-    }
-    body {
-      background-color: #1e1e1e;
-      color: #fff;
-      font-family: 'Arial', sans-serif;
-      text-align: center;
-    }
-    .p{
-    margin-top: -20px;
-    font-size: 25px;
-}
-    .current {
-  color:#ff001f;
-  font-weight:bold;
-}
-header {
-  background-color: #007bff;
-  color: #fff;
-  padding: 10px 0;
-  text-align: center;
-}
-
-header nav ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-header nav ul li {
-  display: inline;
-  margin-right: 20px;
-}
-
-header nav ul li a {
-  color: #fff;
-  text-decoration: none;
-}
-
-header nav ul li a:hover {
-  text-decoration: underline;
-}
-
-.container {
-  max-width: 500px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-    h1 {
-      font-size: 48px;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    /* Modern CSS Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
-    .game-container {
-      width: 350px;
-      height: 350px;;
-      border: 2px solid #fff;
-      margin: 0 auto;
+    body {
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+      color: #fff;
+      min-height: 100vh;
+      padding: 20px;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
+    }
+    
+    /* Header Styles */
+    header {
+      width: 100%;
+      max-width: 800px;
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 12px;
+      padding: 15px 25px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .back-button {
+      font-size: 24px;
+      color: #ff5722;
+      text-decoration: none;
+      transition: transform 0.2s;
+    }
+    
+    .back-button:hover {
+      transform: scale(1.1);
+    }
+    
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 20px;
+    }
+    
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 8px 15px;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+    
+    nav a:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .current {
+      background-color: #ff5722;
+      color: white;
+    }
+    
+    .current:hover {
+      background-color: #e64a19;
+    }
+    
+    /* Timer Styles */
+    #timer {
+      font-size: 1.5rem;
+      font-weight: bold;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 8px 15px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    
+    /* Game Controls */
+    .game-controls {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .time-input {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 10px 15px;
+      border-radius: 30px;
+    }
+    
+    #time {
+      width: 60px;
+      padding: 8px;
+      border: none;
+      border-radius: 20px;
+      text-align: center;
+      font-weight: bold;
+    }
+    
+    .control-btn {
+      background: linear-gradient(to right, #ff5722, #ff9800);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 10px 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .control-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 87, 34, 0.4);
+    }
+    
+    .control-btn.secondary {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .control-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
+    /* Game Title */
+    h1 {
+      font-size: 3rem;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+      margin: 15px 0;
+      background: linear-gradient(to right, #ffeb3b, #ff9800);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+    }
+    
+    /* Score Display */
+    .score-container {
+      display: flex;
+      gap: 30px;
+      margin-bottom: 20px;
+    }
+    
+    .score-box {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 15px 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    
+    #score {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #4caf50;
+    }
+    
+    #high-score {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #f44336;
+    }
+    
+    /* Game Container */
+    .game-container {
+      width: 400px;
+      height: 400px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      margin: 0 auto 30px;
       position: relative;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.2);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
     }
     
     .target {
-      width: 3px;
-      height: 5px;
+      width: 40px;
+      height: 40px;
       position: absolute;
-      background-color: #ff5722;
-      top: 0;
-      left: 0;
+      background: radial-gradient(circle, #ff5722, #e64a19);
+      border-radius: 50%;
       cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      transition: transform 0.1s;
     }
-    #high-score {
-        color: red;
-        font-weight: bold;    
-        }
-    #score {
-    background:#1e1e1e;
-      font-size: 24px;
+    
+    .target:hover {
+      transform: scale(1.1);
     }
-    #nust{
-        text-align:right;
-        
+    
+    /* Instructions */
+    .instructions {
+      max-width: 500px;
+      text-align: center;
+      margin-top: 20px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 15px;
+      border-radius: 12px;
+      line-height: 1.6;
     }
-    #nust2{
-        display:none;
-        text-align:right;
-        width:2px;
-    }
-    #time{
-        width:55px;
-    }
-    #nus{
-       text-align: center;
-       width:50px; 
-    }  
-    #nust2{
-       width:50px; 
-        text-align: center;
-    }  
-    #re{
-    width:55px;
-        display:hide;
+    
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      .header-content {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      nav ul {
+        gap: 10px;
+      }
+      
+      .game-container {
+        width: 320px;
+        height: 320px;
+      }
+      
+      h1 {
+        font-size: 2.2rem;
+      }
+      
+      .score-container {
+        flex-direction: column;
+        gap: 15px;
+      }
     }
   </style>
 </head>
 <body>
-    <header>
-       <p id="timer" style="text-align:right"></p>
-      </div class="container">
-         <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>     
-        <nav>
-          <ul>
-            <li><a href="Guess.html">Guess number</a></li>
-            <li class="current"><a href="click game.html">Click game</a></li>
-                        
-          </ul>
-        </nav>
-      </div>
-    </header> 
-    <div id="nust">
-    <input id="time" type="number">
-    <button id="nus" onclick="startCountdown()">🔵</button>
-   <button id="re" onclick="re()">rest</button> </div>
-    <button id="nust2" onclick="p()">⚫</button>
-    
-  <h1>Action Game</h1>
-  <div id="score">Score: 0</div>
-  <div id="high-score">High Score: 0</div>
-  <div class="game-container">
-    
-    <div class="target" id="target" onclick="removeTarget()"></div>
- 
+  <audio id="myAudio" loop>
+    <source src="./audio/enjoy.mp3" type="audio/mp3">
+  </audio>
+  
+  <header>
+    <div class="header-content">
+      <a href="menu.html" class="back-button"><i class="fas fa-arrow-left"></i></a>
+      <nav>
+        <ul>
+          <li><a href="Guess.html">Guess number</a></li>
+          <li><a href="click game.html" class="current">Click game</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  
+  <div id="timer">00:00</div>
+  
+  <div class="game-controls">
+    <div class="time-input">
+      <label for="time">Seconds:</label>
+      <input id="time" type="number" min="1" value="30">
+    </div>
+    <button class="control-btn" onclick="startCountdown()">
+      <i class="fas fa-play"></i> Start Game
+    </button>
+    <button class="control-btn secondary" onclick="resetGame()">
+      <i class="fas fa-redo"></i> Reset
+    </button>
   </div>
-  <audio id="myAudio">
-        <source src="./audio/enjoy.mp3" type="audio/mp3">
-    </audio>
+  
+  <h1>Action Game</h1>
+  
+  <div class="score-container">
+    <div class="score-box">
+      <div>Score:</div>
+      <div id="score">0</div>
+    </div>
+    <div class="score-box">
+      <div>High Score:</div>
+      <div id="high-score">0</div>
+    </div>
+  </div>
+  
+  <div class="game-container">
+    <div class="target" id="target" onclick="removeTarget()"></div>
+  </div>
+  
+  <div class="instructions">
+    <p>Set your time, click Start Game, and click as many targets as possible before time runs out!</p>
+    <p>The high score is calculated as points per second.</p>
+  </div>
+
   <script>
+    // Initialize variables
+    var highScore = localStorage.getItem('highScore') || 0;
+    var bestTime = localStorage.getItem('time') || 1;
+    var audio = document.getElementById("myAudio"); 
+    var score = 0;
+    var countdownInterval;
+    
+    // Update high score display
+    document.getElementById("high-score").innerHTML = highScore + " <small>pts/sec</small>";
+    
+    // Countdown function
+    function countdown(t) {
+      let ft = t;
+      audio.play();
+      var timerElement = document.getElementById('timer');
       
-        var highScore = localStorage.getItem('highScore') || 0;
-        var time = localStorage.getItem('time') || 1;                      
-        document.getElementById("high-score").innerText = "High Score: " + highScore+" & second = " +time;
- var audio = document.getElementById("myAudio"); 
- var score = 0;
-
-function countdown(t) {
-let ft = t;
-audio.play();
-        var timerElement = document.getElementById('timer');
-        var interval = setInterval(function() {
-            if (t > 0) {
-              var mins = Math.floor(t / 60);
-              var secs = t % 60;
-              var timer = ("0" + mins).slice(-2) + ":" + ("0" + secs).slice(-2);
-            timerElement.textContent = timer;
-                t--;
-            } else {
-            alert("time is completed");
-                clearInterval(interval);
-                timerElement.textContent = 'Timer completed!';
-                audio.pause();
-                checkHighScore(ft);    
-       
-                 }
-        }, 1000);
+      // Update timer every second
+      countdownInterval = setInterval(function() {
+        if (t > 0) {
+          var mins = Math.floor(t / 60);
+          var secs = t % 60;
+          var timerText = ("0" + mins).slice(-2) + ":" + ("0" + secs).slice(-2);
+          timerElement.textContent = timerText;
+          t--;
+        } else {
+          clearInterval(countdownInterval);
+          timerElement.textContent = 'Time\'s up!';
+          audio.pause();
+          audio.currentTime = 0;
+          checkHighScore(ft);
+        }
+      }, 1000);
     }
 
+    // Start the countdown
     function startCountdown() {   
-    score = 0;   
-    document.getElementById("score").innerText = "Score: " + score;
-        var inputTime = document.getElementById('time').value;
-document.getElementById("nust").style.display="none";
-document.getElementById("nust2").style.display="block";
-        countdown(parseInt(inputTime, 10));
-        
-    }
-function p(){
- document.getElementById("nust").style.display="block"; 
-document.getElementById("nust2").style.display="none"; 
-document.getElementById("re").style.display="block"; 
-}
-
-
+      // Reset any existing timer
+      if (countdownInterval) {
+        clearInterval(countdownInterval);
+      }
       
-    // JavaScript code
-    
-   function updateScore()
-     {
-     
-      score += 1;
-      document.getElementById("score").innerText = "Score: " + score;
+      score = 0;   
+      document.getElementById("score").textContent = score;
+      
+      var inputTime = document.getElementById('time').value;
+      if (inputTime < 1) inputTime = 1;
+      
+      // Start the countdown
+      countdown(parseInt(inputTime, 10));
     }
-function re(){
-score = 0;
-document.getElementById("score").innerText = "Score: " + score;
-document.getElementById("nust").style.display="none";
-document.getElementById("nust2").style.display="block";
-}		    
-    function removeTarget() {
-    updateScore();
-      var target = document.querySelector('.target');
-      target.parentNode.removeChild(target);
-document.querySelector(".target").style.backgroundColor = getRandomColor();
+    
+    // Reset the game
+    function resetGame() {
+      if (countdownInterval) {
+        clearInterval(countdownInterval);
+      }
+      
+      audio.pause();
+      audio.currentTime = 0;
+      
+      score = 0;
+      document.getElementById("score").textContent = score;
+      document.getElementById("timer").textContent = "00:00";
+      document.getElementById('time').value = 30;
+      
+      // Remove all targets
+      var targets = document.querySelectorAll('.target');
+      targets.forEach(target => target.remove());
+      
+      // Add a new target
       addNewTarget();
-      
     }
     
+    // Update score
+    function updateScore() {
+      score += 1;
+      document.getElementById("score").textContent = score;
+    }
+    
+    // Remove target and add a new one
+    function removeTarget() {
+      updateScore();
+      var target = document.querySelector('.target');
+      target.remove();
+      
+      // Add new target with random color
+      addNewTarget();
+    }
+    
+    // Add a new target to the game container
     function addNewTarget() {
       var container = document.querySelector('.game-container');
       var target = document.createElement('div');
       target.className = 'target';
       target.onclick = removeTarget;
-      target.style.backgroundColor = getRandomColor();
-      var x = Math.floor(Math.random() * (container.clientWidth - 50));
-      var y = Math.floor(Math.random() * (container.clientHeight - 50));
+      
+      // Generate random position (within container bounds)
+      var maxX = container.clientWidth - 40;
+      var maxY = container.clientHeight - 40;
+      var x = Math.floor(Math.random() * maxX);
+      var y = Math.floor(Math.random() * maxY);
+      
       target.style.top = y + 'px';
       target.style.left = x + 'px';
       
+      // Add random color
+      target.style.background = getRandomGradient();
+      
       container.appendChild(target);
     }
-  function getRandomColor() {
-    var letters = "0123456789F";
-    var color = "#";
-
-    for (var i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 11)];
+    
+    // Generate random gradient color
+    function getRandomGradient() {
+      var colors = [
+        ['#FF512F', '#DD2476'], // Red to pink
+        ['#11998e', '#38ef7d'], // Teal to green
+        ['#FF5F6D', '#FFC371'], // Coral to peach
+        ['#4A00E0', '#8E2DE2'], // Purple to violet
+        ['#00c6ff', '#0072ff']  // Light blue to dark blue
+      ];
+      
+      var randomColors = colors[Math.floor(Math.random() * colors.length)];
+      return `radial-gradient(circle, ${randomColors[0]}, ${randomColors[1]})`;
     }
-   
-    return color;
-}  
-        function checkHighScore(t) {
-            if (score/t >= highScore/time) {
-                highScore = score;
-                time = t;
-                localStorage.setItem('highScore', highScore);
-                localStorage.setItem('time', time);  
-                document.getElementById("high-score").innerText = "High Score: " + highScore+" & second = " +time;
-                alert("New High Score: " + highScore);
-            }
-        }
+    
+    // Check and update high score
+    function checkHighScore(t) {
+      var efficiency = score / t;
+      
+      if (efficiency > highScore) {
+        highScore = efficiency.toFixed(2);
+        bestTime = t;
+        localStorage.setItem('highScore', highScore);
+        localStorage.setItem('time', bestTime);
+        
+        document.getElementById("high-score").innerHTML = highScore + " <small>pts/sec</small>";
+        alert(`New High Score: ${highScore} points per second!`);
+      }
+      
+      // Show game over message
+      setTimeout(() => {
+        alert(`Game Over!\nYour score: ${score} points in ${t} seconds\nEfficiency: ${efficiency.toFixed(2)} points per second`);
+      }, 500);
+    }
 
+    // Initialize the game
     addNewTarget();
-   
   </script>
 </body>
 </html>
