@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Calendar</title>
+    <style>
+           header {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 0;
+      text-align: center;
+      position: fixed;
+      top: 0;
+      width: 100%;
+    }
+
+    header nav ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    header nav ul li {
+      display: inline;
+      margin-right: 20px;
+    }
+
+    header nav ul li a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    header nav ul li a:hover {
+      text-decoration: underline;
+    }
+   .p{
+       margin: 10px;
+       font-size: 5vw;
+   }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .calendar-container {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #4285f4;
+            color: white;
+        }
+        
+        .calendar-header button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .calendar-header button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .calendar-header h2 {
+            font-weight: 500;
+            text-align: center;
+        }
+        
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+        
+        .weekdays div {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background-color: #e0e0e0;
+        }
+        
+        .days div {
+            position: relative;
+            min-height: 100px;
+            padding: 10px;
+            background-color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .days div:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .days div.empty {
+            background-color: #f5f5f5;
+            cursor: default;
+        }
+        
+        .days div.today {
+            background-color: #e3f2fd;
+            font-weight: bold;
+        }
+        
+        .days div.today::before {
+            content: "";
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 8px;
+            height: 8px;
+            background-color: #4285f4;
+            border-radius: 50%;
+        }
+        
+        .event-marker {
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background-color: #4285f4;
+            border-radius: 50%;
+        }
+        
+        @media (max-width: 768px) {
+            .days div {
+                min-height: 70px;
+                font-size: 14px;
+                padding: 5px;
+            }
+            
+            .weekdays div {
+                padding: 10px;
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .days div {
+                min-height: 50px;
+                font-size: 12px;
+            }
+            
+            .weekdays div {
+                padding: 8px 5px;
+                font-size: 12px;
+            }
+            
+            .calendar-header {
+                padding: 10px;
+            }
+            
+            .calendar-header h2 {
+                font-size: 18px;
+            }
+        }
+        
+   		#gosp{
+			    position: fixed;
+			    width: 120px;
+			    height: 30px;
+			    border-radius: 10px;			    
+			    bottom: 5px;
+			    left: 5px;
+			    font-size: 0.7rem;
+			}	
+    </style>
+</head>
+<body>
+    <header>
+      </div class="container">
+         <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>     
+        <nav>
+          <ul>
+              <li class="current"><a href="date.html">date</a></li>  
+            <li><a href="calendar.html">Calendar </a></li>
+                     
+          </ul>
+        </nav>
+      </div>
+    </header> 
+    <div class="calendar-container">
+        <div class="calendar-header">
+            <button id="prev-month">&lt;</button>
+            <h2 id="current-month-year">Month Year</h2>
+            <button id="next-month">&gt;</button>
+        </div>
+        <div class="weekdays">
+            <div>Sun</div>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+        </div>
+        <div class="days" id="calendar-days">
+            <!-- Days will be populated by JavaScript -->
+        </div>
+    </div>
+        <button id="gosp" onclick="window.location.href = 'calendar.html'">Euriopian Calendar</button>    
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Ethiopian months
+    const ethiopianMonths = [
+        "መስከረም", "ጥቅምት", "ህዳር", "ታህሳስ",
+        "ጥር", "የካቲት", "መጋቢት", "ሚያዝያ",
+        "ግንቦት", "ሰኔ", "ሀምሌ", "ነሐሴ", "ጳጉሜ"
+    ];
+
+    const monthYearElement = document.getElementById('current-month-year');
+    const calendarDaysElement = document.getElementById('calendar-days');
+    const prevMonthButton = document.getElementById('prev-month');
+    const nextMonthButton = document.getElementById('next-month');
+
+    // Get today's Gregorian date and convert to Ethiopian
+    let today = new Date();
+    let etToday = gregorianToEthiopian(today.getFullYear(), today.getMonth() + 1, today.getDate());
+
+    // Start calendar at today's Ethiopian month/year
+    let currentMonth = etToday.month;
+    let currentYear = etToday.year;
+
+    function renderCalendar() {
+        monthYearElement.textContent = `${ethiopianMonths[currentMonth]} ${currentYear}`;
+        calendarDaysElement.innerHTML = "";
+
+        // Days in Ethiopian month
+        let daysInMonth = (currentMonth === 12) ? (isLeapYear(currentYear) ? 6 : 5) : 30;
+
+        // Get weekday of Ethiopian 1st day by converting to Gregorian
+        let gDate = ethiopianToGregorian(currentYear, currentMonth, 1);
+        let firstWeekday = new Date(gDate.year, gDate.month, gDate.day).getDay(); // 0=Sun..6=Sat
+
+        // Empty slots before first day
+        for (let i = 0; i < firstWeekday; i++) {
+            let emptyDay = document.createElement("div");
+            emptyDay.classList.add("empty");
+            calendarDaysElement.appendChild(emptyDay);
+        }
+
+        // Fill Ethiopian days
+        for (let i = 1; i <= daysInMonth; i++) {
+            let day = document.createElement("div");
+            day.textContent = i;
+
+            // Highlight today
+            if (i === etToday.day && currentMonth === etToday.month && currentYear === etToday.year) {
+                day.classList.add("today");
+            }
+
+            calendarDaysElement.appendChild(day);
+        }
+    }
+
+    function changeMonth(direction) {
+        currentMonth += direction;
+        if (currentMonth < 0) {
+            currentMonth = 12;
+            currentYear--;
+        } else if (currentMonth > 12) {
+            currentMonth = 0;
+            currentYear++;
+        }
+        renderCalendar();
+    }
+
+    prevMonthButton.addEventListener('click', () => changeMonth(-1));
+    nextMonthButton.addEventListener('click', () => changeMonth(1));
+
+    renderCalendar();
+
+    // -------- Conversion Functions --------
+
+    // Gregorian → Ethiopian
+    function gregorianToEthiopian(year, month, day) {
+        let a = Math.floor((14 - month) / 12);
+        let y = year + 4800 - a;
+        let m = month + 12 * a - 3;
+        let jd = day + Math.floor((153 * m + 2) / 5) + 365 * y +
+                 Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) - 32045;
+
+        let ethioEpoch = 1723856;
+        let r = (jd - ethioEpoch) % 1461;
+        let n = (r % 365) + 365 * Math.floor(r / 1460);
+        let ethioYear = 4 * Math.floor((jd - ethioEpoch) / 1461) + Math.floor(r / 365) - Math.floor(r / 1460);
+        let ethioMonth = Math.floor(n / 30);
+        let ethioDay = (n % 30) + 1;
+
+        return { year: ethioYear, month: ethioMonth, day: ethioDay };
+    }
+
+    // Ethiopian → Gregorian
+    function ethiopianToGregorian(year, month, day) {
+        let ethioEpoch = 1723856;
+        let jd = ethioEpoch + 365 + 365 * (year - 1) + Math.floor(year / 4) + 30 * month + day - 31;
+
+        let a = jd + 32044;
+        let b = Math.floor((4 * a + 3) / 146097);
+        let c = a - Math.floor((146097 * b) / 4);
+        let d = Math.floor((4 * c + 3) / 1461);
+        let e = c - Math.floor((1461 * d) / 4);
+        let m = Math.floor((5 * e + 2) / 153);
+
+        let dayG = e - Math.floor((153 * m + 2) / 5) + 1;
+        let monthG = m + 3 - 12 * Math.floor(m / 10);
+        let yearG = 100 * b + d - 4800 + Math.floor(m / 10);
+
+        return { year: yearG, month: monthG - 1, day: dayG };
+    }
+
+    // Ethiopian leap year check
+    function isLeapYear(year) {
+        return year % 4 === 3;
+    }
+});
+</script>
+</body>
+</html>
