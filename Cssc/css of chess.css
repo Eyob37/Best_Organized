@@ -1,6 +1,8 @@
+body {
+   background-image: url("./img/backgrounddiv.jpg"); 
+}       
 #chessboard {
-    margin-top: 90px;
-    margin-left: 5px;
+    margin: 90px auto;    
     width: 100%;
     max-width: 400px;
     display: grid;
@@ -32,21 +34,30 @@
     width: 80%;
     height: 80%;
     border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.checker:hover {
+    transform: scale(1.05);
 }
 
 .checker.selected {
-    box-shadow: 0 0 10px 2px yellow;
+    box-shadow: 0 0 10px 3px yellow;
     outline: 2px solid yellow;
+    transform: scale(1.1);
 }
 
 .checker.p2.king {
-    background-color: #b9ff00; /* King color */
-    box-shadow: 0 0 10px; /* Optional border for kings */
+    background: radial-gradient(circle, #b9ff00 40%, #8bc34a 100%);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+    border: 2px solid gold;
 }
 
 .checker.p1.king {
-    background-color: #1100f3; /* King color */
-    box-shadow: 0 0 10px; /* Optional border for kings */
+    background: radial-gradient(circle, #1100f3 40%, #0a0082 100%);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+    border: 2px solid gold;
 }
 
 #p2, #p1 {
@@ -61,20 +72,23 @@
     width: 150px;
     height: 30px;
     font-size: 25px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 #p2 {
     right: 5px;
-    top: 150px;
+    top: 200px;
 }
 
 #p1 {
-    top: 150px;
+    top: 200px;
     left: 5px;
 }
 
 #timer {
     text-align: center;
+    font-weight: bold;
+    font-size: 24px;
 }
 
 #time {
@@ -86,17 +100,20 @@
     justify-content: center;
     align-items: center;
     font-size: 10vw;
-    background: #000;
+    background: linear-gradient(145deg, #2d2d2d, #000000);
     color: #fff;
-    display: flex;
     border-radius: 2rem;
     padding: 0 2rem;
-    border: 0.5rem solid #2d2d2d; 
+    border: 0.5rem solid #2d2d2d;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 input {
     margin: 3px;
     margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 3px;
 }
 
 #sitting {
@@ -106,43 +123,66 @@ input {
     width: 30px;
     height: 30px;
     background: cyan;
-    box-shadow: 0 0 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     border-radius: 50%;
-    overflow: auto;
+    overflow: hidden;
+    transition: all 0.5s ease;
+    z-index: 100;
 }
 
-img {
+#sitting img {
     width: 35px;
     height: 35px;
     margin-bottom: 20px;
+    cursor: pointer;
 }
 
 #sitting:hover {
-    transition: all 2s ease-in-out;
-    width: 150px;
-    height: 400px;
-    display: block;
-    border-radius: 0;
+    width: 180px;
+    height: 420px;
+    border-radius: 10px;
+    padding: 10px;
 }
 
 label {
     margin-top: 5px;
     font-weight: bold;
     margin-left: 3px;
+    color: #333;
 }
 
 .p {
     position: absolute;
     top: 1px;
     font-size: 30px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #000;
 }
 
 #au {
     display: flex;
+    align-items: center;
+    margin-top: 10px;
 }
 
 #audiom {
     margin: 5px 1px;
-    width: 15px;
-    height: 15px;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+}
+
+#audiom:hover {
+    transform: scale(1.1);
+}
+
+select {
+    margin: 5px 0;
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    width: 90%;
 }
