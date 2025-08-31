@@ -344,5 +344,10 @@ function checkForDoubleCapture(row, col, checker) {
     return false;
 }
 
+window.addEventListener("beforeunload", () => {
+    audio.pause();
+    audio.currentTime = 0;
+});
+
 // Initialize the chessboard
 generateChessboard();
