@@ -233,28 +233,41 @@
     }
 
    function movePlayer(diceResult, player) {
-		  if (player === 1) {
-		    currentPosition1 = Math.min(currentPosition1 + diceResult, 99);
-		    animateMove(piece1, currentPosition1);
-		
-		    if (currentPosition1 === 99) {  // player 1 wins
-		      setTimeout(() => declareWinner("Player 1 (Red)"), 600);
-		    }
-		
-		  } else {
-		    currentPosition2 = Math.min(currentPosition2 + diceResult, 99);
-		    animateMove(piece2, currentPosition2);
-		
-		    if (currentPosition2 === 99) {  // player 2 wins
-		      setTimeout(() => declareWinner("Player 2 (Blue)"), 600);
-		    }
-		  }
-		}
+      if (player === 1) {
+        // Only move if the result won't exceed 100
+        if (currentPosition1 + diceResult <= 100) {
+          currentPosition1 += diceResult;
+          animateMove(piece1, currentPosition1);
+          
+          // Check for win condition (exactly 100)
+          if (currentPosition1 === 100) {
+            setTimeout(() => declareWinner("Player 1 (Red)"), 600);
+          }
+        } else {
+          // Player cannot move beyond position 100
+          document.getElementById('dice-result1').textContent += " - Can't move beyond 100!";
+        }
+      } else {
+        // Only move if the result won't exceed 100
+        if (currentPosition2 + diceResult <= 100) {
+          currentPosition2 += diceResult;
+          animateMove(piece2, currentPosition2);
+          
+          // Check for win condition (exactly 100)
+          if (currentPosition2 === 100) {
+            setTimeout(() => declareWinner("Player 2 (Blue)"), 600);
+          }
+        } else {
+          // Player cannot move beyond position 100
+          document.getElementById('dice-result2').textContent += " - Can't move beyond 100!";
+        }
+      }
+    }
 
     function animateMove(piece, position) {
       const cellSize = 32; 
-      const row = Math.floor(position / 10);
-      const col = position % 10;
+      const row = Math.floor((position - 1) / 10);
+      const col = (position - 1) % 10;
 
       // Convert col for zigzag movement like Snakes & Ladders
       const actualCol = row % 2 === 0 ? col : 9 - col;
