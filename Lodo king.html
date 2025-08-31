@@ -1,195 +1,272 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ludo Game</title>
-    <style>    
-        p{
-            font-size: 30px;
-        }
-        h2{
-            font-size: 40px;
-            text-align: center;
-            color: blue;
-        }
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f4f8;
-    margin: 0;
-    padding: 0;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ludo Game</title>
+  <style>    
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 0;
+    }
 
-#rd1,#rd2 {
- //   background: linear-gradient(135deg, #ff6a00, #ee0979);
-    background: blur;
-    width: 150px;
-    height: 30px;
-    border-radius: 15px;
-    color: white;
-    font-size: 14px;
-    border: none;
-    cursor: pointer;
-    margin: 5px auto;
-    display: block;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: background 0.3s ease;
-}
+    h2 {
+      font-size: 40px;
+      text-align: center;
+      color: blue;
+    }
 
-#rd:hover {
-    background: linear-gradient(135deg, #ee0979, #ff6a00);
-}
+    button {
+      width: 150px;
+      height: 40px;
+      border-radius: 15px;
+      color: white;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      margin: 10px auto;
+      display: block;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      background: linear-gradient(135deg, #ff6a00, #ee0979);
+      transition: transform 0.2s, background 0.3s;
+    }
+    button:hover {
+      background: linear-gradient(135deg, #ee0979, #ff6a00);
+      transform: scale(1.05);
+    }
 
-#ludo-board {
-    display: grid;
-    grid-template-columns: repeat(10, 32px);
-    grid-template-rows: repeat(10, 32px);
-    width: 100%;
-    max-width: 320px;
-    margin: 20px auto;
-    box-shadow: 0 0px 15px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    overflow: hidden;
-}
+    #ludo-board {
+      display: grid;
+      grid-template-columns: repeat(10, 32px);
+      grid-template-rows: repeat(10, 32px);
+      width: 100%;
+      max-width: 320px;
+      margin: 20px auto;
+      box-shadow: 0 0px 15px rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
 
-#ludo-board div {
-    border: 1px solid #ddd;
-    box-sizing: border-box;
-    background-color: #ffffff;
-    transition: background-color 0.3s ease;
-}
+    #ludo-board div {
+      border: 1px solid #ddd;
+      box-sizing: border-box;
+      background-color: #ffffff;
+    }
 
-.start-zone {
-    background-color: #ffd700;
-}
+    .player-piece {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      position: absolute;
+      transition: transform 0.5s ease-in-out;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
 
-.safe {
-    background-color: #32cd32;
-}
-
-.player-piece {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: red;
-    margin: 2px auto;
-    position: relative;
-    z-index: 1;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-#dice-result1, #dice-result2 {
-    text-align: center;
-    font-size: 18px;
-    margin-top: 8px;
-    font-weight: bold;
-}
-    </style>
+    #dice-result1, #dice-result2 {
+      text-align: center;
+      font-size: 18px;
+      margin-top: 8px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-     <header>
-        <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>           
-    </header>
-    <h2>Lodo King</h2>
-    <div id="dice-result1"></div>
-    <button id="rd1" onclick="rollDice(1)">Roll Dice</button>
-    <div id="ludo-board">
-        <!-- The board will be generated here by JavaScript -->
-    </div>
+  <header>
+    <a href="menu.html"><p style="font-size:30px; text-align:left">👈</p></a>           
+  </header>
 
-    <button id="rd2" onclick="rollDice(2)">Roll Dice</button>
-    <div id="dice-result2"></div>
+  <h2>Ludo King</h2>
+  
+  <div id="dice-result1"></div>
+  <button id="rd1" onclick="rollDice(1)">Roll Dice (P1)</button>
 
-    <script>
-        // script.js
-let firstStarter = Math.floor(Math.random()* 2)+1;        
-let currentPlayer = ''; 
- firstStarter == 1 ? currentPlayer = 'p1':currentPlayer = 'p2';
-let currentPosition1 = 100;
-let currentPosition2 = 100;
-const thebutton1 = document.getElementById("rd1");
-const thebutton2 = document.getElementById("rd2");
-if(firstStarter == 1) {
-    thebutton1.style.background = "linear-gradient(135deg, #ff6a00, #ee0979)";
-}else{
-    thebutton2.style.background = "linear-gradient(135deg, #ff6a00, #ee0979)";
-}
+  <div id="ludo-board"></div>
+   <div id="dice-result2"></div>
+  <button id="rd2" onclick="rollDice(2)">Roll Dice (P2)</button>
 
-function createBoard() {
-    currentPosition2 = 100;
-    currentPosition1 = 100;    
+  <script>
+    let firstStarter = Math.floor(Math.random() * 2) + 1;
+    let currentPlayer = firstStarter === 1 ? 'p1' : 'p2';
+
+    let currentPosition1 = 0;
+    let currentPosition2 = 0;
+
+
     const board = document.getElementById('ludo-board');
-    for (let i = 0; i < 100; i++) {
-        const cell = document.createElement('div');
-        if (i < 10 || i % 10 === 0 || i % 10 === 9 || i >= 100) {
-            cell.classList.add('safe');
-        }        
-        board.appendChild(cell);        
-    }    
-}
+    const thebutton1 = document.getElementById("rd1");
+    const thebutton2 = document.getElementById("rd2");
 
-function rollDice(a) {
-    if((a == 1 && currentPlayer == 'p1')||(a == 2 && currentPlayer == 'p2')) {
+    let piece1, piece2;
+
+		function manageButton(player){		
+		   if(player == 1){
+		       thebutton1.disabled = true;
+		       thebutton2.disabled = false;   
+		   }
+		   else{
+		       thebutton2.disabled = true;
+		       thebutton1.disabled = false;   
+		   }		   
+		}
+
+		function createBoard() {
+		  board.innerHTML = "";
+		  for (let row = 0; row < 10; row++) {
+		    for (let col = 0; col < 10; col++) {
+		      let number;
+		
+		      if (row % 2 === 0) {
+		        // left → right
+		        number = row * 10 + col + 1;
+		      } else {
+		        // right → left
+		        number = row * 10 + (10 - col);
+		      }
+		
+		      const cell = document.createElement('div');
+		      cell.textContent = number;
+		      cell.style.fontSize = "12px";
+		      cell.style.textAlign = "center";
+		      cell.style.lineHeight = "32px";
+		      cell.style.color = "#666"; 
+		      board.appendChild(cell);
+		    }
+		  }
+		
+		  // Create player pieces
+		  piece1 = document.createElement('div');
+		  piece1.className = 'player-piece';
+		  piece1.style.background = 'red';
+		  board.appendChild(piece1);
+		
+		  piece2 = document.createElement('div');
+		  piece2.className = 'player-piece';
+		  piece2.style.background = 'blue';
+		  board.appendChild(piece2);
+		
+		  updatePiecePosition(piece1, currentPosition1);
+		  updatePiecePosition(piece2, currentPosition2);
+		}
+		
+		function declareWinner(playerName) {
+		  // Create a modal for winner announcement
+		  const modal = document.createElement('div');
+		  modal.style.position = 'fixed';
+		  modal.style.top = '0';
+		  modal.style.left = '0';
+		  modal.style.width = '100%';
+		  modal.style.height = '100%';
+		  modal.style.backgroundColor = 'rgba(0,0,0,0.7)';
+		  modal.style.display = 'flex';
+		  modal.style.justifyContent = 'center';
+		  modal.style.alignItems = 'center';
+		  modal.style.zIndex = '1000';
+		  
+		  const modalContent = document.createElement('div');
+		  modalContent.style.backgroundColor = 'white';
+		  modalContent.style.padding = '30px';
+		  modalContent.style.borderRadius = '15px';
+		  modalContent.style.textAlign = 'center';
+		  modalContent.style.boxShadow = '0 0 20px rgba(255,255,255,0.3)';
+		  
+		  const winnerText = document.createElement('h2');
+		  winnerText.textContent = `${playerName} Wins! 🎉`;
+		  winnerText.style.color = 'green';
+		  winnerText.style.margin = '0 0 20px 0';
+		  
+		  const playAgainBtn = document.createElement('button');
+		  playAgainBtn.textContent = 'Play Again';
+		  playAgainBtn.onclick = function() {
+		    document.body.removeChild(modal);
+		    resetGame();
+		  };
+		  
+		  modalContent.appendChild(winnerText);
+		  modalContent.appendChild(playAgainBtn);
+		  modal.appendChild(modalContent);
+		  document.body.appendChild(modal);
+		  
+		  // Disable dice buttons
+		  document.getElementById("rd1").disabled = true;
+		  document.getElementById("rd2").disabled = true;
+		}
+		
+		function resetGame() {
+		  // Reset game state
+		  currentPosition1 = 0;
+		  currentPosition2 = 0;
+		  
+		  // Reset first player randomly
+		  firstStarter = Math.floor(Math.random() * 2) + 1;
+		  currentPlayer = firstStarter === 1 ? 'p1' : 'p2';
+		  
+		  // Clear dice results
+		  document.getElementById('dice-result1').textContent = '';
+		  document.getElementById('dice-result2').textContent = '';
+		  
+		  // Recreate the board
+		  createBoard();
+		  
+		  // Enable buttons based on who starts
+		  if (currentPlayer === 'p1') {
+		    thebutton1.disabled = false;
+		    thebutton2.disabled = true;
+		  } else {
+		    thebutton1.disabled = true;
+		    thebutton2.disabled = false;
+		  }
+		}
+
+    function rollDice(player) {
+      if ((player === 1 && currentPlayer === 'p1') || (player === 2 && currentPlayer === 'p2')) {
         const diceResult = Math.floor(Math.random() * 6) + 1;
-    document.getElementById('dice-result'+a).textContent = `You rolled: ${diceResult}`;    
-    movePlayer(diceResult,a);
-    }else {
-        alert("it is not your turn")
-    }    
-    
-}
-
-function movePlayer(diceResult, a) {
-    a == 1 ? currentPosition = currentPosition1 : currentPosition = currentPosition2;
-    if (currentPlayer === 'p1') {
-        tbutton = thebutton2;
-        fbutton = thebutton1;
-    } else {
-        tbutton = thebutton1;
-        fbutton = thebutton2;
+        document.getElementById('dice-result' + player).textContent = `You rolled: ${diceResult}`;
+        movePlayer(diceResult, player);
+        currentPlayer = (currentPlayer === 'p1') ? 'p2' : 'p1';
+        manageButton(player);
+      } else {
+        alert("It is not your turn!");
+      }
     }
-    const board = document.getElementById('ludo-board');
-    const cells = board.children;
-    currentPosition -= diceResult;
-    if (currentPosition + diceResult < 100 && currentPosition >= 0) {
-        cells[currentPosition + diceResult].textContent = '';
-    }    
-    else if(diceResult != 1) {       
-    currentPlayer == 'p1' ? currentPlayer = 'p2' : currentPlayer = 'p1';
-    tbutton.style.background = "linear-gradient(135deg, #ff6a00, #ee0979)";
-    fbutton.style.background = "#8c8c8c";    
-    return;
-}         
-    
 
-    if (currentPosition > 0) {       
-        const piece = document.createElement('div');       
-        piece.className = 'player-piece';        
-        if(a == 1){
-            piece.style.background = 'red';
-        }else{
-            piece.style.background = 'blue';
-        }
-        cells[currentPosition].appendChild(piece);
-    } else if (currentPosition == 0) {
-        if(a == 1) {
-            alert('Player 1 wins');
-        } else {
-            alert('Player 2 wins');
-        }
-        board.innerHTML = "";  
-        createBoard();
-        currentPosition1 = 100;
-        currentPosition2 = 100;
-        return;
+   function movePlayer(diceResult, player) {
+		  if (player === 1) {
+		    currentPosition1 = Math.min(currentPosition1 + diceResult, 99);
+		    animateMove(piece1, currentPosition1);
+		
+		    if (currentPosition1 === 99) {  // player 1 wins
+		      setTimeout(() => declareWinner("Player 1 (Red)"), 600);
+		    }
+		
+		  } else {
+		    currentPosition2 = Math.min(currentPosition2 + diceResult, 99);
+		    animateMove(piece2, currentPosition2);
+		
+		    if (currentPosition2 === 99) {  // player 2 wins
+		      setTimeout(() => declareWinner("Player 2 (Blue)"), 600);
+		    }
+		  }
+		}
+
+    function animateMove(piece, position) {
+      const cellSize = 32; 
+      const row = Math.floor(position / 10);
+      const col = position % 10;
+
+      // Convert col for zigzag movement like Snakes & Ladders
+      const actualCol = row % 2 === 0 ? col : 9 - col;
+
+      piece.style.transform = `translate(${actualCol * cellSize + 2}px, ${row * cellSize + 2}px)`;
     }
-    a == 1 ? currentPosition1 = currentPosition : currentPosition2 = currentPosition;
-    currentPlayer == 'p1' ? currentPlayer = 'p2' : currentPlayer = 'p1';
-    tbutton.style.background = "linear-gradient(135deg, #ff6a00, #ee0979)";
-    fbutton.style.background = "#8c8c8c";
-    
-}
-createBoard();
-    </script>
+
+    function updatePiecePosition(piece, position) {
+      animateMove(piece, position);
+    }
+
+    createBoard();
+  </script>
 </body>
 </html>
