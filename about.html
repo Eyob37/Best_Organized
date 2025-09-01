@@ -1,164 +1,307 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About Us - Eyob's website</title>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      line-height: 1.6;
-    }
-    header {
-      background: #4CAF50;
-      color: white;
-      padding: 1rem 0;
-      text-align: center;
-    }
-    section {
-      padding: 2rem;
-      max-width: 900px;
-      margin: auto;
-    }
-    h1, h2, h3 {
-      color: #333;
-    }
-    p {
-      color: #555;
-    }
-    ul {
-      margin: 1rem 0;
-      padding-left: 1.5rem;
-    }
-    ul li {
-      margin-bottom: 0.5rem;
-    }
-    a {
-      color: #4CAF50;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    aside{
-        margin: auto;
-        width: 90%;
-        border: solid 2px red;
-        text-align: center;
-        background: orange;
-    }
-    aside input{
-        width: 90%;
-        height: 30px;
-    }
-    aside button{
-        width: 80px;
-        height: 20px;
-        border-radius: 5px;
-    }
-    [placeholder *= "Message"]{
-        height: 100px;
-        width: 90%;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Best Organized</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6e8efb 0%, #a777e3 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            color: #6e8efb;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e6e9ff;
+            display: flex;
+            align-items: center;
+        }
+
+        h2 i {
+            margin-right: 10px;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 30px;
+            font-size: 1.1rem;
+        }
+
+        li:before {
+            content: "•";
+            color: #a777e3;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            font-size: 1.5rem;
+        }
+
+        a {
+            color: #6e8efb;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            color: #a777e3;
+            text-decoration: underline;
+        }
+
+        .contact-info {
+            background: #f9f9ff;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #6e8efb;
+        }
+
+        .contact-info li:before {
+            color: #6e8efb;
+        }
+
+        /* Back Button Styles */
+        .back {
+            position: fixed;
+            left: 20px;
+            top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            text-decoration: none;
+            font-size: 28px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .back::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .back:hover::before {
+            left: 100%;
+        }
+
+        .back:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .back:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .back::after {
+            content: 'Back to Menu';
+            position: absolute;
+            left: 70px;
+            white-space: nowrap;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .back:hover::after {
+            opacity: 1;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #6e8efb 0%, #a777e3 100%);
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .back {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+            
+            .back::after {
+                font-size: 14px;
+                padding: 5px 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 30px 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            h2 {
+                font-size: 1.4rem;
+            }
+            
+            li, p {
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>About Us</h1>
-    <a href="menu.html">👈</a> 
-  </header>
-  <section>
-    <h2>Welcome to Eyob's Website</h2>
-    <p>At <strong>Eyob's Website</strong>, we offer a variety of interactive tools, calculators, and games that cater to your productivity, learning, and entertainment needs. Our goal is to create a user-friendly experience where functionality meets creativity and fun.</p>
+    <a href="menu.html" class="back">👈</a>
     
-    <h3>What We Offer</h3>
-    <p>Discover the features available on our website:</p>
-    <ul>
-      <li><a href="https://best-organized.vercel.app/calculate.html" target="_blank">Standard Calculator</a>: Perform everyday calculations with ease.</li>
-      <li><a href="https://best-organized.vercel.app/geometrical%20calculator.html" target="_blank">Geometrical Calculator</a>: Solve geometry problems quickly and accurately.</li>
-      <li><a href="https://best-organized.vercel.app/water%20body.html" target="_blank">Water Body</a>: A space to enjoy and connect with nature.</li>
-      <li><a href="https://best-organized.vercel.app/fd.html" target="_blank">Finger Draw</a>: Unleash your creativity with drawing and art tools.</li>
-      <li><a href="https://best-organized.vercel.app/Guess.html" target="_blank">Guessing Game</a>: Test your intuition with this fun and engaging game.</li>
-      <li><a href="https://best-organized.vercel.app/click%20game.html" target="_blank">Click Game</a>: A fast-paced clicking challenge for all ages.</li>
-      <li><a href="https://best-organized.vercel.app/date.html" target="_blank">Digital Clock</a>: View the current date in a stylish format.</li>
-      <li><a href="https://best-organized.vercel.app/analog%20clock.html" target="_blank">Analog Clock</a>: Check the time with this elegant clock design.</li>
-      <li><a href="https://best-organized.vercel.app/qf.html" target="_blank">Quadratic Equation Solver</a>: Solve quadratic equations in three unique ways.</li>
-      <li><a href="https://best-organized.vercel.app/factorization-in.html" target="_blank">Quadratic Factorization</a>: Factorize quadratic equations step-by-step.</li>
-      <li><a href="https://best-organized.vercel.app/ox.html" target="_blank">Tic-Tac-Toe</a>: Play the timeless Xs and Os game.</li>
-      <li><a href="https://best-organized.vercel.app/logical%20calculater.html" target="_blank">Logical Calculator</a>: Handle logical operations easily.</li>
-      <li><a href="https://best-organized.vercel.app/checker.html" target="_blank">Checker Game</a>: Enjoy this classic board game.</li>
-      <li><a href="https://best-organized.vercel.app/logical%20calculation.html" target="_blank">Advanced Logical Calculations</a>: Solve advanced logical problems effectively.</li>
-      <li><a href="https://best-organized.vercel.app/chess.html" target="_blank">Chess Game</a>: Engage in a strategic chess match.</li>
-      <li><a href="https://best-organized.vercel.app/Lodo%20king.html" target="_blank">Ludo King</a>: Play this family-favorite board game.</li>
-      <li><a href="https://best-organized.vercel.app/Physics.html" target="_blank">Physics Solver</a>: Simplify physics equations and concepts.</li>
-    </ul>
+    <div class="container">
+        <div class="header">
+            <h1>About This Project</h1>
+            <p>Discover the collection of interactive mini-games and utilities designed for entertainment and learning</p>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <p>
+                    Welcome to <strong>Best Organized</strong> – a collection of interactive mini-games
+                    and utilities built with HTML, CSS, and JavaScript. This project brings together
+                    fun games like <em>Snake</em>, <em>Chess</em>, <em>Dama</em>, <em>OX Game</em>, and
+                    <em>Ludo King</em>, along with useful tools such as calculators, calendars,
+                    and clocks.
+                </p>
+            </div>
 
-    <h3>Our Vision</h3>
-    <p>We strive to be your one-stop platform for productivity, learning, and entertainment. From solving complex equations to enjoying classic games, <strong>Eyob's Website</strong> is here to enhance your everyday experiences.</p>
-    
-    <h3>Get in Touch</h3>
-    <p>Have suggestions or feedback? Reach out to us to help improve <strong>Eyob's Website</strong>. Your input is invaluable to us.</p>
-<p>If you want to write comment to me: <call style="color: blue;">0922750426</call> is my number and</p>
-    
-    <aside id="sidebar">
-          <div class="dark">
-            <h3>Get A Quote</h3>
-            <form class="quote">
-  						<div>
-  							<label>Name</label><br>
-  							<input type="text" placeholder="Name">
-  						</div>
-  						<div>
-  							<label>Email</label><br>
-  							<input type="email" placeholder="Enter your email Address">
-  						</div>
-  						<div>
-  							<label>Message</label><br>
-  							<textarea placeholder="Message" required></textarea>
-  						</div>
-  						<button onclick="sendToemail()" class="button_1" type="submit">Send</button>
-					</form>
-          </div>
-        </aside>   
-  </section>
-  <script>
-document.addEventListener("DOMContentLoaded", function () {
-      emailjs.init("7UGwi5Gy7R_A48GpD"); 
-});
-  
-      const $ = selector => {
-          return document.querySelector(selector);
-      }
-      
-      function sendToemail() {
-          let Name = $('[placeholder *= "Name"]').value;
-          let Email = $('[placeholder *= "email"]').value;
-          let Message = $('[placeholder *= "Message"]').value;
-          if(!Message) {
-              return;
-          }
-          
-          var params = {
-                name: Name,
-                email: Email,
-                message: Message
-            };
+            <div class="section">
+                <h2><i class="fas fa-gamepad"></i> What's Inside</h2>
+                <ul>
+                    <li>🎮 Classic games – Snake, Chess, Checkers, Dama, Mind Game, and more.</li>
+                    <li>🧮 Math tools – calculators, factorization, and quadratic solvers.</li>
+                    <li>📅 Time tools – analog clocks, calendars, and date utilities.</li>
+                    <li>🎨 Custom styling and 🎵 background audio for an engaging experience.</li>
+                </ul>
+            </div>
 
-            console.log("Sending email with params:", params); // Debugging
+            <div class="section">
+                <h2><i class="fas fa-bullseye"></i> Our Goal</h2>
+                <p>
+                    The purpose of this project is to create an organized hub where entertainment
+                    and learning meet. Whether you want to play a quick game or solve a calculation,
+                    everything is available in one place.
+                </p>
+            </div>
 
-            emailjs.send("service_sjp7z9x", "template_bcmnf95", params)
-                .then(function(response) {
-                    console.log("Email sent successfully:", response);
-                    alert("you sent message successfully");
+            <div class="section">
+                <h2><i class="fas fa-heart"></i> Credits</h2>
+                <p>
+                    Developed and organized by Eyob. All code, images, and audio are part of this
+                    creative collection.
+                </p>
+            </div>
 
-                }, function(error) {
-                    console.log("Failed to send email:", error);
-
-                }); 
-      }          
-  </script>
+            <div class="section">
+                <h2><i class="fas fa-envelope"></i> Contact Us</h2>
+                <p>If you would like to get in touch, feel free to reach us through the following:</p>
+                <ul class="contact-info">
+                    <li>📞 Phone: <a href="tel:0714103851">0714103851</a></li>
+                    <li>📧 Email: <a href="mailto:eyobeb337@gmail.com">eyobeb337@gmail.com</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2023 Best Organized. All rights reserved.</p>
+        </div>
+    </div>
 </body>
 </html>
