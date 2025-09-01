@@ -5,39 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Calendar</title>
     <style>
-           header {
-      background-color: #007bff;
-      color: #fff;
-      padding: 10px 0;
-      text-align: center;
-      position: fixed;
-      top: 0;
-      width: 100%;
-    }
-
-    header nav ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    header nav ul li {
-      display: inline;
-      margin-right: 20px;
-    }
-
-    header nav ul li a {
-      color: #fff;
-      text-decoration: none;
-    }
-
-    header nav ul li a:hover {
-      text-decoration: underline;
-    }
-   .p{
-       margin: 10px;
-       font-size: 5vw;
+      #back{
+       position: fixed;
+       top: 0;
+       left: 0;
+       z-index: 2;
+       background: none;
+       font-size: 30px;
    }
+         
+nav {  
+    position: fixed;  
+    top: 0;  
+    left: 0;  
+    width: 100%;  
+    background: cyan;  
+    padding: 10px 0;  
+    display: flex;  
+    justify-content: center;  
+    gap: 20px; /* spacing between links */  
+}  
+
+a {  
+    text-decoration: none;  
+    color: brown;  
+    background: yellow;  
+    font-weight: 800;  
+    padding: 10px 25px;  
+    border-radius: 10px;  
+    transition: background 0.3s;  
+}  
+
+a:hover {  
+    background: gold;  
+}  
+
+a:nth-child(2) {  
+    margin: 0 calc(33% - 100px); /* pushes second link to the right */  
+}  
+
+.current {  
+    background: orange;  
+    color: white;  
+}
         * {
             margin: 0;
             padding: 0;
@@ -202,18 +212,11 @@
     </style>
 </head>
 <body>
-    <header>
-      </div class="container">
-         <a href="menu.html"><p class="p" style="text-align:left">👈</p></a>     
-        <nav>
-          <ul>
-              <li class="current"><a href="date.html">date</a></li>  
-            <li><a href="calendar.html">Calendar </a></li>
-                     
-          </ul>
+        <nav>                   
+            <a id="back" href="menu.html">👈</a>        
+            <a href="date.html">date</a>
+            <a class="current" href="calendar.html">Calendar </a>    
         </nav>
-      </div>
-    </header> 
     <div class="calendar-container">
         <div class="calendar-header">
             <button id="prev-month">&lt;</button>
