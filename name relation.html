@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relationship Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        h2 {
+            color: #ff4081;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            width: 80%;
+            max-width: 300px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #e91e63;
+        }
+        #steps {
+            background-color: #fff;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 20px auto;
+            max-width: 500px;
+            text-align: left;
+        }
+        #result {
+            color: #ff4081;
+            margin-top: 20px;
+            font-size: 1.4rem;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <h2>Relationship Calculator</h2>
+    <p>Enter two names to find their "relationship percentage" based on a fun algorithm!</p>
+    <label for="n1">Enter the first name: </label><br>
+    <input type="text" id="n1" placeholder="First name"><br><br>
+    <label for="n2">Enter the second name: </label><br>
+    <input type="text" id="n2" placeholder="Second name"><br><br>
+    <button onclick="calculateRelationship()">Calculate</button>
+    <div id="steps" style="margin-top: 20px;"></div>
+    <div id="result" style="margin-top: 20px; font-weight: bold; font-size: 1.2em;"></div>
+
+    <script>
+        function calculateRelationship() {
+            const name1 = document.getElementById("n1").value.trim();
+            const name2 = document.getElementById("n2").value.trim();
+            const stepsDiv = document.getElementById("steps");
+            const resultDiv = document.getElementById("result");
+            
+            let ksh = 0;
+
+            if (name1 === "" || name2 === "") {
+                stepsDiv.innerHTML = "Please enter both names!";
+                resultDiv.innerHTML = "";
+                return;
+            }
+
+            // Combine names with "love"
+            const combinedNames = (name1 + "love" + name2).toLowerCase();
+            const counts = {};
+            const steps = [];
+
+            // Count occurrences of each character
+            for (let char of combinedNames) {
+                counts[char] = (counts[char] || 0) + 1;
+                
+            }                        
+                        
+            // Convert counts to a single array of digits
+            const countsArray = Object.values(counts).join("").split("").map(Number);
+            console.log(countsArray);
+            steps.push(`Initial counts (based on "${name1} + love + ${name2}"): ${countsArray.join("")}`);
+             
+            // Iteratively reduce the numbers
+            let current = countsArray;
+            
+             while (current.length > 2) {
+                const next = [];
+                for (let i = 0, j = current.length - 1; i <= j; i++, j--) {
+                    if (i === j) {
+                        next.push(current[i]); // Middle number remains if odd length
+                    } else {
+                        if(current[i] + current[j] <= 9) {
+                            next.push(current[i] + current[j]);
+                        }else {
+                            let sum = current[i] + current[j];
+                            next.push(Math.floor(sum / 10));
+                            next.push(sum % 10);                         
+                        }
+                         
+                    }
+                }
+             
+               current = next;
+                steps.push(`After reducing: ${current.join("")}`);
+            } 
+
+            // Final relationship percentage
+            const percentage = current.join("");
+            steps.push(`Final percentage: ${percentage}%`);
+
+            // Display steps and result
+            stepsDiv.innerHTML = `<h3>Steps:</h3><pre>${steps.join("\n")}</pre>`;
+            resultDiv.innerHTML = `<b>${name1} + love + ${name2}</b> results in a <b>${percentage}%</b> relationship compatibility!`;
+        }
+    </script>
+</body>
+</html>
