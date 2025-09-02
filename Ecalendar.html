@@ -252,24 +252,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const nextMonthButton = document.getElementById('next-month');
 
     // Get today's Gregorian date and convert to Ethiopian
-    let today = new Date();
+    let today = new Date();              
     let etToday = gregorianToEthiopian(today.getFullYear(), today.getMonth() + 1, today.getDate());
-
+console.log(etToday.year, etToday.month, etToday.day);
     // Start calendar at today's Ethiopian month/year
     let currentMonth = etToday.month;
     let currentYear = etToday.year;
 
     function renderCalendar() {
-        monthYearElement.textContent = `${ethiopianMonths[currentMonth]} ${currentYear}`;
+        monthYearElement.textContent = `${ethiopianMonths[currentMonth - 1]} ${currentYear}`;
         calendarDaysElement.innerHTML = "";
 
         // Days in Ethiopian month
-        let daysInMonth = (currentMonth === 12) ? (isLeapYear(currentYear) ? 6 : 5) : 30;
+        let daysInMonth = (currentMonth === 13) ? (isLeapYear(currentYear) ? 6 : 5) : 30;
 
         // Get weekday of Ethiopian 1st day by converting to Gregorian
         let gDate = ethiopianToGregorian(currentYear, currentMonth, 1);
-        let firstWeekday = new Date(gDate.year, gDate.month, gDate.day).getDay(); // 0=Sun..6=Sat
-
+        let firstWeekday = new Date(gDate.year, gDate.month - 1, gDate.day).getDay() - 1 ;
         // Empty slots before first day
         for (let i = 0; i < firstWeekday; i++) {
             let emptyDay = document.createElement("div");
@@ -293,11 +292,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function changeMonth(direction) {
         currentMonth += direction;
-        if (currentMonth < 0) {
-            currentMonth = 12;
+        if (currentMonth < 1) {
+            currentMonth = 13;
             currentYear--;
-        } else if (currentMonth > 12) {
-            currentMonth = 0;
+        } else if (currentMonth > 13) {
+            currentMonth = 1;
             currentYear++;
         }
         renderCalendar();
@@ -312,7 +311,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Gregorian → Ethiopian
     function gregorianToEthiopian(year, month, day) {
-        let a = Math.floor((14 - month) / 12);
+        let a = Math.floor((14 - month) / 12);       
         let y = year + 4800 - a;
         let m = month + 12 * a - 3;
         let jd = day + Math.floor((153 * m + 2) / 5) + 365 * y +
@@ -322,7 +321,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let r = (jd - ethioEpoch) % 1461;
         let n = (r % 365) + 365 * Math.floor(r / 1460);
         let ethioYear = 4 * Math.floor((jd - ethioEpoch) / 1461) + Math.floor(r / 365) - Math.floor(r / 1460);
-        let ethioMonth = Math.floor(n / 30);
+        let ethioMonth = Math.floor(n / 30) + 1; // 1–13
         let ethioDay = (n % 30) + 1;
 
         return { year: ethioYear, month: ethioMonth, day: ethioDay };
@@ -331,7 +330,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Ethiopian → Gregorian
     function ethiopianToGregorian(year, month, day) {
         let ethioEpoch = 1723856;
-        let jd = ethioEpoch + 365 + 365 * (year - 1) + Math.floor(year / 4) + 30 * month + day - 31;
+        let jd = ethioEpoch + 365 + 365 * (year - 1) + Math.floor(year / 4) + 30 * (month - 1) + day;
 
         let a = jd + 32044;
         let b = Math.floor((4 * a + 3) / 146097);
@@ -344,7 +343,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let monthG = m + 3 - 12 * Math.floor(m / 10);
         let yearG = 100 * b + d - 4800 + Math.floor(m / 10);
 
-        return { year: yearG, month: monthG - 1, day: dayG };
+        return { year: yearG, month: monthG, day: dayG }; // month = 1–12
     }
 
     // Ethiopian leap year check
