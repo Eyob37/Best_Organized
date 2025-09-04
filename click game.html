@@ -338,15 +338,17 @@
     // Start the countdown
     function startCountdown() {   
       // Reset any existing timer
+      var inputTime = document.getElementById('time').value;
+      if(inputTime < 5) {
+          alert("the minimum input is 5");
+          return;
+      }
       if (countdownInterval) {
         clearInterval(countdownInterval);
       }
       
       score = 0;   
       document.getElementById("score").textContent = score;
-      
-      var inputTime = document.getElementById('time').value;
-      if (inputTime < 1) inputTime = 1;
       
       // Start the countdown
       countdown(parseInt(inputTime, 10));
