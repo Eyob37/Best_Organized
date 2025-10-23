@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ludo Board - Updated</title>
+    <style>
+       body {
+           display: flex;
+           height: 100vh;
+           align-items: center;
+           justify-content: center;
+           background: #f3f3f3;
+           flex-direction: column;
+           background: url('ludo.jpg');
+           background-size: 100vw 100vh;
+           background-attachment: fixed;
+           
+       }
+.main-container{
+    background: white;
+    width: 400px;
+    height: 400px;
+    display: grid;
+    grid-template-columns: repeat(15, 1fr);
+    grid-template-rows: repeat(15, 1fr);
+    margin: auto;
+    
+}
+
+/* Four home squares */
+.red{         
+    grid-row: 1 / 7;
+    grid-column: 1 / 7;
+    border: 20px solid red;
+}
+.green{         
+    grid-row: 1 / 7;
+    grid-column: 10 / 16;
+    border: 20px solid green;
+}
+.blue{         
+    grid-row: 10 / 16;
+    grid-column: 1 / 7;
+    border: 20px solid blue;
+}
+.yellow{         
+    grid-row: 10 / 16;
+    grid-column: 10 / 16;
+    border: 20px solid yellow;
+}
+
+/* Pathways between colors */
+.btRedGreen{
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: repeat(3, 1fr);         
+    grid-row: 1 / 7;
+    grid-column: 7 / 10;
+}      
+.btGreenYellow{
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(6, 1fr);
+    grid-row: 7 / 10;
+    grid-column: 10 / 16;
+}
+.btBlueYellow{   
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: repeat(3, 1fr);         
+    grid-row: 10 / 16;
+    grid-column: 7 / 10;
+}
+.btBlueRed{
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(6, 1fr);
+    grid-row: 7 / 10;
+    grid-column: 1 / 7;
+}
+
+/* center 3x3 cell */
+.center {
+  grid-row: 7 / 10;
+  grid-column: 7 / 10;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Each triangle fills its quadrant */
+.center .tri {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+/* Top-left triangle (red) */
+.center .red {
+  background: red;
+  clip-path: polygon(0 0, 0 70%, 40% 35%);
+}
+
+/* Top-right triangle (green) */
+.center .green {
+  background: green;
+  clip-path: polygon(0 0,70% 0, 35% 40%);
+}
+
+/* Bottom-right triangle (yellow) */
+.center .yellow {
+  background: yellow;
+  clip-path: polygon(100% -32%, 39% 35%, 100% 100%);  
+}
+
+/* Bottom-left triangle (blue) */
+.center .blue {
+  background: blue;
+  clip-path: polygon(0% 70%,40% 35%, 70% 70%);
+}
+
+.sub-container {
+  position: relative;
+}
+.cell{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Border for each cell */
+.btwn div{
+    border: 1px solid black;
+    box-sizing: border-box;
+    font-size: 12px;
+}
+
+/* Beautiful Roller Styles */
+.roller {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(145deg, #f0f0f0, #c9c9c9);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 
+        0 4px 8px rgba(0,0,0,0.2),
+        inset 0 1px 0 rgba(255,255,255,0.8),
+        inset 0 -1px 0 rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.roller:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 6px 12px rgba(0,0,0,0.25),
+        inset 0 1px 0 rgba(255,255,255,0.8),
+        inset 0 -1px 0 rgba(0,0,0,0.1);
+}
+
+.roller:active {
+    transform: translateY(1px);
+    box-shadow: 
+        0 2px 4px rgba(0,0,0,0.2),
+        inset 0 1px 0 rgba(255,255,255,0.8),
+        inset 0 -1px 0 rgba(0,0,0,0.1);
+}
+
+.roller::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+    border-radius: 10px 10px 0 0;
+}
+
+.dice {
+    width: 40px;
+    height: 40px;
+    background: white;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    position: relative;
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+}
+
+.dice::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 50%);
+}
+
+.dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #333;
+    border-radius: 50%;
+}
+
+/* Dice face patterns */
+.dice[data-value="1"] .dot:nth-child(1) {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.dice[data-value="2"] .dot {
+    display: none;
+}
+.dice[data-value="2"] .dot:nth-child(1) {
+    display: block;
+    top: 25%;
+    left: 25%;
+}
+.dice[data-value="2"] .dot:nth-child(2) {
+    display: block;
+    bottom: 25%;
+    right: 25%;
+}
+
+.dice[data-value="3"] .dot:nth-child(1) {
+    top: 25%;
+    left: 25%;
+}
+.dice[data-value="3"] .dot:nth-child(2) {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.dice[data-value="3"] .dot:nth-child(3) {
+    bottom: 25%;
+    right: 25%;
+}
+
+.dice[data-value="4"] .dot {
+    display: none;
+}
+.dice[data-value="4"] .dot:nth-child(1) {
+    display: block;
+    top: 25%;
+    left: 25%;
+}
+.dice[data-value="4"] .dot:nth-child(2) {
+    display: block;
+    top: 25%;
+    right: 25%;
+}
+.dice[data-value="4"] .dot:nth-child(3) {
+    display: block;
+    bottom: 25%;
+    left: 25%;
+}
+.dice[data-value="4"] .dot:nth-child(4) {
+    display: block;
+    bottom: 25%;
+    right: 25%;
+}
+
+.dice[data-value="5"] .dot:nth-child(1) {
+    top: 25%;
+    left: 25%;
+}
+.dice[data-value="5"] .dot:nth-child(2) {
+    top: 25%;
+    right: 25%;
+}
+.dice[data-value="5"] .dot:nth-child(3) {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.dice[data-value="5"] .dot:nth-child(4) {
+    bottom: 25%;
+    left: 25%;
+}
+.dice[data-value="5"] .dot:nth-child(5) {
+    bottom: 25%;
+    right: 25%;
+}
+
+.dice[data-value="6"] .dot:nth-child(1) {
+    top: 25%;
+    left: 25%;
+}
+.dice[data-value="6"] .dot:nth-child(2) {
+    top: 25%;
+    right: 25%;
+}
+.dice[data-value="6"] .dot:nth-child(3) {
+    top: 50%;
+    left: 25%;
+    transform: translateY(-50%);
+}
+.dice[data-value="6"] .dot:nth-child(4) {
+    top: 50%;
+    right: 25%;
+    transform: translateY(-50%);
+}
+.dice[data-value="6"] .dot:nth-child(5) {
+    bottom: 25%;
+    left: 25%;
+}
+.dice[data-value="6"] .dot:nth-child(6) {
+    bottom: 25%;
+    right: 25%;
+}
+
+.topDiv,.bottomDiv{
+    position: relative;    
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+.DivLeft{
+    position: relative;
+    left: 20px;
+}
+
+.DivRight{
+    position: relative;
+    right: 20px;
+}
+
+
+.initial-point{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.player{
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 5px solid brown;
+}
+.red-player{background: red;}
+.green-player{background: green;}
+.blue-player{background: blue;}
+.yellow-player{background: yellow;}
+#full{
+    padding-left: 5px;
+}
+    </style>
+</head>
+<body>
+    <div id="full"><div class="topDiv" style="margin-bottom:10px;">
+        <div class="DivLeft roller" style="background: red;">
+            <div class="dice" data-value="1">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+        <div class="DivRight roller" style="background: green;">
+            <div class="dice" data-value="1">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+    </div>
+    <div class="main-container">
+        <div class="sub-container red"></div>
+        <div class="btRedGreen btwn"></div>
+        <div class="sub-container green"></div>
+        <div class="btGreenYellow btwn"></div>
+        <div class="sub-container blue"></div>      
+        <div class="btBlueYellow btwn"></div>  
+        <div class="sub-container yellow"> </div>        
+        <div class="btBlueRed btwn"></div>  
+       <div class="center">          
+          <div class="tri green" data-gridno="6" data-idno="6271"></div>
+          <div class="tri yellow" data-ylidno="6" data-idno="6272"></div>
+          <div class="tri blue" data-blidno="6" data-idno="6273"></div>
+          <div class="tri red" data-rdidno="6" data-idno="6274"></div>
+        </div>
+    </div>
+    <div class="bottomDiv" style="margin-top:10px;">
+        <div class="DivLeft roller" style="background: blue;">
+            <div class="dice" data-value="1">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+        <div class="DivRight roller" style="background: yellow;">
+            <div class="dice" data-value="1">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+    </div></div>
+    <!-- style script -->
+<audio id="audio-roller">
+  <source src="ludo roll.mp3" type="audio/mpeg">
+</audio>
+<audio id="audio-move">
+  <source src="ludo game move.mp3" type="audio/mpeg">
+</audio>
+    <script>
+       let PlayPlayers = JSON.parse(localStorage.getItem("playPlayers")) || ["red", "green","blue","yellow"];
+       
+       console.log(PlayPlayers.includes("Yellow")); 
+// ----- STYLE / SETUP SCRIPT -----
+
+let audioRoller = document.getElementById("audio-roller");
+let audioMove = document.getElementById("audio-move");
+let idGP = 53;
+let betweenDivs = document.querySelectorAll(".btwn");
+let SCDivs = document.querySelectorAll(".sub-container");
+
+let SCDA = [["left","top"],["right","top"],["left","bottom"],["right","bottom"]];
+let colorOrder = ["red","green","blue","yellow"];
+let roadArr = [];
+let playersEle = [[],[],[],[]]; // 4 players, 4 tokens each
+let homeSpots = [[],[],[],[]]; // wrapper divs inside each home
+let players = ["red","green","blue","yellow"];
+let currentPlayer = players[Math.floor(Math.random()*4)];
+let startPositions = {red:40, green:1, blue:27, yellow:14};
+const SAVE_POSITIONS = [9,22,35,48, 40, 1, 27, 14]; // star safe idno positions
+
+// Create 18 small cells in between divs
+betweenDivs.forEach(div => {
+    for (let k = 0; k < 18; k++) {
+        let cell = document.createElement("div");
+        div.appendChild(cell);
+        cell.classList.add("cell");
+    }
+});
+
+
+let greenPath = document.querySelector(".btRedGreen").children;
+for (let i = 3; i < greenPath.length; i++) {
+    if (i % 3 === 1) greenPath[i].style.background = "green"; // middle column
+}greenPath[5].style.background = "green";
+
+// Green path (right to center)
+let yellowPath = document.querySelector(".btGreenYellow").children;
+for (let i = 0; i < yellowPath.length; i++) {
+    if (i >= 6 && i < 11) yellowPath[i].style.background = "yellow"; // middle row
+}yellowPath[16].style.background = "yellow"; // middle row
+
+// Yellow path (bottom to center)
+let bluePath = document.querySelector(".btBlueYellow").children;
+for (let i = 0; i < bluePath.length-3; i++) {
+    if (i % 3 === 1) bluePath[i].style.background = "blue"; // middle column
+}bluePath[bluePath.length-6].style.background = "blue"; // middle column
+
+// Blue path (left to center)
+let redPath = document.querySelector(".btBlueRed").children;
+for (let i = 0; i < redPath.length; i++) {
+    if (i >= 7 && i < 12) redPath[i].style.background = "red"; // middle row
+}redPath[1].style.background = "red"; // middle row
+
+// Organize initial 4 tokens per player inside home
+function organizeInnerDiv() {
+    for(let i = 0; i < SCDivs.length; i++){
+        for(let k = 0; k < 4; k++){        
+            let div = document.createElement("div");
+            SCDivs[i].appendChild(div);
+            div.style.cssText = `
+                position: absolute;
+                ${SCDA[k][0]}: 10px;
+                ${SCDA[k][1]}: 10px;     
+                width: 30px; 
+                height: 30px;
+                border-radius: 50%;       
+                background: ${colorOrder[i]};
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            `;
+            // store wrapper spot
+            homeSpots[i][k] = div;
+
+            // Add token div inside
+            let PlayerDiv = document.createElement("div");
+            div.appendChild(PlayerDiv);
+            PlayerDiv.classList.add(`${colorOrder[i]}-player`);
+            PlayerDiv.classList.add("player");
+            PlayerDiv.dataset.home = "true"; // mark token as still in home
+            PlayerDiv.dataset.index = k; // remember its spot index
+            playersEle[i][k] = PlayerDiv;
+        }
+    }
+}
+
+// Organizer road cells using current data-idno (keep as is)
+function organizeroadArr() {
+    const greenPath = document.querySelector(".btRedGreen").children;
+    const yellowPath = document.querySelector(".btGreenYellow").children;
+    const bluePath = document.querySelector(".btBlueYellow").children;
+    const redPath = document.querySelector(".btBlueRed").children;
+
+    // Keep existing assignments
+    for (let i = 0; i < greenPath.length; i++) {
+        if (i < 3) greenPath[i].dataset.idno = i + 50;
+        if(i%3 == 2 && i >= 3) greenPath[i].dataset.idno = Math.floor(i/3);
+        if(i%3 == 0 && i >= 3) greenPath[i].dataset.idno = 50 - Math.floor(i/3);
+    }
+    greenPath[5].dataset.idno = 1;
+
+    for (let i = 0; i < yellowPath.length; i++) {
+        if (i < 6) yellowPath[i].dataset.idno = i + 6;
+        if (i == 11) yellowPath[i].dataset.idno = 12;
+        if (i >= 12) yellowPath[i].dataset.idno = 30 - i;
+    }
+    yellowPath[16].dataset.idno = 14;
+
+    for (let i = 0; i < bluePath.length; i++) {
+        if (i%3 == 2) bluePath[i].dataset.idno = Math.floor(i/3) + 19;
+        if (i == 16) bluePath[i].dataset.idno = 25;
+        if (i%3 == 0) bluePath[i].dataset.idno = 31 - Math.floor(i/3);
+    }
+
+    for (let i = 0; i < redPath.length; i++) {
+        if (i < 6) redPath[i].dataset.idno = i + 39;
+        if (i == 6) redPath[i].dataset.idno = 38;
+        if (i > 11) redPath[i].dataset.idno = 49 - i;
+    }
+}
+
+function organizeGetInArr(){
+    const greenPath = document.querySelector(".btRedGreen").children;
+    const yellowPath = document.querySelector(".btGreenYellow").children;
+    const bluePath = document.querySelector(".btBlueYellow").children;
+    const redPath = document.querySelector(".btBlueRed").children;
+
+    for (let i = 0; i < greenPath.length; i++) {        
+        if(i%3 == 1 && i!= 1) greenPath[i].dataset.gridno = Math.floor(i/3);     
+        if(i%3 == 1 && i!= 1) greenPath[i].dataset.idno = idGP;
+        idGP++;
+    }
+    for (let i = 0; i < yellowPath.length; i++) {        
+        if (i > 5 && i <= 10) yellowPath[i].dataset.ylidno = 11 - i;
+        if (i > 5 && i <= 10) yellowPath[i].dataset.idno = idGP;
+        idGP++;
+    }
+    for (let i = 0; i < bluePath.length; i++) {        
+        if (i%3 == 1 && i != 16) bluePath[i].dataset.blidno = 5 - Math.floor(i/3);
+        if (i%3 == 1 && i != 16) bluePath[i].dataset.idno = idGP;
+        idGP++;
+    }
+    for (let i = 0; i < redPath.length; i++) {        
+        if (i > 6 && i <= 11) redPath[i].dataset.rdidno = i - 6;      
+        if (i > 6 && i <= 11) redPath[i].dataset.idno = idGP;
+        idGP++;  
+    }
+}
+
+// Place star symbols (optional)
+function putStar() {
+    const starPositon = [9,22,35,48];
+    starPositon.forEach(po => {
+        const el = document.querySelector(`[data-idno='${po}']`);
+        if(el) el.textContent = "⭐";
+    });
+}
+
+organizeInnerDiv();
+organizeroadArr();
+organizeGetInArr();
+putStar();
+
+    </script>
+    <!-- process script -->
+    <script>
+// ----- PROCESS / GAMEPLAY SCRIPT -----
+
+let diceValue = 0;
+let rollTime = 0;
+
+// Helper: get all path cells by data-idno
+let allPathCells = {};
+document.querySelectorAll(".btwn div, .center").forEach(el=> {
+    if(el.dataset.idno) allPathCells[el.dataset.idno] = el;
+
+});
+
+// Current selected token after roll
+let selectedToken = null;
+
+// Player turn
+function showCurrent() {
+    let rollers = document.querySelectorAll('.roller');
+    rollers.forEach((roller, index) => {
+        if (!(index == players.indexOf(currentPlayer))) {
+            roller.disabled = true;
+            roller.style.background = "#848484";
+            roller.removeEventListener('click', diceHandler);
+        } else {
+            if(!(PlayPlayers.includes(currentPlayer))){
+                nextTurn();
+                return;
+            }
+            roller.disabled = false;
+            roller.style.background = players[index];
+            roller.addEventListener('click', diceHandler);
+        }
+    });
+}
+
+showCurrent();
+
+function MakeAutoMove() {
+    let tokens = playersEle[players.indexOf(currentPlayer)];
+    let homeTokens = tokens.filter(t => t.dataset.home === "true");
+    let outTokens = tokens.filter(t => t.dataset.home === "false");
+
+    // Case 1: All in home & no 6
+    if (homeTokens.length === tokens.length && diceValue !== 6) {        
+        nextTurn();
+        return "nextTurn"; // Return specific value
+    }
+
+    // Case 2: Only one out & no 6
+    if (outTokens.length === 1 && diceValue !== 6) {
+        moveToken(outTokens[0]);        
+        return "autoMove"; // Return specific value
+    }
+
+    // else do nothing
+    return null; // Return null/false when no auto action
+}
+
+
+// Dice rolling functionality
+function rollDice(diceElement, callback) {        
+    audioRoller.play()
+    let rolls = 0;
+    const maxRolls = 5;
+    const rollInterval = setInterval(() => {
+        const randomValue = Math.floor(Math.random() * 6) + 1;
+        diceElement.setAttribute('data-value', randomValue);
+        rolls++;
+        if (rolls >= maxRolls) {
+            clearInterval(rollInterval);
+            diceValue = Math.floor(Math.random() * 6) + 1;                      
+            diceElement.setAttribute('data-value', diceValue);            
+                        
+            const result = MakeAutoMove();   
+                                  
+            if(result === null && callback) callback();
+        }
+    }, 100);
+}
+
+function diceHandler() {   
+    const dice = this.querySelector('.dice');    
+    rollDice(dice, enableTokenSelection);    
+}
+
+// Enable clicking player's tokens after dice roll
+function enableTokenSelection() {
+    selectedToken = null;
+    
+    // All tokens of current player
+    playersEle[players.indexOf(currentPlayer)].forEach(token => {
+        token.style.cursor = "pointer";
+        token.addEventListener("click", tokenClickHandler);
+    });
+}
+
+// Disable token selection
+function disableTokenSelection() {
+    playersEle[players.indexOf(currentPlayer)].forEach(token => {
+        token.style.cursor = "default";
+        token.removeEventListener("click", tokenClickHandler);
+    });
+}
+
+
+// Handle token click
+function tokenClickHandler(e) {    
+    let token = e.currentTarget;               
+    moveToken(token);   
+}
+
+function canMoveToFinal(token, color, steps) {
+    let currentId = parseInt(token.dataset.idno);
+
+    // Simulate movement without actually moving
+    for (let i = 0; i < steps; i++) {
+        currentId = getNextId(color, currentId, token);
+        if (currentId === null) return true; // reached the end, valid finish
+    }
+
+    // If next cell is final lane position
+    let targetCell = document.querySelector(`[data-idno='${currentId}']`);
+    if (!targetCell) return false; // invalid move (missing cell)
+
+    // If cell already contains 1 or more same-color tokens, skip move
+    let tokensInside = Array.from(targetCell.querySelectorAll('.player'));
+    let hasOwnToken = tokensInside.some(tok => 
+        tok.classList.contains(`${color}-player`)
+    );
+
+    return !hasOwnToken; // can move only if no own token blocking
+}
+
+// Move a token
+function moveToken(token) {
+    disableTokenSelection();
+    let color = currentPlayer;
+    let playerIndex = players.indexOf(color);
+
+    let inHome = token.dataset.home === "true";
+
+    if(inHome) {
+        if(diceValue === 6) {       
+            // Move token out of home to start position
+            let startCellNo = startPositions[color];
+            let startCell = document.querySelector(`[data-idno='${startCellNo}']`);            
+            if(startCell) {
+                startCell.appendChild(token);
+                token.dataset.home = "false";
+                token.dataset.idno = startCellNo;
+                // After moving out, capture enemies on that start cell if any
+                captureEnemiesAtCell(startCell, color);
+            }
+            diceValue = 0; // used roll
+            checkExtraTurn(6); // extra turn if 6            
+        } else {            
+            nextTurn();
+        }
+    } else {
+       		if (!canMoveToFinal(token, color, diceValue)) {
+		        console.log("Move blocked: final cell is occupied or invalid.");
+		        nextTurn();
+		        return;
+		     }     
+        
+        // Token already on board, move diceValue steps with animation        
+        animateTokenMovement(token, color, diceValue);
+        return; // Exit early since animation will handle the rest
+    }
+    rollChance = 1;    
+    diceValue = 0;
+    showCurrent();
+}
+
+// New function to handle animated movement
+function animateTokenMovement(token, color, steps) {
+    let currentId = parseInt(token.dataset.idno);
+    let stepCount = 0;
+
+    function moveNextStep() {
+        if (stepCount < steps) {            
+            currentId = getNextId(color, currentId, token);
+            if (currentId === null) {
+                // Reached end/finished                         
+                finishMovement();                
+                return;
+            }
+
+            let targetCell = document.querySelector(`[data-idno='${currentId}']`);
+            if (targetCell) {
+                targetCell.appendChild(token);
+                token.dataset.idno = currentId;
+
+                audioMove.play();
+                stepCount++;
+                if (stepCount < steps) {
+                    setTimeout(moveNextStep, 400);
+                } else {
+                    finishMovement();
+                }
+            } else {
+                // if target cell missing, treat as finish
+                finishMovement();
+                return;
+            }
+        } else {
+            finishMovement();
+        }
+    }
+
+    function finishMovement() {
+        // After movement ends, handle capture and finish checks
+        let cell = document.querySelector(`[data-idno='${token.dataset.idno}']`);
+        let captured;
+        if(cell) {
+            // If token moved onto star, do nothing capture-wise
+            // else capture all enemy tokens present
+           captured = captureEnemiesAtCell(cell, color);
+        }
+
+        // Check if token reached final winning cell
+        if(isTokenFinished(token, color)) {
+            token.dataset.finished = "true";
+        //    token.remove();
+            
+            checkWin(color);
+        }
+        				
+		if (captured) {
+		    checkExtraTurn(6);   // ✅ treat capture like rolling 6
+		} else {
+		    checkExtraTurn(steps === 6 ? 6 : 0);
+		}
+        disableTokenSelection();
+        diceValue = 0;
+        showCurrent();
+    }
+
+    // Start the animation
+    moveNextStep();
+}
+
+// Capture all enemy tokens at the target cell (unless star/safe)
+function captureEnemiesAtCell(cell, color) {
+    let captureHappened = false;  // ✅ track capture
+
+    let idno = cell.dataset.idno ? parseInt(cell.dataset.idno) : null;
+    if(idno && SAVE_POSITIONS.includes(idno)) return false; // safe zone, no capture
+
+    let tokensInside = Array.from(cell.querySelectorAll('.player'));
+    tokensInside.forEach(tok => {
+        let tokColor = null;
+        if(tok.classList.contains('red-player')) tokColor = 'red';
+        if(tok.classList.contains('green-player')) tokColor = 'green';
+        if(tok.classList.contains('blue-player')) tokColor = 'blue';
+        if(tok.classList.contains('yellow-player')) tokColor = 'yellow';
+
+        if(tokColor && tokColor !== color) {
+            sendTokenHome(tok, tokColor);
+            captureHappened = true;  // ✅ mark capture
+        }
+    });
+
+    return captureHappened;  // ✅ return result
+}
+
+// Send a token back to its original home spot (by dataset.index)
+function sendTokenHome(token, tokColor) {
+    // remove any idno / lane attributes
+    delete token.dataset.idno;
+    delete token.dataset.rdidno;
+    delete token.dataset.gridno;
+    delete token.dataset.blidno;
+    delete token.dataset.ylidno;
+    token.dataset.home = "true";
+    token.dataset.finished = "false";
+
+    // find its index
+    let idx = token.dataset.index ? parseInt(token.dataset.index) : 0;
+    let colorIndex = players.indexOf(tokColor);
+    // append back to its wrapper spot
+    let spot = homeSpots[colorIndex][idx];
+    if(spot) {
+        spot.appendChild(token);
+    } else {
+        // fallback: append to the home container
+        SCDivs[colorIndex].appendChild(token);
+    }
+}
+
+// Return next data-idno in the path
+function getNextId(color, currentId, tokenRef) {
+    // Find element for current id
+    
+    let el = document.querySelector(`[data-idno='${currentId}']`);
+    // If element exists and has lane attributes, continue inside lane
+    if(el) {
+        // If currently on red's private lane
+        if(el.dataset.rdidno) {
+            let cur = parseInt(el.dataset.rdidno);
+            if(cur >= 6) return null; // finished after 5
+            let nextEl = document.querySelector(`[data-rdidno='${cur+1}']`);
+            return nextEl ? parseInt(nextEl.dataset.idno) : null;
+        }
+        // green lane
+        if(el.dataset.gridno) {
+            let cur = parseInt(el.dataset.gridno);
+            if(cur >= 6) return null;
+            let nextEl = document.querySelector(`[data-gridno='${cur+1}']`);
+            return nextEl ? parseInt(nextEl.dataset.idno) : null;
+        }
+        // yellow lane
+        if(el.dataset.ylidno) {
+            let cur = parseInt(el.dataset.ylidno);
+            if(cur >= 6) return null;
+            let nextEl = document.querySelector(`[data-ylidno='${cur+1}']`);
+            return nextEl ? parseInt(nextEl.dataset.idno) : null;
+        }
+        // blue lane
+        if(el.dataset.blidno) {
+            let cur = parseInt(el.dataset.blidno);
+            if(cur >= 6) return null;
+            let nextEl = document.querySelector(`[data-blidno='${cur+1}']`);
+            return nextEl ? parseInt(nextEl.dataset.idno) : null;
+        }
+    }
+
+    // Not in a lane: check if this currentId is the threshold to enter lane
+    if (color === "red" && currentId === 38) {
+        const nextCell = document.querySelector(`[data-rdidno='1']`);        
+        return nextCell ? parseInt(nextCell.dataset.idno) : null;
+    }
+    if (color === "green" && currentId === 51) {
+        const nextCell = document.querySelector(`[data-gridno='1']`);
+        return nextCell ? parseInt(nextCell.dataset.idno) : null;
+    }
+    if (color === "yellow" && currentId === 12) {
+        const nextCell = document.querySelector(`[data-ylidno='1']`);
+        return nextCell ? parseInt(nextCell.dataset.idno) : null;
+    }
+    if (color === "blue" && currentId === 25) {
+        const nextCell = document.querySelector(`[data-blidno='1']`);
+        return nextCell ? parseInt(nextCell.dataset.idno) : null;
+    }
+
+    // Otherwise, continue on the general circular path
+    let next = currentId + 1;
+    if (next > 52) next = next - 52;    
+    return next;
+}
+
+// Check if token reached home (final)
+function isTokenFinished(token, color) {
+    // If token is in a lane and on position 5 -> finished
+    let el = null;
+    if(token.dataset.idno) el = document.querySelector(`[data-idno='${token.dataset.idno}']`);
+    if(!el) return false;
+
+    if(color === 'red' && el.dataset.rdidno && parseInt(el.dataset.rdidno) === 6) return true;
+    if(color === 'green' && el.dataset.gridno && parseInt(el.dataset.gridno) === 6) return true;
+    if(color === 'yellow' && el.dataset.ylidno && parseInt(el.dataset.ylidno) === 6) return true;
+    if(color === 'blue' && el.dataset.blidno && parseInt(el.dataset.blidno) === 6) return true;
+
+    return false;
+}
+
+// Check for player win
+function checkWin(color) {
+    // Count removed/finished tokens for the color
+    let totalFinished = 0;
+    // We consider tokens removed from DOM as finished; alternative tracking can be added
+    // Quick method: count how many tokens in playersEle were removed from DOM (no parent matching)
+    playersEle[players.indexOf(color)].forEach(t => {
+        if(!document.body.contains(t)) totalFinished++;
+    });
+    if(totalFinished === 4) {
+        alert(`${color.toUpperCase()} wins!`);
+    }
+}
+
+// Extra turn logic
+function checkExtraTurn(rolled6) {
+    if(rolled6 === 6) {        
+        showCurrent();
+    } else {
+        nextTurn();
+    }
+}
+
+// Switch to next player
+function nextTurn() {
+    let currentIndex = players.indexOf(currentPlayer);
+    currentPlayer = players[(currentIndex + 1) % players.length];
+    showCurrent();
+}
+
+
+
+    </script>
+</body>
+</html>

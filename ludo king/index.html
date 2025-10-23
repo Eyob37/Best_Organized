@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ludo Game - Setup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 600px;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        
+        .setup-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 15px;
+            background-color: #f8f9fa;
+        }
+        
+        h2 {
+            color: #444;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .player-options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .player-option {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .player-option:hover {
+            transform: scale(1.05);
+            background-color: #dee2e6;
+        }
+        
+        .player-option.selected {
+            background-color: #4dabf7;
+            color: white;
+            border-color: #339af0;
+            box-shadow: 0 0 10px rgba(77, 171, 247, 0.5);
+        }
+        
+        .color-options {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .color-option {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            position: relative;
+        }
+        
+        .color-option:hover {
+            transform: scale(1.05);
+        }
+        
+        .color-option.selected {
+            border-color: #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .color-option.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        
+        .color-red { background-color: #e03131; }
+        .color-blue { background-color: #1971c2; }
+        .color-yellow { background-color: #fcc419; }
+        .color-green { background-color: #2f9e44; }
+        
+        .start-button {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 5px 15px rgba(37, 117, 252, 0.4);
+        }
+        
+        .start-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(37, 117, 252, 0.6);
+        }
+        
+        .start-button:disabled {
+            background: #adb5bd;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .selected-colors {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .selected-color {
+            display: inline-flex;
+            align-items: center;
+            background-color: #e9ecef;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .color-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .instructions {
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>LUDO</h1>
+        <p class="subtitle">Set up your game</p>
+        
+        <div class="setup-section">
+            <h2>Number of Players</h2>
+            <div class="player-options">
+                <div class="player-option" data-players="2">2</div>
+                <div class="player-option" data-players="3">3</div>
+                <div class="player-option" data-players="4">4</div>
+            </div>
+            <p class="instructions">Select how many players will participate</p>
+        </div>
+        
+        <div class="setup-section">
+            <h2>Player Colors</h2>
+            <div class="color-options">
+                <div class="color-option color-red" data-color="red"></div>
+                <div class="color-option color-blue" data-color="blue"></div>
+                <div class="color-option color-yellow" data-color="yellow"></div>
+                <div class="color-option color-green" data-color="green"></div>
+            </div>
+            <p class="instructions">Select colors for each player (must match player count)</p>
+            
+            <div class="selected-colors" id="selectedColors">
+                <!-- Selected colors will appear here -->
+            </div>
+        </div>
+        
+        <button class="start-button" id="startButton" disabled>Start Game</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const playerOptions = document.querySelectorAll('.player-option');
+            const colorOptions = document.querySelectorAll('.color-option');
+            const startButton = document.getElementById('startButton');
+            const selectedColorsContainer = document.getElementById('selectedColors');
+            
+            let selectedPlayers = 0;
+            let selectedColors = [];
+            
+            // Player selection
+            playerOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const players = parseInt(this.getAttribute('data-players'));
+                    
+                    // Reset selection
+                    playerOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    selectedPlayers = players;
+                    selectedColors = []; // Reset colors when players change
+                    updateColorOptions();
+                    updateStartButton();
+                    updateSelectedColorsDisplay();
+                });
+            });
+            
+            // Color selection
+            colorOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    if (this.classList.contains('disabled')) return;
+                    
+                    const color = this.getAttribute('data-color');
+                    
+                    if (selectedColors.includes(color)) {
+                        // Deselect color
+                        selectedColors = selectedColors.filter(c => c !== color);
+                        this.classList.remove('selected');
+                    } else {
+                        // Select color if we haven't reached the player limit
+                        if (selectedColors.length < selectedPlayers) {
+                            selectedColors.push(color);
+                            this.classList.add('selected');
+                        }
+                    }
+                    
+                    updateColorOptions();
+                    updateStartButton();
+                    updateSelectedColorsDisplay();
+                });
+            });
+            
+            // Update color options based on player selection
+            function updateColorOptions() {
+                colorOptions.forEach(option => {
+                    const color = option.getAttribute('data-color');
+                    
+                    if (selectedPlayers === 0) {
+                        // No players selected, disable all colors
+                        option.classList.add('disabled');
+                    } else if (selectedColors.includes(color)) {
+                        // Selected colors are always enabled
+                        option.classList.remove('disabled');
+                    } else if (selectedColors.length >= selectedPlayers) {
+                        // Max colors selected, disable unselected ones
+                        option.classList.add('disabled');
+                    } else {
+                        // Enable all colors when we have space
+                        option.classList.remove('disabled');
+                    }
+                });
+            }
+            
+            // Update start button state
+            function updateStartButton() {
+                if (selectedPlayers > 0 && selectedColors.length === selectedPlayers) {
+                    startButton.disabled = false;
+                } else {
+                    startButton.disabled = true;
+                }
+            }
+            
+            // Update the display of selected colors
+            function updateSelectedColorsDisplay() {
+                selectedColorsContainer.innerHTML = '';
+                
+                selectedColors.forEach(color => {
+                    const colorElement = document.createElement('div');
+                    colorElement.className = 'selected-color';
+                    
+                    const colorDot = document.createElement('div');
+                    colorDot.className = 'color-dot';
+                    colorDot.style.backgroundColor = getColorValue(color);
+                    
+                    colorElement.appendChild(colorDot);
+                    colorElement.appendChild(document.createTextNode(color));
+                    
+                    selectedColorsContainer.appendChild(colorElement);
+                });
+            }
+            
+            // Get CSS color value from color name
+            function getColorValue(colorName) {
+                const colorMap = {
+                    'red': '#e03131',
+                    'blue': '#1971c2',
+                    'yellow': '#fcc419',
+                    'green': '#2f9e44'
+                };
+                
+                return colorMap[colorName] || '#000';
+            }
+            
+            // Start button functionality
+            startButton.addEventListener('click', function() {
+                if (!this.disabled) {
+                    alert(`Starting game with ${selectedPlayers} players using colors: ${selectedColors.join(', ')}`);
+                    localStorage.setItem("playPlayers", JSON.stringify(selectedColors));
+                    window.location.href = "Best ludo.html";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
