@@ -673,9 +673,8 @@ function rollDice(diceElement, callback) {
         rolls++;
         if (rolls >= maxRolls) {
             clearInterval(rollInterval);
-            diceValue = Math.floor(Math.random() * 6) + 1;                      
+            diceValue = 6;            
             diceElement.setAttribute('data-value', diceValue);            
-                        
             const result = MakeAutoMove();   
                                   
             if(result === null && callback) callback();
@@ -714,26 +713,39 @@ function tokenClickHandler(e) {
     moveToken(token);   
 }
 
-function canMoveToFinal(token, color, steps) {
-    let currentId = parseInt(token.dataset.idno);
+// Check if the move exceeds the lane limit
+function checkMoveLimit(color, currentId, steps) {
+    // Find the current cell element for the token
+    let el = document.querySelector(`[data-idno='${currentId}']`);
 
-    // Simulate movement without actually moving
-    for (let i = 0; i < steps; i++) {
-        currentId = getNextId(color, currentId, token);
-        if (currentId === null) return true; // reached the end, valid finish
+    // If the element exists and has lane-specific attributes, check for each lane
+    if (el) {
+        let laneNo = null;
+
+        // Red lane check
+        if (el.dataset.rdidno) {
+            laneNo = parseInt(el.dataset.rdidno);
+            if (laneNo + steps > 6) return false; // Cannot move, exceeds the lane limit
+        }
+        // Green lane check
+        if (el.dataset.gridno) {
+            laneNo = parseInt(el.dataset.gridno);
+            if (laneNo + steps > 6) return false;
+        }
+        // Yellow lane check
+        if (el.dataset.ylidno) {
+            laneNo = parseInt(el.dataset.ylidno);
+            if (laneNo + steps > 6) return false;
+        }
+        // Blue lane check
+        if (el.dataset.blidno) {
+            laneNo = parseInt(el.dataset.blidno);
+            if (laneNo + steps > 6) return false;
+        }
     }
-
-    // If next cell is final lane position
-    let targetCell = document.querySelector(`[data-idno='${currentId}']`);
-    if (!targetCell) return false; // invalid move (missing cell)
-
-    // If cell already contains 1 or more same-color tokens, skip move
-    let tokensInside = Array.from(targetCell.querySelectorAll('.player'));
-    let hasOwnToken = tokensInside.some(tok => 
-        tok.classList.contains(`${color}-player`)
-    );
-
-    return !hasOwnToken; // can move only if no own token blocking
+    
+    // If no lane-specific attributes or the move is within limit
+    return true;
 }
 
 // Move a token
@@ -761,13 +773,12 @@ function moveToken(token) {
         } else {            
             nextTurn();
         }
-    } else {
-       		if (!canMoveToFinal(token, color, diceValue)) {
-		        console.log("Move blocked: final cell is occupied or invalid.");
-		        nextTurn();
-		        return;
-		     }     
-        
+    } else {       		
+        let currentId = parseInt(token.dataset.idno);
+        if (!checkMoveLimit(color, currentId, diceValue)) {
+            nextTurn();  // Pass turn if the move exceeds the lane limit
+            return;
+        }
         // Token already on board, move diceValue steps with animation        
         animateTokenMovement(token, color, diceValue);
         return; // Exit early since animation will handle the rest
