@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ludo Game Lobby</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .players-container {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .player-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .player-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            border-color: #667eea;
+        }
+
+        .player-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 15px;
+        }
+
+        .player-info {
+            text-align: left;
+            flex: 1;
+        }
+
+        .player-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .player-status {
+            color: #28a745;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .start-button {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.3);
+            font-weight: 600;
+        }
+
+        .start-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        .start-button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            opacity: 0.6;
+            filter: blur(1px);
+            transform: none;
+            box-shadow: none;
+        }
+
+        .loading {
+            color: #666;
+            font-style: italic;
+            margin: 20px 0;
+        }
+
+        .error {
+            color: #dc3545;
+            background: #f8d7da;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .player-count {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Game Lobby</h1>
+        <p class="subtitle">Waiting for players to join...</p>
+        
+        <div class="player-count" id="playerCount">Players: 0/0</div>
+        
+        <div class="players-container" id="playersContainer">
+            <div class="loading">Loading players...</div>
+        </div>
+        
+        <button class="start-button" id="startButton" style="display: none;">Start Game</button>
+        
+        <div id="errorMessage" class="error" style="display: none;"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDRDm3Da8IOE2vJHQ6j-16qofhkvsuNpfQ",
+            authDomain: "ludo-eea76.firebaseapp.com",
+            databaseURL: "https://ludo-eea76-default-rtdb.firebaseio.com",
+            projectId: "ludo-eea76",
+            storageBucket: "ludo-eea76.firebasestorage.app",
+            messagingSenderId: "249574298911",
+            appId: "1:249574298911:web:3e087f9eb96d67d2d14c2a",
+            measurementId: "G-4LRR00CHK3"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Get elements
+        const playersContainer = document.getElementById('playersContainer');
+        const startButton = document.getElementById('startButton');
+        const errorMessage = document.getElementById('errorMessage');
+        const playerCount = document.getElementById('playerCount');
+
+        // Get data from localStorage
+        const roomId = localStorage.getItem("roomId");
+        const isHoster = localStorage.getItem("Hoster") === "true";
+        const playPlayers = JSON.parse(localStorage.getItem("playPlayers") || "[]");
+        
+        // Required number of players (based on colors in playPlayers)
+        const requiredPlayers = playPlayers.length;
+
+        // Check if we have the necessary data
+        if (!roomId) {
+            showError("Room ID not found. Please join a room first.");
+            window.location.href = "index.html";
+        }
+
+        if (!playPlayers || playPlayers.length === 0) {
+            showError("Game configuration not found. Please set up the game first.");
+            window.location.href = "index.html";
+        }
+
+        // Show start button only for host
+        if (isHoster) {
+            startButton.style.display = 'block';
+        }
+
+        // Reference to players in the room
+        const playersRef = ref(database, `Ludo Game/${roomId}/players`);
+        const allIsReadyRef = ref(database, `Ludo Game/${roomId}/AllIsReady`);
+
+        // Listen for changes in players
+        onValue(playersRef, (snapshot) => {
+            const players = snapshot.val();
+            updatePlayersList(players);
+            
+            // Update start button state for host
+            if (isHoster) {
+                const playerCount = players ? Object.keys(players).length : 0;
+                startButton.disabled = playerCount < requiredPlayers;
+                
+                // Update player count display
+                document.getElementById('playerCount').textContent = 
+                    `Players: ${playerCount}/${requiredPlayers}`;
+            }
+        });
+
+        // For non-host users: listen for AllIsReady changes
+        if (!isHoster) {
+            onValue(allIsReadyRef, (snapshot) => {
+                const allIsReady = snapshot.val();
+                if (allIsReady === true) {
+                    redirectToGame();
+                }
+            });
+        }
+
+        // Start button click handler
+        startButton.addEventListener('click', async () => {
+            try {
+                startButton.disabled = true;
+                startButton.textContent = 'Starting Game...';
+                
+                // Write true to AllIsReady
+                await set(allIsReadyRef, true);
+                
+                // Redirect host to game
+                redirectToGame();
+            } catch (error) {
+                console.error('Error starting game:', error);
+                showError('Failed to start game. Please try again.');
+                startButton.disabled = false;
+                startButton.textContent = 'Start Game';
+            }
+        });
+
+        // Function to update players list
+        function updatePlayersList(players) {
+            playersContainer.innerHTML = '';
+            
+            if (!players || Object.keys(players).length === 0) {
+                playersContainer.innerHTML = '<div class="loading">No players yet. Waiting for players to join...</div>';
+                return;
+            }
+            
+            Object.entries(players).forEach(([playerId, playerData], index) => {
+                const playerCard = document.createElement('div');
+                playerCard.className = 'player-card';
+                
+                // Use player data if available, otherwise generate placeholder
+                const playerName = playerId || `Player ${index + 1}`;
+                const playerColor = playerData.color || getColorByIndex(index);
+                
+                playerCard.innerHTML = `
+                    <div class="player-avatar" style="background: ${playerColor}">
+                        ${playerName.charAt(0).toUpperCase()}
+                    </div>
+                    <div class="player-info">
+                        <div class="player-name">${playerName}</div>
+                        <div class="player-status">Ready to play</div>
+                    </div>
+                `;
+                
+                playersContainer.appendChild(playerCard);
+            });
+        }
+
+        // Helper function to generate colors
+        function getColorByIndex(index) {
+            const colors = [
+                'linear-gradient(135deg, #FF6B6B, #FF8E8E)',
+                'linear-gradient(135deg, #4ECDC4, #88D9D9)',
+                'linear-gradient(135deg, #FFD166, #FFE299)',
+                'linear-gradient(135deg, #06D6A0, #4CE4B8)',
+                'linear-gradient(135deg, #118AB2, #5AB9D9)',
+                'linear-gradient(135deg, #EF476F, #F58BA4)'
+            ];
+            return colors[index % colors.length];
+        }
+
+        // Function to show error messages
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+
+        // Function to redirect to game
+        function redirectToGame() {
+            window.location.href = "Best ludo.html";
+        }
+    </script>
+</body>
+</html>

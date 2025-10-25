@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ludo Game - Setup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 600px;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        
+        .setup-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 15px;
+            background-color: #f8f9fa;
+        }
+        
+        h2 {
+            color: #444;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .player-options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .player-option {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+        
+        .player-option:hover {
+            transform: scale(1.05);
+            background-color: #dee2e6;
+        }
+        
+        .player-option.selected {
+            background-color: #4dabf7;
+            color: white;
+            border-color: #339af0;
+            box-shadow: 0 0 10px rgba(77, 171, 247, 0.5);
+        }
+        
+        .color-options {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .color-option {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            position: relative;
+        }
+        
+        .color-option:hover {
+            transform: scale(1.05);
+        }
+        
+        .color-option.selected {
+            border-color: #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .color-option.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        
+        .color-red { background-color: #e03131; }
+        .color-blue { background-color: #1971c2; }
+        .color-yellow { background-color: #fcc419; }
+        .color-green { background-color: #2f9e44; }
+        
+        .start-button {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 5px 15px rgba(37, 117, 252, 0.4);
+        }
+        
+        .start-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(37, 117, 252, 0.6);
+        }
+        
+        .start-button:disabled {
+            background: #adb5bd;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .selected-colors {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .selected-color {
+            display: inline-flex;
+            align-items: center;
+            background-color: #e9ecef;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .color-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .instructions {
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+       .RIReciver{
+           position: fixed;
+           width: 300px;
+           min-height: 80px;
+           border-radius: 10px;
+           padding: 10px;
+           display: none;
+           background: cyan;
+           z-index: 5;
+       }
+       
+       .RIReciver input{
+           height: 25px;
+           width: 200px;
+           border-radius: 5px;
+           margin: 5px;
+           padding: 1px;
+       }
+       .RIReciver button{
+           height: 25px;
+           width: 80px;
+           border-radius: 10px;
+           font-size: 1.1rem;
+           font-weight: 700;
+           color: red;
+           background: linear-gradient(to right, #00d5ff, #f8ff2a);
+           border: none;
+           margin: 2px;
+       }
+       
+      .cancel{
+          background: #f4f4f4d1 !important;
+      }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>LUDO</h1>
+        <p class="subtitle">Set up your game</p>
+        
+        <div class="setup-section">
+            <h2>Number of Players</h2>
+            <div class="player-options">
+                <div class="player-option" data-players="2">2</div>
+                <div class="player-option" data-players="3">3</div>
+                <div class="player-option" data-players="4">4</div>
+            </div>
+            <p class="instructions">Select how many players will participate</p>
+        </div>
+        
+        <div class="RIReciver">
+            <p>Enter room Id:</p>
+            <input type="number"><br>
+            <button class="cancel">cancel</button>
+            <button onclick="checkRoomId()">Done</button>
+        </div>
+        
+        <div class="setup-section">
+            <h2>Player Colors</h2>
+            <div class="color-options">
+                <div class="color-option color-red" data-color="red"></div>
+                <div class="color-option color-blue" data-color="blue"></div>
+                <div class="color-option color-yellow" data-color="yellow"></div>
+                <div class="color-option color-green" data-color="green"></div>
+            </div>
+            <p class="instructions">Select colors for each player (must match player count)</p>
+            
+            <div class="selected-colors" id="selectedColors">
+                <!-- Selected colors will appear here -->
+            </div>
+        </div>
+        
+        <button class="start-button" id="JoinButton">Join</button>
+        <button class="start-button" id="HostButton" disabled>Host</button>
+    </div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+  import { 
+    getDatabase, 
+    ref, 
+    set, 
+    get, 
+    onValue 
+  } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+  // Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDRDm3Da8IOE2vJHQ6j-16qofhkvsuNpfQ",
+    authDomain: "ludo-eea76.firebaseapp.com",
+    databaseURL: "https://ludo-eea76-default-rtdb.firebaseio.com",
+    projectId: "ludo-eea76",
+    storageBucket: "ludo-eea76.firebasestorage.app",
+    messagingSenderId: "249574298911",
+    appId: "1:249574298911:web:3e087f9eb96d67d2d14c2a",
+    measurementId: "G-4LRR00CHK3"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const databaseLocation = ref(db, 'Ludo Game');
+
+  document.addEventListener('DOMContentLoaded', function() {
+      const playerOptions = document.querySelectorAll('.player-option');
+      const colorOptions = document.querySelectorAll('.color-option');
+      const HostButton = document.getElementById('HostButton');
+      const JoinButton = document.getElementById('JoinButton');
+      const cancel = document.querySelector('.cancel');
+      const selectedColorsContainer = document.getElementById('selectedColors');
+      const roomInput = document.querySelector('.RIReciver input');
+
+      let selectedPlayers = 0;
+      let selectedColors = [];
+
+        let userName = prompt("Hello what is your name?");
+
+      // Player selection
+      playerOptions.forEach(option => {
+          option.addEventListener('click', function() {
+              const players = parseInt(this.getAttribute('data-players'));
+              playerOptions.forEach(opt => opt.classList.remove('selected'));
+              this.classList.add('selected');
+              selectedPlayers = players;
+              selectedColors = [];
+              updateColorOptions();
+              updateStartButton();
+              updateSelectedColorsDisplay();
+          });
+      });
+
+      // Color selection
+      colorOptions.forEach(option => {
+          option.addEventListener('click', function() {
+              if (this.classList.contains('disabled')) return;
+              const color = this.getAttribute('data-color');
+              if (selectedColors.includes(color)) {
+                  selectedColors = selectedColors.filter(c => c !== color);
+                  this.classList.remove('selected');
+              } else if (selectedColors.length < selectedPlayers) {
+                  selectedColors.push(color);
+                  this.classList.add('selected');
+              }
+              updateColorOptions();
+              updateStartButton();
+              updateSelectedColorsDisplay();
+          });
+      });
+
+      function updateColorOptions() {
+          colorOptions.forEach(option => {
+              const color = option.getAttribute('data-color');
+              if (selectedPlayers === 0) {
+                  option.classList.add('disabled');
+              } else if (selectedColors.includes(color)) {
+                  option.classList.remove('disabled');
+              } else if (selectedColors.length >= selectedPlayers) {
+                  option.classList.add('disabled');
+              } else {
+                  option.classList.remove('disabled');
+              }
+          });
+      }
+
+      function updateStartButton() {
+          HostButton.disabled = !(selectedPlayers > 0 && selectedColors.length === selectedPlayers);
+      }
+
+      function updateSelectedColorsDisplay() {
+          selectedColorsContainer.innerHTML = '';
+          selectedColors.forEach(color => {
+              const div = document.createElement('div');
+              div.className = 'selected-color';
+              const dot = document.createElement('div');
+              dot.className = 'color-dot';
+              dot.style.backgroundColor = getColorValue(color);
+              div.appendChild(dot);
+              div.appendChild(document.createTextNode(color));
+              selectedColorsContainer.appendChild(div);
+          });
+      }
+
+      function getColorValue(color) {
+          const map = {
+              red: '#e03131',
+              blue: '#1971c2',
+              yellow: '#fcc419',
+              green: '#2f9e44'
+          };
+          return map[color] || '#000';
+      }
+
+      // 🧠 --- JOIN ROOM FUNCTION ---
+      window.checkRoomId = async () => {
+          const inputValue = roomInput.value.trim();          
+
+          if (inputValue === "") {
+              alert("Please enter the room ID");
+              return;
+          }
+
+          try {
+              const roomRef = ref(db, `Ludo Game/${inputValue}`);
+              const snapshot = await get(roomRef);
+
+              if (snapshot.exists()) {
+                  // Add player to that room
+                  await set(ref(db, `Ludo Game/${inputValue}/players/${userName}`), {
+                      joinedAt: Date.now()
+                  });
+                  alert(`Joined room ${inputValue} as ${userName}`);
+                  document.querySelector(".RIReciver").style.display = "none";
+                  localStorage.setItem("Hoster", false);
+                  localStorage.setItem("roomId", inputValue);
+                  window.location.href = "Manage Players.html";
+              } else {
+                  alert("Room ID not found!");
+              }
+          } catch (error) {
+              console.error(error);
+              alert("Error checking room ID!");
+          }
+      };
+
+      // 🧠 --- HOST ROOM FUNCTION ---
+      HostButton.addEventListener('click', async function() {
+          if (this.disabled) return;
+          
+          const colors = JSON.stringify(selectedColors);
+
+          let newRoomId = null;
+
+          // Generate unique room ID
+          while (true) {
+              const randomId = Math.floor(10000000 + Math.random() * 90000000).toString(); // 8 digits
+              const snapshot = await get(ref(db, `Ludo Game/${randomId}`));
+              if (!snapshot.exists()) {
+                  newRoomId = randomId;
+                  break;
+              }
+          }
+
+          // Create the room
+          await set(ref(db, `Ludo Game/${newRoomId}`), {
+              host: userName,
+              createdAt: Date.now(),
+              colors: selectedColors,
+              players: {
+                  [userName]: { joinedAt: Date.now() }
+              }
+          });
+
+          alert(`Room created! Room ID: ${newRoomId}`);
+          localStorage.setItem("roomId", newRoomId);
+          localStorage.setItem("Hoster", true);
+          localStorage.setItem("playPlayers", colors);
+          window.location.href = "Manage Players.html";
+      });
+
+      // Cancel & Join button display
+      cancel.addEventListener('click', () => {
+          document.querySelector(".RIReciver").style.display = "none";
+      });
+
+      JoinButton.addEventListener('click', () => {
+          document.querySelector(".RIReciver").style.display = "block";
+      });
+  });
+</script>
+</body>
+</html>
