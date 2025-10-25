@@ -673,7 +673,7 @@ function rollDice(diceElement, callback) {
         rolls++;
         if (rolls >= maxRolls) {
             clearInterval(rollInterval);
-            diceValue = 6;            
+            diceValue = Math.floor(Math.random() * 6) + 1;            
             diceElement.setAttribute('data-value', diceValue);            
             const result = MakeAutoMove();   
                                   
