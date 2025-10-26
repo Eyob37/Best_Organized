@@ -374,37 +374,47 @@
           return map[color] || '#000';
       }
 
-      // 🧠 --- JOIN ROOM FUNCTION ---
-      window.checkRoomId = async () => {
-          const inputValue = roomInput.value.trim();          
-
-          if (inputValue === "") {
-              alert("Please enter the room ID");
-              return;
-          }
-
-          try {
-              const roomRef = ref(db, `Ludo Game/${inputValue}`);
-              const snapshot = await get(roomRef);
-
-              if (snapshot.exists()) {
-                  // Add player to that room
-                  await set(ref(db, `Ludo Game/${inputValue}/players/${userName}`), {
-                      joinedAt: Date.now()
-                  });
-                  alert(`Joined room ${inputValue} as ${userName}`);
-                  document.querySelector(".RIReciver").style.display = "none";
-                  localStorage.setItem("Hoster", false);
-                  localStorage.setItem("roomId", inputValue);
-                  window.location.href = "Manage Players.html";
-              } else {
-                  alert("Room ID not found!");
-              }
-          } catch (error) {
-              console.error(error);
-              alert("Error checking room ID!");
-          }
-      };
+      
+		window.checkRoomId = async () => {
+		    const inputValue = roomInput.value.trim();
+		
+		    if (inputValue === "") {
+		        alert("Please enter the room ID");
+		        return;
+		    }
+		
+		    try {
+		        const roomRef = ref(db, `Ludo Game/${inputValue}`);
+		        const snapshot = await get(roomRef);
+		
+		        if (snapshot.exists()) {
+		            const roomData = snapshot.val();
+		
+		            // Prevent joining if room is full
+		            if (roomData && roomData.isRoomFull === true) {
+		                alert("Cannot join: room is full.");
+		                return;
+		            }
+		
+		            // Add player to that room (no color assigned here — Manage Players will claim a color)
+		            await set(ref(db, `Ludo Game/${inputValue}/players/${userName}`), {
+		                name: userName,
+		                joinedAt: Date.now()
+		            });
+		
+		            alert(`Joined room ${inputValue} as ${userName}`);
+		            document.querySelector(".RIReciver").style.display = "none";
+		            localStorage.setItem("Hoster", false);
+		            localStorage.setItem("roomId", inputValue);
+		            window.location.href = "Manage Players.html";
+		        } else {
+		            alert("Room ID not found!");
+		        }
+		    } catch (error) {
+		        console.error(error);
+		        alert("Error checking room ID!");
+		    }
+		};
 
       // 🧠 --- HOST ROOM FUNCTION ---
       HostButton.addEventListener('click', async function() {
@@ -424,15 +434,16 @@
               }
           }
 
-          // Create the room
-          await set(ref(db, `Ludo Game/${newRoomId}`), {
-              host: userName,
-              createdAt: Date.now(),
-              colors: selectedColors,
-              players: {
-                  [userName]: { joinedAt: Date.now() }
-              }
-          });
+         
+				await set(ref(db, `Ludo Game/${newRoomId}`), {
+				    host: userName,
+				    createdAt: Date.now(),
+				    "Available Colors": selectedColors,   // store chosen colors here
+				    isRoomFull: false,
+				    players: {
+				        [userName]: { name: userName, joinedAt: Date.now() } // host as first player
+				    }
+				});
 
           alert(`Room created! Room ID: ${newRoomId}`);
           localStorage.setItem("roomId", newRoomId);
