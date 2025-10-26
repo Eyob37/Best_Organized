@@ -231,6 +231,9 @@ async function assignColorsToPlayers(playersObj) {
 
             // write player color
             await set(ref(database, `Ludo Game/${roomId}/players/${playerId}/color`), pickedColor);
+           if (playerId === userName) {
+                localStorage.setItem("playerColor", pickedColor);
+            }
         }
 
         // update Available Colors in DB if changed
