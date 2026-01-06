@@ -121,7 +121,7 @@ self.addEventListener('fetch', event => {
           caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
           return resp;
         })
-        .catch(() => caches.match('/offline.html'))
+        .catch(() => caches.match('index.html'))
     );
     return;
   }
