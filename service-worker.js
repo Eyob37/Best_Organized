@@ -182,3 +182,19 @@ self.addEventListener('periodicsync', event => {
     event.waitUntil(updateContent());
   }
 });
+
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+
+  event.waitUntil(
+    clients.openWindow('/index.html')
+  );
+});
+
+self.registration.showNotification('Hello Eyob 👋', {
+  body: 'Your app is working offline!',
+  icon: '/icons/icon-192.png',
+  badge: '/icons/icon-72.png',
+  vibrate: [100, 50, 100],
+  tag: 'offline-notification'
+});
