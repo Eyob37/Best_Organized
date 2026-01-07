@@ -183,18 +183,15 @@ self.addEventListener('periodicsync', event => {
   }
 });
 
-self.addEventListener('notificationclick', event => {
-  event.notification.close();
+
+// push notification
+self.addEventListener('push', event => {
+  const data = event.data.json();
 
   event.waitUntil(
-    clients.openWindow('/index.html')
+    self.registration.showNotification(data.title, {
+      body: data.body,
+      icon: '/icons/icon-192.png'
+    })
   );
-});
-
-self.registration.showNotification('Hello Eyob 👋', {
-  body: 'Your app is working offline!',
-  icon: '/icons/icon-192.png',
-  badge: '/icons/icon-72.png',
-  vibrate: [100, 50, 100],
-  tag: 'offline-notification'
 });
