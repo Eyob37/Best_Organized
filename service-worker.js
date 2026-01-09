@@ -46,10 +46,7 @@ const DYNAMIC_ASSETS = [
   "/calculate.html",  
   "/date.html",  
   "/com.html",  
-  "/about.html",
-  "/audio/ashenf.mp3",
-  "/audio/chess.m4a",
-  "/audio/enjoy.mp3"
+  "/about.html"
 ];  
   
 // Install event - cache critical assets  
@@ -91,7 +88,42 @@ self.addEventListener('fetch', event => {
   }  
   
   const url = new URL(event.request.url);  
-  
+
+    // Handle audio files specifically - they need to work offline
+  if (url.pathname.includes('/audio/')) {
+    event.respondWith(
+      caches.match(event.request)
+        .then(cachedResponse => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          
+          // Try to fetch from network
+          return fetch(event.request)
+            .then(networkResponse => {
+              // Cache the audio file for future use
+              const responseToCache = networkResponse.clone();
+              caches.open(CACHE_NAME)
+                .then(cache => cache.put(event.request, responseToCache))
+                .catch(error => {
+                  console.error('Failed to cache audio:', error);
+                });
+              
+              return networkResponse;
+            })
+            .catch(error => {
+              console.log('Audio fetch failed, no cached version available:', error);
+              // Return a placeholder or error response for audio
+              return new Response('', {
+                status: 404,
+                statusText: 'Audio not available offline'
+              });
+            });
+        })
+    );
+    return;
+  }
+
   // Handle navigation requests (HTML pages)  
   if (event.request.mode === 'navigate') {  
     event.respondWith(  
