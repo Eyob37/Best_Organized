@@ -46,7 +46,10 @@ const DYNAMIC_ASSETS = [
   "/calculate.html",  
   "/date.html",  
   "/com.html",  
-  "/about.html"  
+  "/about.html",
+  "/audio/ashenf.mp3",
+  "/audio/chess.m4a",
+  "/audio/enjoy.mp3"
 ];  
   
 // Install event - cache critical assets  
