@@ -219,7 +219,7 @@ self.addEventListener('periodicsync', event => {
 });
 
 
-// push notification
+/* push notification
 self.addEventListener('push', event => {
   const data = event.data.json();
 
@@ -229,4 +229,15 @@ self.addEventListener('push', event => {
       icon: '/icons/icon-192.png'
     })
   );
-});
+});*/
+
+// Helper functions (placeholder implementations)
+function syncData() {
+  alert('Syncing data...');
+  return Promise.resolve();
+}
+
+function updateContent() {
+  alert('Updating content...');
+  return Promise.resolve();
+}
